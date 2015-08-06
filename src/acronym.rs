@@ -5,7 +5,7 @@ use std::ascii::AsciiExt;
 use itertools::Itertools;
 
 /// A word in an acronym, which can have zero or more of its initial letters appear.
-#[derive(Clone, Hash, PartialEq, Eq, Debug)]
+#[derive(Clone, Hash, PartialEq, Eq, PartialOrd, Ord, Debug)]
 pub struct Word {
     string: String,
     initial_count: usize,
