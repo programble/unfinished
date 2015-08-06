@@ -2,6 +2,7 @@
 
 use std::ops::Add;
 use std::ascii::AsciiExt;
+use itertools::Itertools;
 
 /// A word in an acronym, which can have zero or more of its initial letters appear.
 #[derive(Clone, Hash, PartialEq, Eq, Debug)]
@@ -121,6 +122,29 @@ impl Acronym {
         self.words.iter()
             .map(Word::initial_count)
             .fold(0, usize::add)
+    }
+
+    /// Creates a `String` of the `Acronym` expansion, made up of the expansion of each `Word`.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use tbd::acronym::{Word, Acronym};
+    ///
+    /// let a = Acronym {
+    ///     words: vec![
+    ///         Word::new(String::from("Great")).with_count(2),
+    ///         Word::new(String::from("Acronym")),
+    ///         Word::new(String::from("Example")).with_count(3),
+    ///     ],
+    /// };
+    ///
+    /// assert_eq!("GReat Acronym EXAmple", a.expansion());
+    /// ```
+    pub fn expansion(&self) -> String {
+        self.words.iter()
+            .map(Word::expansion)
+            .join(" ")
     }
 }
 
