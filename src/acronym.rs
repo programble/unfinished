@@ -4,7 +4,7 @@ use std::ops::Add;
 use std::ascii::AsciiExt;
 
 /// A word in an acronym, which can have zero or more of its initial letters appear.
-#[derive(Clone, Debug)]
+#[derive(Clone, Hash, PartialEq, Eq, Debug)]
 pub struct Word {
     string: String,
     initial_count: usize,
@@ -49,11 +49,26 @@ impl Word {
     ///
     /// ```
     /// use tbd::acronym::Word;
-    /// let w = Word::new("example".to_string());
+    /// let w = Word::new(String::from("example"));
     /// assert_eq!("E", w.initial());
     /// ```
     pub fn initial(&self) -> String {
         self.string[..self.initial_count].to_ascii_uppercase()
+    }
+
+    /// Creates a `String` of this `Word` with the visible initial letters in uppercase.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use tbd::acronym::Word;
+    /// let w = Word::new(String::from("example")).with_count(2);
+    /// assert_eq!("EXample", w.expansion());
+    /// ```
+    pub fn expansion(&self) -> String {
+        let head = self.initial();
+        let tail = self.string[self.initial_count..].to_ascii_lowercase();
+        head + &tail
     }
 
     /// Returns the word length.
@@ -79,7 +94,7 @@ impl Word {
 ///
 /// assert_eq!("GAE", a.to_string());
 /// ```
-#[derive(Clone, Debug)]
+#[derive(Clone, Hash, PartialEq, Eq, Debug)]
 pub struct Acronym {
     pub words: Vec<Word>,
 }
