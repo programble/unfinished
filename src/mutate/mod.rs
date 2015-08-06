@@ -35,5 +35,7 @@ impl Mutate for Nop {
 }
 
 pub use self::yet_another::YetAnother;
+mod yet_another;
 
-pub mod yet_another;
+pub use self::recursive::Recursive;
+mod recursive;
