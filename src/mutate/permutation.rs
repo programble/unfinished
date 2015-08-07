@@ -11,10 +11,10 @@ use acronym::Acronym;
 ///
 /// let a = Acronym {
 ///     words: vec![
-///         Word::new(String::from("Tempting")),
-///         Word::new(String::from("Pretty")),
-///         Word::new(String::from("And")),
-///         Word::new(String::from("Hot")),
+///         Word(String::from("tempting"), 1),
+///         Word(String::from("pretty"), 1),
+///         Word(String::from("and"), 1),
+///         Word(String::from("hot"), 1),
 ///     ],
 /// };
 /// let ms: Vec<String> = Permutation::mutate(&a).iter()

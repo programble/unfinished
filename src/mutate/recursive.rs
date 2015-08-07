@@ -12,9 +12,9 @@ use acronym::{Word, Acronym};
 ///
 /// let a = Acronym {
 ///     words: vec![
-///         Word::new(String::from("Not")),
-///         Word::new(String::from("an")).with_count(0),
-///         Word::new(String::from("Emulator")),
+///         Word(String::from("not"), 1),
+///         Word(String::from("an"), 0),
+///         Word(String::from("emulator"), 1),
 ///     ],
 /// };
 /// let ms: Vec<String> = Recursive::mutate(&a).iter()
@@ -33,15 +33,17 @@ impl super::Mutate for Recursive {
         let is_tail = String::from("I") + &tail;
 
         for l in (b'A'..b'Z') {
-            let word = Word::new((l as char).to_string() + &tail);
+            let l = l as char;
+
+            let word = Word(l.to_string() + &tail, 1);
             let mut mutated = acronym.clone();
             mutated.words.insert(0, word);
             set.insert(mutated);
 
-            let word = Word::new((l as char).to_string() + &is_tail);
+            let word = Word(l.to_string() + &is_tail, 1);
             let mut mutated = acronym.clone();
             mutated.words.insert(0, word);
-            mutated.words.insert(1, Word::new(String::from("Is")));
+            mutated.words.insert(1, Word(String::from("is"), 1));
             set.insert(mutated);
         }
 

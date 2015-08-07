@@ -19,8 +19,8 @@ pub trait Mutate {
 ///
 /// let a = Acronym {
 ///     words: vec![
-///         Word::new(String::from("Nop")),
-///         Word::new(String::from("Example")),
+///         Word(String::from("nop"), 1),
+///         Word(String::from("example"), 1),
 ///     ],
 /// };
 ///

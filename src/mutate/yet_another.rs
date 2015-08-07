@@ -11,8 +11,8 @@ use acronym::{Word, Acronym};
 ///
 /// let a = Acronym {
 ///     words: vec![
-///         Word::new(String::from("Markup")),
-///         Word::new(String::from("Language")),
+///         Word(String::from("markup"), 1),
+///         Word(String::from("language"), 1),
 ///     ],
 /// };
 /// let ms = YetAnother::mutate(&a);
@@ -24,8 +24,8 @@ pub struct YetAnother;
 impl super::Mutate for YetAnother {
     fn mutate(acronym: &Acronym) -> HashSet<Acronym> {
         let mut mutated = acronym.clone();
-        mutated.words.insert(0, Word::new(String::from("Yet")));
-        mutated.words.insert(1, Word::new(String::from("Another")));
+        mutated.words.insert(0, Word(String::from("yet"), 1));
+        mutated.words.insert(1, Word(String::from("another"), 1));
 
         let mut set = HashSet::new();
         set.insert(mutated);

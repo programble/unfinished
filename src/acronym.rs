@@ -6,20 +6,9 @@ use itertools::Itertools;
 
 /// A word in an acronym, which can have zero or more of its initial letters appear.
 #[derive(Clone, Hash, PartialEq, Eq, PartialOrd, Ord, Debug)]
-pub struct Word {
-    string: String,
-    initial_count: usize,
-}
+pub struct Word(pub String, pub usize);
 
 impl Word {
-    /// Creates a new `Word` with its first letter visible.
-    pub fn new(s: String) -> Word {
-        Word {
-            string: s,
-            initial_count: 1,
-        }
-    }
-
     /// Sets the number of visible initial letters.
     ///
     /// # Panics
@@ -30,18 +19,14 @@ impl Word {
     ///
     /// ```
     /// use tbd::acronym::Word;
-    /// let mut w = Word::new(String::from("example")).with_count(2);
-    /// assert_eq!("EX", w.initial());
+    /// let a = Word(String::from("example"), 1);
+    /// let b = a.clone().with_count(2);
+    /// assert_eq!("EX", b.initial());
     /// ```
     pub fn with_count(mut self, count: usize) -> Self {
-        assert!(count <= self.string.len());
-        self.initial_count = count;
+        assert!(count <= self.0.len());
+        self.1 = count;
         self
-    }
-
-    /// Returns the number of visible initial letters.
-    pub fn initial_count(&self) -> usize {
-        self.initial_count
     }
 
     /// Creates an uppercase `String` of the visible initial letters for this word.
@@ -50,11 +35,11 @@ impl Word {
     ///
     /// ```
     /// use tbd::acronym::Word;
-    /// let w = Word::new(String::from("example"));
+    /// let w = Word(String::from("example"), 1);
     /// assert_eq!("E", w.initial());
     /// ```
     pub fn initial(&self) -> String {
-        self.string[..self.initial_count].to_ascii_uppercase()
+        self.0[..self.1].to_ascii_uppercase()
     }
 
     /// Creates a `String` of this `Word` with the visible initial letters in uppercase.
@@ -63,18 +48,18 @@ impl Word {
     ///
     /// ```
     /// use tbd::acronym::Word;
-    /// let w = Word::new(String::from("example")).with_count(2);
+    /// let w = Word(String::from("example"), 2);
     /// assert_eq!("EXample", w.expansion());
     /// ```
     pub fn expansion(&self) -> String {
         let head = self.initial();
-        let tail = self.string[self.initial_count..].to_ascii_lowercase();
+        let tail = self.0[self.1..].to_ascii_lowercase();
         head + &tail
     }
 
     /// Returns the word length.
     pub fn len(&self) -> usize {
-        self.string.len()
+        self.0.len()
     }
 }
 
@@ -87,9 +72,9 @@ impl Word {
 ///
 /// let a = Acronym {
 ///     words: vec![
-///         Word::new(String::from("Great")),
-///         Word::new(String::from("Acronym")),
-///         Word::new(String::from("Example")),
+///         Word(String::from("great"), 1),
+///         Word(String::from("acronym"), 1),
+///         Word(String::from("example"), 1),
 ///     ],
 /// };
 ///
@@ -110,9 +95,9 @@ impl Acronym {
     ///
     /// let a = Acronym {
     ///     words: vec![
-    ///         Word::new(String::from("Great")).with_count(2),
-    ///         Word::new(String::from("Acronym")),
-    ///         Word::new(String::from("Example")).with_count(3),
+    ///         Word(String::from("great"), 2),
+    ///         Word(String::from("acronym"), 1),
+    ///         Word(String::from("example"), 3),
     ///     ],
     /// };
     ///
@@ -120,7 +105,7 @@ impl Acronym {
     /// ```
     pub fn len(&self) -> usize {
         self.words.iter()
-            .map(Word::initial_count)
+            .map(|&Word(_, n)| n)
             .fold(0, usize::add)
     }
 
@@ -133,9 +118,9 @@ impl Acronym {
     ///
     /// let a = Acronym {
     ///     words: vec![
-    ///         Word::new(String::from("Great")).with_count(2),
-    ///         Word::new(String::from("Acronym")),
-    ///         Word::new(String::from("Example")).with_count(3),
+    ///         Word(String::from("great"), 2),
+    ///         Word(String::from("acronym"), 1),
+    ///         Word(String::from("example"), 3),
     ///     ],
     /// };
     ///
