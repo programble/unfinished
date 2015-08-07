@@ -42,3 +42,6 @@ mod recursive;
 
 pub use self::permutation::Permutation;
 mod permutation;
+
+pub use self::contraction::{ApostropheS, Contract, Expand};
+mod contraction;
