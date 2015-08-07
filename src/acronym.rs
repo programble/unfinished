@@ -57,6 +57,16 @@ impl Word {
         head + &tail
     }
 
+    /// Returns the string of this `Word`.
+    pub fn string(&self) -> &str {
+        &self.0[..]
+    }
+
+    /// Returns the count of this `Word`.
+    pub fn count(&self) -> usize {
+        self.1
+    }
+
     /// Returns the word length.
     pub fn len(&self) -> usize {
         self.0.len()
