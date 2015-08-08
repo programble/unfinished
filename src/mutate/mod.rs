@@ -3,9 +3,9 @@
 use acronym::Acronym;
 
 /// An `Acronym` mutator.
-pub trait Mutate: Iterator<Item = Acronym> {
+pub trait Mutate<'a>: Iterator<Item = Acronym> {
     /// Creates an `Iterator` over mutated acronyms.
-    fn new(acronym: &Acronym) -> Self;
+    fn new(acronym: &'a Acronym) -> Self;
 }
 
 /// A mutator that yields nothing.
@@ -27,13 +27,13 @@ pub trait Mutate: Iterator<Item = Acronym> {
 /// ```
 pub struct Nop;
 
-impl Mutate for Nop {
-    fn new(_acronym: &Acronym) -> Self {
+impl<'a> Mutate<'a> for Nop {
+    fn new(_acronym: &'a Acronym) -> Self {
         return Nop;
     }
 }
 
-impl Iterator for Nop {
+impl<'a> Iterator for Nop {
     type Item = Acronym;
 
     fn next(&mut self) -> Option<Acronym> {
