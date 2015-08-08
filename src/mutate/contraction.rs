@@ -26,17 +26,15 @@ pub struct ApostropheS;
 
 impl ApostropheS {
     fn mutate_from(set: &mut HashSet<Acronym>, i: usize, acronym: &Acronym) {
-        if acronym.words.len() <= i + 1 {
-            return;
-        }
+        if acronym.words.len() <= i + 1 { return; }
 
-        let Word(ref word_s, word_n) = acronym.words[i];
-        let Word(ref next_s, _) = acronym.words[i + 1];
+        let current = &acronym.words[i];
+        let next = &acronym.words[i + 1];
 
-        if next_s.to_ascii_lowercase() == "is" {
+        if next.string().to_ascii_lowercase() == "is" {
             let mut mutated = acronym.clone();
             mutated.words.remove(i + 1);
-            mutated.words[i] = Word(word_s.clone() + "'s", word_n);
+            mutated.words[i] = Word(String::from(current.string()) + "'s", current.count());
 
             Self::mutate_from(set, i + 1, &mutated);
             set.insert(mutated);
