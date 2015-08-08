@@ -9,8 +9,5 @@ mod recursive;
 pub use self::permutation::Permutation;
 mod permutation;
 
-//pub use self::apostrophe::{WordApostropheS, WordIs};
-//mod apostrophe;
-//
-//pub use self::contraction::{Contract, Expand};
-//mod contraction;
+pub use self::is_contraction::IsContraction;
+mod is_contraction;
