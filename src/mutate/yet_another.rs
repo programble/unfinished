@@ -1,4 +1,3 @@
-use std::collections::HashSet;
 use acronym::{Word, Acronym};
 
 /// Adds "Yet Another" to the beginning of acronyms.
@@ -7,7 +6,7 @@ use acronym::{Word, Acronym};
 ///
 /// ```
 /// use tbd::acronym::{Word, Acronym};
-/// use tbd::mutate::{Mutate, YetAnother};
+/// use tbd::mutate::YetAnother;
 ///
 /// let a = Acronym {
 ///     words: vec![
@@ -15,21 +14,32 @@ use acronym::{Word, Acronym};
 ///         Word(String::from("language"), 1),
 ///     ],
 /// };
-/// let ms = YetAnother::mutate(&a);
+/// let mut m = YetAnother::new(&a);
 ///
-/// assert_eq!("YAML", ms.iter().next().unwrap().to_string());
+/// assert_eq!("YAML", m.next().map(|a| a.to_string()).unwrap());
 /// ```
-pub struct YetAnother;
+pub struct YetAnother<'a> {
+    acronym: &'a Acronym,
+    done: bool,
+}
 
-impl super::Mutate for YetAnother {
-    fn mutate(acronym: &Acronym) -> HashSet<Acronym> {
-        let mut mutated = acronym.clone();
-        mutated.words.insert(0, Word(String::from("yet"), 1));
-        mutated.words.insert(1, Word(String::from("another"), 1));
+impl<'a> YetAnother<'a> {
+    pub fn new(acronym: &'a Acronym) -> YetAnother {
+        YetAnother { done: false, acronym: acronym }
+    }
+}
 
-        let mut set = HashSet::new();
-        set.insert(mutated);
+impl<'a> Iterator for YetAnother<'a> {
+    type Item = Acronym;
 
-        set
+    fn next(&mut self) -> Option<Acronym> {
+        if self.done { return None; }
+
+        let mut next = self.acronym.clone();
+        next.words.insert(0, Word(String::from("yet"), 1));
+        next.words.insert(1, Word(String::from("another"), 1));
+
+        self.done = true;
+        Some(next)
     }
 }

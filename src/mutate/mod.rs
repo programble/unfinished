@@ -1,49 +1,8 @@
 //! Acronym mutation.
 
-use acronym::Acronym;
+pub use self::yet_another::YetAnother;
+mod yet_another;
 
-/// An `Acronym` mutator.
-pub trait Mutate<'a>: Iterator<Item = Acronym> {
-    /// Creates an `Iterator` over mutated acronyms.
-    fn new(acronym: &'a Acronym) -> Self;
-}
-
-/// A mutator that yields nothing.
-///
-/// # Examples
-///
-/// ```
-/// use tbd::acronym::{Word, Acronym};
-/// use tbd::mutate::{Mutate, Nop};
-///
-/// let mut m = Nop::new(&Acronym {
-///     words: vec![
-///         Word(String::from("nop"), 1),
-///         Word(String::from("example"), 1),
-///     ]
-/// });
-///
-/// assert_eq!(None, m.next());
-/// ```
-pub struct Nop;
-
-impl<'a> Mutate<'a> for Nop {
-    fn new(_acronym: &'a Acronym) -> Self {
-        return Nop;
-    }
-}
-
-impl<'a> Iterator for Nop {
-    type Item = Acronym;
-
-    fn next(&mut self) -> Option<Acronym> {
-        None
-    }
-}
-
-//pub use self::yet_another::YetAnother;
-//mod yet_another;
-//
 //pub use self::recursive::Recursive;
 //mod recursive;
 //
