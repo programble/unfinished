@@ -1,15 +1,14 @@
 //! Acronym mutation.
 
-use std::collections::HashSet;
 use acronym::Acronym;
 
 /// An `Acronym` mutator.
-pub trait Mutate {
-    /// Creates a `HashSet` of mutated `Acronym` from an initial `Acronym`.
-    fn mutate(acronym: &Acronym) -> HashSet<Acronym>;
+pub trait Mutate: Iterator<Item = Acronym> {
+    /// Creates an `Iterator` over mutated acronyms.
+    fn new(acronym: &Acronym) -> Self;
 }
 
-/// A mutator that does nothing.
+/// A mutator that yields nothing.
 ///
 /// # Examples
 ///
@@ -17,31 +16,42 @@ pub trait Mutate {
 /// use tbd::acronym::{Word, Acronym};
 /// use tbd::mutate::{Mutate, Nop};
 ///
-/// let a = Acronym {
+/// let mut m = Nop::new(&Acronym {
 ///     words: vec![
 ///         Word(String::from("nop"), 1),
 ///         Word(String::from("example"), 1),
-///     ],
-/// };
+///     ]
+/// });
 ///
-/// assert_eq!(0, Nop::mutate(&a).len());
+/// assert_eq!(None, m.next());
 /// ```
 pub struct Nop;
 
 impl Mutate for Nop {
-    fn mutate(_acronym: &Acronym) -> HashSet<Acronym> {
-        HashSet::new()
+    fn new(_acronym: &Acronym) -> Self {
+        return Nop;
     }
 }
 
-pub use self::yet_another::YetAnother;
-mod yet_another;
+impl Iterator for Nop {
+    type Item = Acronym;
 
-pub use self::recursive::Recursive;
-mod recursive;
+    fn next(&mut self) -> Option<Acronym> {
+        None
+    }
+}
 
-pub use self::permutation::Permutation;
-mod permutation;
-
-pub use self::contraction::{ApostropheS, Contract, Expand};
-mod contraction;
+//pub use self::yet_another::YetAnother;
+//mod yet_another;
+//
+//pub use self::recursive::Recursive;
+//mod recursive;
+//
+//pub use self::permutation::Permutation;
+//mod permutation;
+//
+//pub use self::apostrophe::{WordApostropheS, WordIs};
+//mod apostrophe;
+//
+//pub use self::contraction::{Contract, Expand};
+//mod contraction;
