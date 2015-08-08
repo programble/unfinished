@@ -28,7 +28,7 @@ pub struct Recursive<'a> {
 
 impl<'a> Recursive<'a> {
     /// Creates a `Recursive` which optionally inserts "is" as the second word.
-    pub fn new(acronym: &'a Acronym, insert_is: bool) -> Recursive {
+    pub fn new(acronym: &Acronym, insert_is: bool) -> Recursive {
         Recursive {
             acronym: acronym,
             insert_is: insert_is,

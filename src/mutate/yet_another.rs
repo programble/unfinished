@@ -24,7 +24,7 @@ pub struct YetAnother<'a> {
 }
 
 impl<'a> YetAnother<'a> {
-    pub fn new(acronym: &'a Acronym) -> YetAnother {
+    pub fn new(acronym: &Acronym) -> YetAnother {
         YetAnother { done: false, acronym: acronym }
     }
 }
