@@ -1,4 +1,3 @@
-use std::collections::HashSet;
 use acronym::Acronym;
 
 /// Generates all possible permutations of an `Acronym`.
@@ -7,7 +6,7 @@ use acronym::Acronym;
 ///
 /// ```
 /// use tbd::acronym::{Word, Acronym};
-/// use tbd::mutate::{Mutate, Permutation};
+/// use tbd::mutate::Permutation;
 ///
 /// let a = Acronym {
 ///     words: vec![
@@ -17,30 +16,40 @@ use acronym::Acronym;
 ///         Word(String::from("hot"), 1),
 ///     ],
 /// };
-/// let ms: Vec<String> = Permutation::mutate(&a).iter()
-///     .map(Acronym::to_string)
-///     .collect();
+/// let mut m = Permutation::new(&a);
 ///
-/// assert!(ms.contains(&String::from("PHAT")));
+/// assert!(m.any(|a| a.to_string() == "PHAT"));
 /// ```
-pub struct Permutation;
+pub struct Permutation {
+    next: Acronym,
+    done: bool,
+}
 
-impl super::Mutate for Permutation {
-    fn mutate(acronym: &Acronym) -> HashSet<Acronym> {
-        let mut set = HashSet::new();
+impl Permutation {
+    pub fn new(acronym: &Acronym) -> Permutation {
+        let mut first = acronym.clone();
+        first.words.sort();
 
-        let mut permutation = acronym.clone();
-        permutation.words.sort();
-
-        set.insert(permutation.clone());
-
-        while next_permutation(&mut permutation.words) {
-            set.insert(permutation.clone());
+        Permutation {
+            next: first,
+            done: false,
         }
-
-        set
     }
 }
+
+impl Iterator for Permutation {
+    type Item = Acronym;
+
+    fn next(&mut self) -> Option<Acronym> {
+        if self.done { return None; }
+
+        let current = self.next.clone();
+        self.done = !next_permutation(&mut self.next.words);
+
+        Some(current)
+    }
+}
+
 
 /// Mutates the slice to the next lexicographic permutation.
 ///
