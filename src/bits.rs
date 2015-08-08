@@ -1,34 +1,59 @@
-//! Bit access.
+//! Bit iteration.
+//!
+//! # Examples
+//!
+//! ```
+//! use tbd::bits::Bits;
+//!
+//! let x = 0xABu8;
+//! let bits: Vec<bool> = x.bits().collect();
+//!
+//! assert_eq!(vec![true, true, false, true, false, true, false, true], bits);
+//! ```
 
-use std::mem;
+use std::ops::{Shl, BitAnd};
 
-/// Access bits of `self` as `bool`.
+/// Abstracts over a pile of bits (unsigned integers).
 ///
-/// # Examples
-///
-/// ```
-/// use tbd::bits::Bits;
-///
-/// let x = 0xF0u8;
-///
-/// assert_eq!(false, x.get_bit(3).unwrap());
-/// assert_eq!(true, x.get_bit(4).unwrap());
-/// ```
-pub trait Bits {
-    /// Gets the value of bit `n`, or `None` if bit does not exist.
-    fn get_bit(&self, n: usize) -> Option<bool>;
+/// Based on `bit-vec` `BitBlock`.
+pub trait Bits: Copy + Shl<Self, Output=Self> + BitAnd<Self, Output=Self> + Eq {
+    /// Returns `0`.
+    fn zero() -> Self;
+
+    /// Returns `1`.
+    fn one() -> Self;
+
+    /// Returns an `Iterator` over the bits as `bool`.
+    fn bits(&self) -> Iter<Self> {
+        Iter {
+            value: *self,
+            mask: Self::one(),
+        }
+    }
+}
+
+/// Iterator over bits as `bool` from least-significant to most-significant.
+pub struct Iter<T: Bits> {
+    value: T,
+    mask: T,
+}
+
+impl<T: Bits> Iterator for Iter<T> {
+    type Item = bool;
+
+    fn next(&mut self) -> Option<bool> {
+        if self.mask == T::zero() { return None; }
+        let masked = self.value & self.mask;
+        self.mask = self.mask << T::one();
+        Some(masked != T::zero())
+    }
 }
 
 macro_rules! impl_bits {
     ($t:ty) => {
         impl Bits for $t {
-            fn get_bit(&self, n: usize) -> Option<bool> {
-                if n > mem::size_of::<$t>() * 8 - 1 {
-                    None
-                } else {
-                    Some(self >> n & 1 == 1)
-                }
-            }
+            fn zero() -> Self { 0 }
+            fn one() -> Self { 1 }
         }
     }
 }
