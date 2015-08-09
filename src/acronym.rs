@@ -1,7 +1,6 @@
 //! Acronym and Word model.
 
 use std::ops::Add;
-use std::ascii::AsciiExt;
 use itertools::Itertools;
 
 /// A word in an acronym, which can have zero or more of its initial letters appear.
@@ -39,7 +38,7 @@ impl Word {
     /// assert_eq!("E", w.initial());
     /// ```
     pub fn initial(&self) -> String {
-        self.0[..self.1].to_ascii_uppercase()
+        self.0[..self.1].to_uppercase()
     }
 
     /// Creates a `String` of this `Word` with the visible initial letters in uppercase.
@@ -53,7 +52,7 @@ impl Word {
     /// ```
     pub fn expansion(&self) -> String {
         let head = self.initial();
-        let tail = self.0[self.1..].to_ascii_lowercase();
+        let tail = self.0[self.1..].to_lowercase();
         head + &tail
     }
 
