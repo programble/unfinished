@@ -76,7 +76,7 @@ impl Iterator for IsContraction {
             let mut next = Acronym { words: Vec::new() };
             let mut bits = combo.bits();
 
-            for word in self.acronym.words.iter() {
+            for word in &self.acronym.words {
                 if word.string().ends_with("'s") && bits.next().unwrap() {
                     let apostrophe = word.len() - 2;
                     let bare = String::from(&word.string()[..apostrophe]);
