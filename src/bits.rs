@@ -24,9 +24,9 @@ pub trait Bits: Copy + Shl<Self, Output=Self> + BitAnd<Self, Output=Self> + Eq {
     fn one() -> Self;
 
     /// Returns an `Iterator` over the bits as `bool`.
-    fn bits(&self) -> Iter<Self> {
+    fn bits(self) -> Iter<Self> {
         Iter {
-            value: *self,
+            value: self,
             mask: Self::one(),
         }
     }
