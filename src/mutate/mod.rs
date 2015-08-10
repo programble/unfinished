@@ -12,5 +12,5 @@ mod permutation;
 pub use self::is_contraction::IsContraction;
 mod is_contraction;
 
-pub use self::preposition::Preposition;
-mod preposition;
+pub use self::toggle::Toggle;
+mod toggle;
