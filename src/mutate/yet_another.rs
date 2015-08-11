@@ -19,13 +19,12 @@ use acronym::{Word, Acronym};
 /// assert_eq!("YAML", m.next().map(|a| a.to_string()).unwrap());
 /// ```
 pub struct YetAnother<'a> {
-    acronym: &'a Acronym,
-    done: bool,
+    acronym: Option<&'a Acronym>,
 }
 
 impl<'a> YetAnother<'a> {
-    pub fn new(acronym: &Acronym) -> YetAnother {
-        YetAnother { done: false, acronym: acronym }
+    pub fn new(acronym: &'a Acronym) -> Self {
+        YetAnother { acronym: Some(acronym) }
     }
 }
 
@@ -33,13 +32,11 @@ impl<'a> Iterator for YetAnother<'a> {
     type Item = Acronym;
 
     fn next(&mut self) -> Option<Acronym> {
-        if self.done { return None; }
-
-        let mut next = self.acronym.clone();
-        next.words.insert(0, Word(String::from("yet"), 1));
-        next.words.insert(1, Word(String::from("another"), 1));
-
-        self.done = true;
-        Some(next)
+        self.acronym.take().map(|a| {
+            let mut n = a.clone();
+            n.words.insert(0, Word(String::from("yet"), 1));
+            n.words.insert(1, Word(String::from("another"), 1));
+            n
+        })
     }
 }
