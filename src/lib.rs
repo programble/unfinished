@@ -3,5 +3,6 @@ extern crate itertools;
 extern crate lazy_static;
 
 pub mod bits;
+pub mod combos;
 pub mod acronym;
 pub mod mutate;
