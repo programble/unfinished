@@ -2,7 +2,7 @@ LD = ld
 NASM = nasm
 
 LD_FLAGS = -m elf_i386
-NASM_FLAGS = -f elf32
+NASM_FLAGS = -f elf32 -g
 
 OBJECTS = jit.o tpl.o linux.o
 
