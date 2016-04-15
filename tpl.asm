@@ -1,6 +1,3 @@
-global tpl.ILEN
-tpl.ILEN equ 8
-
 %macro pad 1
   times 8 - $ + %1 nop
 %endmacro
@@ -9,10 +6,14 @@ section .rodata
 
 extern os.exit
 
+global tpl.nop
 global tpl.push, tpl.pop, tpl.dup, tpl.swap
 global tpl.add, tpl.sub, tpl.mil, tpl.div, tpl.mod,
 global tpl.not
 global tpl.end
+
+tpl.nop:
+pad tpl.nop
 
 tpl.push:
   push strict dword 0
