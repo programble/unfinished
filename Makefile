@@ -4,7 +4,7 @@ NASM = nasm
 LD_FLAGS = -m elf_i386
 NASM_FLAGS = -f elf32
 
-OBJECTS = jit.o
+OBJECTS = jit.o tpl.o linux.o
 
 befunjit: $(OBJECTS)
 	ld $(LD_FLAGS) -o $@ $^
