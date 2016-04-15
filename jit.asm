@@ -54,7 +54,20 @@ ins.mod:
   push edx
   align ins.LEN
 ins.not:
+  pop eax
+  test eax, eax
+  setz al
+  movzx eax, al
+  push eax
+  align ins.LEN
 ins.gt:
+  pop eax
+  pop edx
+  cmp edx, eax
+  setg al
+  movzx eax, al
+  push eax
+  align ins.LEN
 
 ins.str:
 ins.east:
