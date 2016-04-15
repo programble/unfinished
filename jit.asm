@@ -53,8 +53,6 @@ ins.mod:
   push edx
   align ins.LEN
 ins.not:
-  not dword [esp]
-  align ins.LEN
 ins.gt:
 
 ins.str:
