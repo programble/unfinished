@@ -52,18 +52,33 @@ ins.mod:
   idiv ebx
   push edx
   align ins.LEN
-
 ins.not:
   not dword [esp]
   align ins.LEN
+ins.gt:
 
+ins.str:
+ins.east:
+ins.west:
+ins.south:
+ins.north:
+ins.rand:
 ins.jump:
   jmp short $ + ins.LEN * 2
   align ins.LEN
-
+ins.hif:
+ins.vif:
 ins.end:
   jmp os.exit
   align ins.LEN
+
+ins.outv:
+ins.outa:
+ins.inpv:
+ins.inpa:
+
+ins.get:
+ins.put:
 
 section .data
 
@@ -118,6 +133,84 @@ txt.north:
     jmp $ - txt.ROWS * ins.LEN
     align ins.LEN
   %endrep
+
+jit.table:
+  dd jit.not
+  dd jit.str
+  dd jit.jump
+  dd jit.pop
+  dd jit.nop
+  dd jit.inpv
+  dd jit.nop
+  dd jit.nop
+  dd jit.nop
+  dd jit.mul
+  dd jit.add
+  dd jit.outa
+  dd jit.sub
+  dd jit.outv
+  dd jit.div
+  dd jit.push
+  dd jit.push
+  dd jit.push
+  dd jit.push
+  dd jit.push
+  dd jit.push
+  dd jit.push
+  dd jit.push
+  dd jit.push
+  dd jit.push
+  dd jit.nop
+  dd jit.nop
+  dd jit.west
+  dd jit.nop
+  dd jit.east
+  dd jit.rand
+  dd jit.end
+  times 27 dd jit.nop
+  dd jit.swap
+  dd jit.nop
+  dd jit.north
+  dd jit.nop
+  dd jit.gt
+  times 21 dd jit.nop
+  dd jit.south
+  times 7 dd jit.nop
+  dd jit.inpa
+  dd jit.nop
+
+jit.nop:
+jit.push:
+jit.pop:
+jit.dup:
+jit.swap:
+
+jit.add:
+jit.sub:
+jit.mul:
+jit.div:
+jit.mod:
+jit.not:
+jit.gt:
+
+jit.str:
+jit.east:
+jit.west:
+jit.south:
+jit.north:
+jit.rand:
+jit.jump:
+jit.hif:
+jit.vif:
+jit.end:
+
+jit.outv:
+jit.outa:
+jit.inpv:
+jit.inpa:
+
+jit.get:
+jit.put:
 
 _start:
   jmp txt.east
