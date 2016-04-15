@@ -8,7 +8,7 @@ section .rodata
 ins.LEN equ 8
 
 ins.nop:
-  nop
+  nop dword [dword eax + eax]
   align ins.LEN
 ins.push:
   push strict dword 0
@@ -72,23 +72,47 @@ section .text
 
 txt.east:
   %rep txt.ROWS
-    times txt.COLS * ins.LEN nop
+    %rep txt.COLS
+      nop dword [dword eax + eax]
+      align ins.LEN
+    %endrep
     jmp $ - txt.COLS * ins.LEN
+    align ins.LEN
+    jmp $ - txt.COLS * ins.LEN
+    align ins.LEN
   %endrep
 txt.west:
   %rep txt.ROWS
-    times txt.COLS * ins.LEN nop
+    %rep txt.COLS
+      nop dword [dword eax + eax]
+      align ins.LEN
+    %endrep
     jmp $ - txt.COLS * ins.LEN
+    align ins.LEN
+    jmp $ - txt.COLS * ins.LEN
+    align ins.LEN
   %endrep
 txt.south:
   %rep txt.COLS
-    times txt.ROWS * ins.LEN nop
+    %rep txt.ROWS
+      nop dword [dword eax + eax]
+      align ins.LEN
+    %endrep
     jmp $ - txt.ROWS * ins.LEN
+    align ins.LEN
+    jmp $ - txt.ROWS * ins.LEN
+    align ins.LEN
   %endrep
 txt.north:
   %rep txt.COLS
-    times txt.ROWS * ins.LEN nop
+    %rep txt.ROWS
+      nop dword [dword eax + eax]
+      align ins.LEN
+    %endrep
     jmp $ - txt.ROWS * ins.LEN
+    align ins.LEN
+    jmp $ - txt.ROWS * ins.LEN
+    align ins.LEN
   %endrep
 
 _start:
