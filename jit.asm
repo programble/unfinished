@@ -81,17 +81,20 @@ ins.jump:
 ins.hif:
 ins.vif:
 ins.end:
-  jmp os.exit
+  mov ebp, os.exit
+  jmp ebp
   align ins.LEN
 
 ins.outv:
 ins.outa:
+  mov ebp, os.outa
   pop eax
-  call os.outa
+  call ebp
   align ins.LEN
 ins.inpv:
 ins.inpa:
-  call os.inpa
+  mov ebp, os.inpa
+  call ebp
   movzx eax, al
   push eax
   align ins.LEN
