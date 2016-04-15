@@ -57,6 +57,10 @@ ins.not:
   not dword [esp]
   align ins.LEN
 
+ins.jump:
+  jmp short $ + ins.LEN * 2
+  align ins.LEN
+
 ins.end:
   jmp os.exit
   align ins.LEN
