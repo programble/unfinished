@@ -10,7 +10,7 @@ ins.LEN equ 16
 ins.nop:
   nop dword [dword eax + eax]
   nop dword [dword eax + eax]
-  align ins.LEN
+
 ins.push:
   push strict dword 0
   align ins.LEN
@@ -106,7 +106,6 @@ txt.east:
     %rep txt.COLS
       nop dword [dword eax + eax]
       nop dword [dword eax + eax]
-      align ins.LEN
     %endrep
     jmp $ - txt.COLS * ins.LEN
     align ins.LEN
@@ -118,7 +117,6 @@ txt.west:
     %rep txt.COLS
       nop dword [dword eax + eax]
       nop dword [dword eax + eax]
-      align ins.LEN
     %endrep
     jmp $ - txt.COLS * ins.LEN
     align ins.LEN
@@ -130,7 +128,6 @@ txt.south:
     %rep txt.ROWS
       nop dword [dword eax + eax]
       nop dword [dword eax + eax]
-      align ins.LEN
     %endrep
     jmp $ - txt.ROWS * ins.LEN
     align ins.LEN
@@ -142,7 +139,6 @@ txt.north:
     %rep txt.ROWS
       nop dword [dword eax + eax]
       nop dword [dword eax + eax]
-      align ins.LEN
     %endrep
     jmp $ - txt.ROWS * ins.LEN
     align ins.LEN
