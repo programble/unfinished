@@ -1,7 +1,7 @@
 %use smartalign
 
 global _start
-extern os.exit
+extern os.exit, os.outa, os.inpa
 
 section .rodata
 
@@ -86,8 +86,15 @@ ins.end:
 
 ins.outv:
 ins.outa:
+  pop eax
+  call os.outa
+  align ins.LEN
 ins.inpv:
 ins.inpa:
+  call os.inpa
+  movzx eax, al
+  push eax
+  align ins.LEN
 
 ins.get:
 ins.put:
@@ -147,4 +154,7 @@ txt.north:
   %endrep
 
 _start:
-  jmp txt.east
+  mov al, 'f'
+  call os.inpa
+  call os.outa
+  call os.exit
