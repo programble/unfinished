@@ -12,6 +12,16 @@ tpl.pop:
   add esp, 4
 pad tpl.pop
 
+tpl.dup:
+  push dword [esp]
+pad tpl.dup
+
+tpl.swap:
+  pop eax
+  xchg eax, [esp]
+  push eax
+pad tpl.swap
+
 tpl.add:
   pop eax
   add [esp], eax
