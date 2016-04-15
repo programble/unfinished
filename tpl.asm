@@ -1,5 +1,7 @@
+%include "const.mac"
+
 %macro pad 1
-  times 8 - $ + %1 nop
+  times tpl.LEN - $ + %1 nop
 %endmacro
 
 section .rodata
