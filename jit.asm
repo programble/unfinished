@@ -5,9 +5,10 @@ extern os.exit
 
 section .rodata
 
-ins.LEN equ 8
+ins.LEN equ 16
 
 ins.nop:
+  nop dword [dword eax + eax]
   nop dword [dword eax + eax]
   align ins.LEN
 ins.push:
@@ -91,6 +92,7 @@ txt.east:
   %rep txt.ROWS
     %rep txt.COLS
       nop dword [dword eax + eax]
+      nop dword [dword eax + eax]
       align ins.LEN
     %endrep
     jmp $ - txt.COLS * ins.LEN
@@ -101,6 +103,7 @@ txt.east:
 txt.west:
   %rep txt.ROWS
     %rep txt.COLS
+      nop dword [dword eax + eax]
       nop dword [dword eax + eax]
       align ins.LEN
     %endrep
@@ -113,6 +116,7 @@ txt.south:
   %rep txt.COLS
     %rep txt.ROWS
       nop dword [dword eax + eax]
+      nop dword [dword eax + eax]
       align ins.LEN
     %endrep
     jmp $ - txt.ROWS * ins.LEN
@@ -123,6 +127,7 @@ txt.south:
 txt.north:
   %rep txt.COLS
     %rep txt.ROWS
+      nop dword [dword eax + eax]
       nop dword [dword eax + eax]
       align ins.LEN
     %endrep
