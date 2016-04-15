@@ -1,11 +1,13 @@
 LD = ld
 NASM = nasm
-NASM_FLAGS = -f elf64
 
-OBJECTS = jit.o
+LD_FLAGS = -m elf_i386
+NASM_FLAGS = -f elf32
+
+OBJECTS = jit.o tpl.o
 
 befunjit: $(OBJECTS)
-	ld -o $@ $^
+	ld $(LD_FLAGS) -o $@ $^
 
 %.o: %.asm
 	nasm $(NASM_FLAGS) -o $@ $^
