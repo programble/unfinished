@@ -109,8 +109,6 @@ txt.ROWS equ 25
 
 txt.data: times txt.COLS * txt.ROWS db ' '
 
-section .text
-
 txt.east:
   %rep txt.ROWS
     %rep txt.COLS
@@ -156,8 +154,26 @@ txt.north:
     align ins.LEN
   %endrep
 
+section .text
+
+jit.write:
+  movzx eax, bh
+  mov edx, txt.COLS + 2
+  mul edx
+  movzx edx, bl
+  add eax, edx
+  mov edx, ins.LEN
+  mul edx
+  lea edi, [txt.east + eax]
+  mov ecx, ins.LEN / 4
+  rep movsd
+  ret
+
 _start:
-  mov al, 'f'
-  call os.inpa
-  call os.outa
-  call os.exit
+  mov bx, 0x0000
+  mov esi, ins.inpa
+  call jit.write
+  inc bx
+  mov esi, ins.outa
+  call jit.write
+  jmp txt.east
