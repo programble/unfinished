@@ -3,6 +3,11 @@ use std::str::FromStr;
 use url::{ParseError, Url};
 
 /// Link relation types.
+///
+/// See [section 4][s4] and [section 6.2][s6.2].
+///
+/// [s4]: https://tools.ietf.org/html/rfc5988#section-4
+/// [s6.2]: https://tools.ietf.org/html/rfc5988#section-6.2
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum Relation {
     /// Designates a substitute for the link's context.
