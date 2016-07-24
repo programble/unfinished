@@ -184,3 +184,28 @@ impl FromStr for Relation {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::Relation;
+
+    #[test]
+    fn registered_relation_type() {
+        assert_eq!(Ok(Relation::Next), "next".parse());
+        assert_eq!(Ok(Relation::Next), "Next".parse());
+    }
+
+    #[test]
+    fn extension_relation_type() {
+        let relation: Relation = "http://example.com".parse().unwrap();
+        match relation {
+            Relation::Extension(_) => (),
+            x => panic!("unexpected relation type {:?}", x),
+        }
+    }
+
+    #[test]
+    fn invalid_extension_relation_type() {
+        assert!("a".parse::<Relation>().is_err());
+    }
+}
