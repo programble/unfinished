@@ -236,17 +236,19 @@ impl ToString for Relation {
 
 #[cfg(test)]
 mod tests {
+    use std::str::FromStr;
+
     use super::Relation;
 
     #[test]
-    fn registered_relation_type() {
+    fn from_str_registered_relation_type() {
         assert_eq!(Ok(Relation::Next), "next".parse());
         assert_eq!(Ok(Relation::Next), "Next".parse());
     }
 
     #[test]
-    fn extension_relation_type() {
-        let relation: Relation = "http://example.com".parse().unwrap();
+    fn from_str_extension_relation_type() {
+        let relation = Relation::from_str("http://example.com/").unwrap();
         match relation {
             Relation::Extension(_) => (),
             x => panic!("unexpected relation type {:?}", x),
@@ -254,7 +256,20 @@ mod tests {
     }
 
     #[test]
-    fn invalid_extension_relation_type() {
-        assert!("a".parse::<Relation>().is_err());
+    fn from_str_invalid_extension_relation_type() {
+        assert!(Relation::from_str("a").is_err());
+    }
+
+    #[test]
+    fn to_string_registered_relation_type() {
+        assert_eq!("next", Relation::Next.to_string());
+    }
+
+    #[test]
+    fn to_string_extension_relation_type() {
+        assert_eq!(
+            "http://example.com/",
+            Relation::from_str("http://example.com/").unwrap().to_string()
+        );
     }
 }
