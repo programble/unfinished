@@ -1,4 +1,5 @@
 use std::str::FromStr;
+use std::string::ToString;
 
 use url::{ParseError, Url};
 
@@ -181,6 +182,54 @@ impl FromStr for Relation {
             "working-copy" => Ok(Relation::WorkingCopy),
             "working-copy-of" => Ok(Relation::WorkingCopyOf),
             extension => Url::parse(extension).map(Relation::Extension),
+        }
+    }
+}
+
+impl ToString for Relation {
+    fn to_string(&self) -> String {
+        match *self {
+            Relation::Alternate => String::from("alternate"),
+            Relation::Appendix => String::from("appendix"),
+            Relation::Bookmark => String::from("bookmark"),
+            Relation::Chapter => String::from("chapter"),
+            Relation::Contents => String::from("contents"),
+            Relation::Copyright => String::from("copyright"),
+            Relation::Current => String::from("current"),
+            Relation::Describedby => String::from("describedby"),
+            Relation::Edit => String::from("edit"),
+            Relation::EditMedia => String::from("edit-media"),
+            Relation::Enclosure => String::from("enclosure"),
+            Relation::First => String::from("first"),
+            Relation::Glossary => String::from("glossary"),
+            Relation::Help => String::from("help"),
+            Relation::Hub => String::from("hub"),
+            Relation::Index => String::from("index"),
+            Relation::Last => String::from("last"),
+            Relation::LatestVersion => String::from("latest-version"),
+            Relation::License => String::from("license"),
+            Relation::Next => String::from("next"),
+            Relation::NextArchive => String::from("next-archive"),
+            Relation::Payment => String::from("payment"),
+            Relation::Prev => String::from("prev"),
+            Relation::PredecessorVersion => String::from("predecessor-version"),
+            Relation::Previous => String::from("previous"),
+            Relation::PrevArchive => String::from("prev-archive"),
+            Relation::Related => String::from("related"),
+            Relation::Replies => String::from("replies"),
+            Relation::Section => String::from("section"),
+            Relation::Self_ => String::from("self"),
+            Relation::Service => String::from("service"),
+            Relation::Start => String::from("start"),
+            Relation::Stylesheet => String::from("stylesheet"),
+            Relation::Subsection => String::from("subsection"),
+            Relation::SuccessorVersion => String::from("successor-version"),
+            Relation::Up => String::from("up"),
+            Relation::VersionHistory => String::from("version-history"),
+            Relation::Via => String::from("via"),
+            Relation::WorkingCopy => String::from("working-copy"),
+            Relation::WorkingCopyOf => String::from("working-copy-of"),
+            Relation::Extension(ref url) => url.to_string(),
         }
     }
 }
