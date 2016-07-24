@@ -14,16 +14,24 @@
     variant_size_differences,
 )]
 
+extern crate hyper;
+extern crate mime;
 extern crate url;
 
+mod attribute;
 mod relation;
 
 use url::Url;
 
+pub use attribute::Attribute;
 pub use relation::Relation;
 
 /// A typed connection between two resources.
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+///
+/// See [section 3][s3].
+///
+/// [s3]: https://tools.ietf.org/html/rfc5988#section-3
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Link {
     /// Context URL.
     pub context_url: Url,
@@ -35,5 +43,5 @@ pub struct Link {
     pub target_url: Url,
 
     /// Target attributes.
-    pub target_attrs: (), // TODO
+    pub target_attrs: Vec<Attribute>,
 }
