@@ -1,0 +1,12 @@
+[root]
+name = "fix"
+version = "0.0.0"
+dependencies = [
+ "typenum 1.3.2 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "typenum"
+version = "1.3.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+
