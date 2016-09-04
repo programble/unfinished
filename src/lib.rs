@@ -17,22 +17,14 @@ use std::marker::PhantomData;
 
 use typenum::{NonZero, Unsigned, Integer};
 
-/// Number storage types.
-pub trait Num { }
+pub use typenum::consts;
 
-impl Num for u8 { }
-impl Num for u16 { }
-impl Num for u32 { }
-impl Num for u64 { }
-impl Num for usize { }
+pub mod aliases;
 
-impl Num for i8 { }
-impl Num for i16 { }
-impl Num for i32 { }
-impl Num for i64 { }
-impl Num for isize { }
+mod num;
+pub use num::Num;
 
-/// A fixed-point number stored in `N`, scaled by `Base` to `Exponent`.
+/// A fixed-point number stored in `N`, scaled by `Base ^ Exponent`.
 pub struct Fix<N: Num, Base: NonZero + Unsigned, Exponent: Integer> {
     num: N,
     base: PhantomData<Base>,
