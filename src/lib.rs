@@ -13,6 +13,7 @@
 
 extern crate typenum;
 
+use std::fmt::{Debug, Error as FmtError, Formatter};
 use std::marker::PhantomData;
 
 use typenum::{NonZero, Unsigned, Integer};
@@ -33,7 +34,7 @@ pub trait Exponent: Integer { }
 impl<T: Integer> Exponent for T { }
 
 /// A fixed-point number stored in `N`, scaled by `B ^ E`.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Fix<N: Num, B: Base, E: Exponent> {
     num: N,
     marker: PhantomData<(B, E)>,
@@ -46,5 +47,11 @@ impl<N: Num, B: Base, E: Exponent> Default for Fix<N, B, E> {
             num: N::zero(),
             marker: PhantomData,
         }
+    }
+}
+
+impl<N: Num, B: Base, E: Exponent> Debug for Fix<N, B, E> {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), FmtError> {
+        write!(f, "{:?}x{}^{}", self.num, B::to_u64(), E::to_i64())
     }
 }

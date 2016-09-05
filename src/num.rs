@@ -1,5 +1,7 @@
+use std::fmt::Debug;
+
 /// Integer types.
-pub trait Num {
+pub trait Num: Debug {
     /// Returns zero.
     fn zero() -> Self;
 }
