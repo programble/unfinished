@@ -24,9 +24,17 @@ pub mod aliases;
 mod num;
 pub use num::Num;
 
-/// A fixed-point number stored in `N`, scaled by `Base ^ Exponent`.
-pub struct Fix<N: Num, Base: NonZero + Unsigned, Exponent: Integer> {
+/// Marker trait alias for base.
+pub trait Base: NonZero + Unsigned { }
+impl<T: NonZero + Unsigned> Base for T { }
+
+/// Marker trait alias for exponent.
+pub trait Exponent: Integer { }
+impl<T: Integer> Exponent for T { }
+
+/// A fixed-point number stored in `N`, scaled by `B ^ E`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+pub struct Fix<N: Num, B: Base, E: Exponent> {
     num: N,
-    base: PhantomData<Base>,
-    exponent: PhantomData<Exponent>,
+    marker: PhantomData<(B, E)>,
 }
