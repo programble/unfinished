@@ -1,5 +1,6 @@
 /// Integer types.
 pub trait Num {
+    /// Returns zero.
     fn zero() -> Self;
 }
 
