@@ -177,3 +177,37 @@ pub mod si {
     /// 10^24
     pub type Yotta<N> = Fix<N, U10, P24>;
 }
+
+/// IEC prefixes.
+pub mod iec {
+    use typenum::{P10, P20, P30, P40, P50, P60, P70, P80, U2, Z0};
+
+    use Fix;
+
+    /// 2^0
+    pub type Unit<N> = Fix<N, U2, Z0>;
+
+    /// 2^10
+    pub type Kibi<N> = Fix<N, U2, P10>;
+
+    /// 2^20
+    pub type Mebi<N> = Fix<N, U2, P20>;
+
+    /// 2^30
+    pub type Gibi<N> = Fix<N, U2, P30>;
+
+    /// 2^40
+    pub type Tebi<N> = Fix<N, U2, P40>;
+
+    /// 2^50
+    pub type Pebi<N> = Fix<N, U2, P50>;
+
+    /// 2^60
+    pub type Exbi<N> = Fix<N, U2, P60>;
+
+    /// 2^70
+    pub type Zebi<N> = Fix<N, U2, P70>;
+
+    /// 2^80
+    pub type Yobi<N> = Fix<N, U2, P80>;
+}
