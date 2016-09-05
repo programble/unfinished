@@ -1,7 +1,8 @@
 use std::fmt::Debug;
+use std::hash::Hash;
 
 /// Integer types.
-pub trait Num: Debug {
+pub trait Num: Debug + Copy + Eq + Ord + Hash {
     /// Returns zero.
     fn zero() -> Self;
 }

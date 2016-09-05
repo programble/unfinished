@@ -13,17 +13,19 @@
 
 extern crate typenum;
 
-use std::fmt::{Debug, Error as FmtError, Formatter};
-use std::marker::PhantomData;
-
-use typenum::{NonZero, Unsigned, Integer};
+pub mod aliases;
 
 pub use typenum::consts;
 
-pub mod aliases;
-
 mod num;
 pub use num::Num;
+
+use std::cmp::Ordering;
+use std::fmt::{Debug, Error as FmtError, Formatter};
+use std::hash::{Hash, Hasher};
+use std::marker::PhantomData;
+
+use typenum::{NonZero, Unsigned, Integer};
 
 /// Marker trait alias for base.
 pub trait Base: NonZero + Unsigned { }
@@ -34,10 +36,58 @@ pub trait Exponent: Integer { }
 impl<T: Integer> Exponent for T { }
 
 /// A fixed-point number stored in `N`, scaled by `B ^ E`.
-#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Fix<N: Num, B: Base, E: Exponent> {
     num: N,
     marker: PhantomData<(B, E)>,
+}
+
+impl<N: Num, B: Base, E: Exponent> Debug for Fix<N, B, E> {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), FmtError> {
+        write!(f, "{:?}x{}^{}", self.num, B::to_u64(), E::to_i64())
+    }
+}
+
+// TODO: Implement Display.
+
+impl<N: Num, B: Base, E: Exponent> Clone for Fix<N, B, E> {
+    fn clone(&self) -> Self {
+        Fix {
+            num: self.num,
+            marker: PhantomData,
+        }
+    }
+}
+
+impl<N: Num, B: Base, E: Exponent> Copy for Fix<N, B, E> { }
+
+impl<N: Num, B: Base, E: Exponent> PartialEq for Fix<N, B, E> {
+    fn eq(&self, other: &Self) -> bool {
+        self.num == other.num
+    }
+}
+
+impl<N: Num, B: Base, E: Exponent> Eq for Fix<N, B, E> { }
+
+// TODO: Implement PartialEq/Eq against other exponents.
+
+impl<N: Num, B: Base, E: Exponent> PartialOrd for Fix<N, B, E> {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        self.num.partial_cmp(&other.num)
+    }
+}
+
+impl<N: Num, B: Base, E: Exponent> Ord for Fix<N, B, E> {
+    fn cmp(&self, other: &Self) -> Ordering {
+        self.num.cmp(&other.num)
+    }
+}
+
+// TODO: Implement PartialOrd/Ord against other exponents.
+
+impl<N: Num, B: Base, E: Exponent> Hash for Fix<N, B, E> {
+    fn hash<H: Hasher>(&self, state: &mut H) {
+        self.num.hash(state);
+    }
 }
 
 /// Returns zero.
@@ -47,11 +97,5 @@ impl<N: Num, B: Base, E: Exponent> Default for Fix<N, B, E> {
             num: N::zero(),
             marker: PhantomData,
         }
-    }
-}
-
-impl<N: Num, B: Base, E: Exponent> Debug for Fix<N, B, E> {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), FmtError> {
-        write!(f, "{:?}x{}^{}", self.num, B::to_u64(), E::to_i64())
     }
 }
