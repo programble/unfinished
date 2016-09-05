@@ -38,3 +38,13 @@ pub struct Fix<N: Num, B: Base, E: Exponent> {
     num: N,
     marker: PhantomData<(B, E)>,
 }
+
+/// Returns zero.
+impl<N: Num, B: Base, E: Exponent> Default for Fix<N, B, E> {
+    fn default() -> Self {
+        Fix {
+            num: N::zero(),
+            marker: PhantomData,
+        }
+    }
+}

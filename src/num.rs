@@ -1,14 +1,24 @@
 /// Integer types.
-pub trait Num { }
+pub trait Num {
+    fn zero() -> Self;
+}
 
-impl Num for u8 { }
-impl Num for u16 { }
-impl Num for u32 { }
-impl Num for u64 { }
-impl Num for usize { }
+macro_rules! impl_num {
+    ($n:ty) => (
+        impl Num for $n {
+            fn zero() -> Self { 0 }
+        }
+    )
+}
 
-impl Num for i8 { }
-impl Num for i16 { }
-impl Num for i32 { }
-impl Num for i64 { }
-impl Num for isize { }
+impl_num!(u8);
+impl_num!(u16);
+impl_num!(u32);
+impl_num!(u64);
+impl_num!(usize);
+
+impl_num!(i8);
+impl_num!(i16);
+impl_num!(i32);
+impl_num!(i64);
+impl_num!(isize);
