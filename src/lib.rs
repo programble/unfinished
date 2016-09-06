@@ -100,11 +100,17 @@ impl<I: Int, B: Base, E: Exponent> Default for Fix<I, B, E> {
     }
 }
 
-impl<I: Int, B: Base> From<I> for Fix<I, B, Z0> {
-    fn from(int: I) -> Self {
+impl<I: Int, B: Base, E: Exponent> Fix<I, B, E> {
+    /// Creates a fixed-point number from an integer.
+    pub fn from_int(int: I) -> Self {
         Fix {
             int: int,
             marker: PhantomData,
         }
+    }
+
+    /// Returns `self` as an integer.
+    pub fn into_int(self) -> I {
+        self.int
     }
 }
