@@ -25,7 +25,7 @@ use std::fmt::{Debug, Error as FmtError, Formatter};
 use std::hash::{Hash, Hasher};
 use std::marker::PhantomData;
 
-use typenum::{NonZero, Unsigned, Integer};
+use typenum::{NonZero, Unsigned, Integer, Z0};
 
 /// Marker trait alias for base.
 pub trait Base: NonZero + Unsigned { }
@@ -95,6 +95,15 @@ impl<N: Num, B: Base, E: Exponent> Default for Fix<N, B, E> {
     fn default() -> Self {
         Fix {
             num: N::zero(),
+            marker: PhantomData,
+        }
+    }
+}
+
+impl<N: Num, B: Base> From<N> for Fix<N, B, Z0> {
+    fn from(num: N) -> Self {
+        Fix {
+            num: num,
             marker: PhantomData,
         }
     }
