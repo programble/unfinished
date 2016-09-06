@@ -25,7 +25,7 @@ use std::fmt::{Debug, Error as FmtError, Formatter};
 use std::hash::{Hash, Hasher};
 use std::marker::PhantomData;
 
-use typenum::{NonZero, Unsigned, Integer, Z0};
+use typenum::{NonZero, Unsigned, Integer};
 
 /// Marker trait alias for base.
 pub trait Base: NonZero + Unsigned { }
@@ -112,5 +112,21 @@ impl<I: Int, B: Base, E: Exponent> Fix<I, B, E> {
     /// Returns `self` as an integer.
     pub fn into_int(self) -> I {
         self.int
+    }
+
+    /// Converts from another exponent.
+    ///
+    /// This is not the `From` trait because that results in a conflicting implementation with
+    /// `From<T> for T`.
+    pub fn from<F: Exponent>(other: Fix<I, B, F>) -> Self {
+        unimplemented!()
+    }
+
+    /// Converts into another exponent.
+    ///
+    /// This is not the `Into` trait because that results in a conflicting implementation with
+    /// `From<T> for T`.
+    pub fn into<F: Exponent>(self) -> Fix<I, B, F> {
+        unimplemented!()
     }
 }
