@@ -41,6 +41,37 @@ pub struct Fix<I: Int, B: Base, E: Exponent> {
     marker: PhantomData<(B, E)>,
 }
 
+impl<I: Int, B: Base, E: Exponent> Fix<I, B, E> {
+    /// Creates a fixed-point number from an integer.
+    pub fn from_int(int: I) -> Self {
+        Fix {
+            int: int,
+            marker: PhantomData,
+        }
+    }
+
+    /// Returns `self` as an integer.
+    pub fn into_int(self) -> I {
+        self.int
+    }
+
+    /// Converts from another exponent.
+    ///
+    /// This is not the `From` trait because that results in a conflicting implementation with
+    /// `From<T> for T`.
+    pub fn from<F: Exponent>(other: Fix<I, B, F>) -> Self {
+        unimplemented!()
+    }
+
+    /// Converts into another exponent.
+    ///
+    /// This is not the `Into` trait because that results in a conflicting implementation with
+    /// `From<T> for T`.
+    pub fn into<F: Exponent>(self) -> Fix<I, B, F> {
+        unimplemented!()
+    }
+}
+
 impl<I: Int, B: Base, E: Exponent> Debug for Fix<I, B, E> {
     fn fmt(&self, f: &mut Formatter) -> Result<(), FmtError> {
         write!(f, "{:?}x{}^{}", self.int, B::to_u64(), E::to_i64())
@@ -93,36 +124,5 @@ impl<I: Int, B: Base, E: Exponent> Default for Fix<I, B, E> {
             int: I::zero(),
             marker: PhantomData,
         }
-    }
-}
-
-impl<I: Int, B: Base, E: Exponent> Fix<I, B, E> {
-    /// Creates a fixed-point number from an integer.
-    pub fn from_int(int: I) -> Self {
-        Fix {
-            int: int,
-            marker: PhantomData,
-        }
-    }
-
-    /// Returns `self` as an integer.
-    pub fn into_int(self) -> I {
-        self.int
-    }
-
-    /// Converts from another exponent.
-    ///
-    /// This is not the `From` trait because that results in a conflicting implementation with
-    /// `From<T> for T`.
-    pub fn from<F: Exponent>(other: Fix<I, B, F>) -> Self {
-        unimplemented!()
-    }
-
-    /// Converts into another exponent.
-    ///
-    /// This is not the `Into` trait because that results in a conflicting implementation with
-    /// `From<T> for T`.
-    pub fn into<F: Exponent>(self) -> Fix<I, B, F> {
-        unimplemented!()
     }
 }
