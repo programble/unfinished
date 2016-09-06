@@ -68,8 +68,6 @@ impl<I: Int, B: Base, E: Exponent> PartialEq for Fix<I, B, E> {
 
 impl<I: Int, B: Base, E: Exponent> Eq for Fix<I, B, E> { }
 
-// TODO: Implement PartialEq/Eq against other exponents.
-
 impl<I: Int, B: Base, E: Exponent> PartialOrd for Fix<I, B, E> {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         self.int.partial_cmp(&other.int)
@@ -81,8 +79,6 @@ impl<I: Int, B: Base, E: Exponent> Ord for Fix<I, B, E> {
         self.int.cmp(&other.int)
     }
 }
-
-// TODO: Implement PartialOrd/Ord against other exponents.
 
 impl<I: Int, B: Base, E: Exponent> Hash for Fix<I, B, E> {
     fn hash<H: Hasher>(&self, state: &mut H) {
