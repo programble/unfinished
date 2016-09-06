@@ -111,67 +111,67 @@ pub mod si {
     use Fix;
 
     /// 10^-24
-    pub type Yocto<N> = Fix<N, U10, N24>;
+    pub type Yocto<I> = Fix<I, U10, N24>;
 
     /// 10^-21
-    pub type Zepto<N> = Fix<N, U10, N21>;
+    pub type Zepto<I> = Fix<I, U10, N21>;
 
     /// 10^-18
-    pub type Atto<N> = Fix<N, U10, N18>;
+    pub type Atto<I> = Fix<I, U10, N18>;
 
     /// 10^-15
-    pub type Femto<N> = Fix<N, U10, N15>;
+    pub type Femto<I> = Fix<I, U10, N15>;
 
     /// 10^-12
-    pub type Pico<N> = Fix<N, U10, N12>;
+    pub type Pico<I> = Fix<I, U10, N12>;
 
     /// 10^-9
-    pub type Nano<N> = Fix<N, U10, N9>;
+    pub type Nano<I> = Fix<I, U10, N9>;
 
     /// 10^-6
-    pub type Micro<N> = Fix<N, U10, N6>;
+    pub type Micro<I> = Fix<I, U10, N6>;
 
     /// 10^-3
-    pub type Milli<N> = Fix<N, U10, N3>;
+    pub type Milli<I> = Fix<I, U10, N3>;
 
     /// 10^-2
-    pub type Centi<N> = Fix<N, U10, N2>;
+    pub type Centi<I> = Fix<I, U10, N2>;
 
     /// 10^-1
-    pub type Deci<N> = Fix<N, U10, N1>;
+    pub type Deci<I> = Fix<I, U10, N1>;
 
     /// 10^0
-    pub type Unit<N> = Fix<N, U10, Z0>;
+    pub type Unit<I> = Fix<I, U10, Z0>;
 
     /// 10^1
-    pub type Deca<N> = Fix<N, U10, P1>;
+    pub type Deca<I> = Fix<I, U10, P1>;
 
     /// 10^2
-    pub type Hecto<N> = Fix<N, U10, P2>;
+    pub type Hecto<I> = Fix<I, U10, P2>;
 
     /// 10^3
-    pub type Kilo<N> = Fix<N, U10, P3>;
+    pub type Kilo<I> = Fix<I, U10, P3>;
 
     /// 10^6
-    pub type Mega<N> = Fix<N, U10, P6>;
+    pub type Mega<I> = Fix<I, U10, P6>;
 
     /// 10^9
-    pub type Giga<N> = Fix<N, U10, P9>;
+    pub type Giga<I> = Fix<I, U10, P9>;
 
     /// 10^12
-    pub type Tera<N> = Fix<N, U10, P12>;
+    pub type Tera<I> = Fix<I, U10, P12>;
 
     /// 10^15
-    pub type Peta<N> = Fix<N, U10, P15>;
+    pub type Peta<I> = Fix<I, U10, P15>;
 
     /// 10^18
-    pub type Exa<N> = Fix<N, U10, P18>;
+    pub type Exa<I> = Fix<I, U10, P18>;
 
     /// 10^21
-    pub type Zeta<N> = Fix<N, U10, P21>;
+    pub type Zeta<I> = Fix<I, U10, P21>;
 
     /// 10^24
-    pub type Yotta<N> = Fix<N, U10, P24>;
+    pub type Yotta<I> = Fix<I, U10, P24>;
 }
 
 /// IEC prefixes.
@@ -181,29 +181,29 @@ pub mod iec {
     use Fix;
 
     /// 2^0
-    pub type Unit<N> = Fix<N, U2, Z0>;
+    pub type Unit<I> = Fix<I, U2, Z0>;
 
     /// 2^10
-    pub type Kibi<N> = Fix<N, U2, P10>;
+    pub type Kibi<I> = Fix<I, U2, P10>;
 
     /// 2^20
-    pub type Mebi<N> = Fix<N, U2, P20>;
+    pub type Mebi<I> = Fix<I, U2, P20>;
 
     /// 2^30
-    pub type Gibi<N> = Fix<N, U2, P30>;
+    pub type Gibi<I> = Fix<I, U2, P30>;
 
     /// 2^40
-    pub type Tebi<N> = Fix<N, U2, P40>;
+    pub type Tebi<I> = Fix<I, U2, P40>;
 
     /// 2^50
-    pub type Pebi<N> = Fix<N, U2, P50>;
+    pub type Pebi<I> = Fix<I, U2, P50>;
 
     /// 2^60
-    pub type Exbi<N> = Fix<N, U2, P60>;
+    pub type Exbi<I> = Fix<I, U2, P60>;
 
     /// 2^70
-    pub type Zebi<N> = Fix<N, U2, P70>;
+    pub type Zebi<I> = Fix<I, U2, P70>;
 
     /// 2^80
-    pub type Yobi<N> = Fix<N, U2, P80>;
+    pub type Yobi<I> = Fix<I, U2, P80>;
 }
