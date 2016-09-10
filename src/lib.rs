@@ -24,7 +24,7 @@ use std::cmp::Ordering;
 use std::fmt::{Debug, Error as FmtError, Formatter};
 use std::hash::{Hash, Hasher};
 use std::marker::PhantomData;
-use std::ops::Add;
+use std::ops::{Add, Sub};
 
 use typenum::{NonZero, Unsigned, Integer};
 
@@ -134,6 +134,17 @@ impl<I: Int, B: Base, E: Exponent> Add for Fix<I, B, E> {
     fn add(self, rhs: Self) -> Self {
         Fix {
             int: self.int + rhs.int,
+            marker: PhantomData,
+        }
+    }
+}
+
+impl<I: Int, B: Base, E: Exponent> Sub for Fix<I, B, E> {
+    type Output = Self;
+
+    fn sub(self, rhs: Self) -> Self {
+        Fix {
+            int: self.int - rhs.int,
             marker: PhantomData,
         }
     }
