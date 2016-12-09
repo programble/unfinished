@@ -1,6 +1,10 @@
 use std::ops::{FnOnce, FnMut, Fn};
 
 /// Always returns the same value.
+///
+/// - `FnOnce() -> A`
+/// - `FnMut() -> A where A: Clone`
+/// - `Fn() -> A where A: Clone`
 #[derive(Debug, Clone, Copy)]
 pub struct Always<A> {
     a: A,
