@@ -29,5 +29,7 @@ pub fn id<A>(a: A) -> A {
 }
 
 mod always;
+mod ignore;
 
-pub use always::{always, Always};
+pub use always::{Always, always};
+pub use ignore::{Ignore1, Ignore2, Ignore3, ignore1, ignore2, ignore3};
