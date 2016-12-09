@@ -1,6 +1,33 @@
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn it_works() {
-    }
+//! Collection of higher-order functions.
+
+#![warn(
+    missing_copy_implementations,
+    missing_debug_implementations,
+    missing_docs,
+    trivial_numeric_casts,
+    unused_extern_crates,
+    unused_import_braces,
+    unused_qualifications,
+    variant_size_differences,
+)]
+
+#![feature(
+    fn_traits,
+    unboxed_closures,
+)]
+
+/// Returns its argument.
+///
+/// # Examples
+///
+/// ```
+/// # use pointfree::id;
+/// assert_eq!(1, id(1));
+/// ```
+pub fn id<A>(a: A) -> A {
+    a
 }
+
+mod always;
+
+pub use always::{always, Always};
