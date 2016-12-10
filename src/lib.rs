@@ -32,6 +32,6 @@ mod always;
 mod compose;
 mod ignore;
 
-pub use always::{Always, always};
+pub use always::{Always, always, always1, always2, always3};
 pub use compose::{Compose1, Compose2, Compose3, compose1, compose2, compose3};
 pub use ignore::{Ignore1, Ignore2, Ignore3, ignore1, ignore2, ignore3};
