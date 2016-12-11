@@ -1,31 +1,16 @@
 use std::ops::{FnOnce, FnMut, Fn};
 
-/// Takes one argument and calls `F` with none.
-///
-/// - `FnOnce(A) -> B where F: FnOnce() -> B`
-/// - `FnMut(A) -> B where F: FnMut() -> B`
-/// - `Fn(A) -> B where F: Fn() -> B`
-#[derive(Debug, Clone, Copy)]
+/// See [`ignore1`](fn.ignore1.html).
 pub struct Ignore1<F> {
     f: F,
 }
 
-/// Takes two arguments and calls `F` with none.
-///
-/// - `FnOnce(A, B) -> C where F: FnOnce() -> C`
-/// - `FnMut(A, B) -> C where F: FnMut() -> C`
-/// - `Fn(A, B) -> C where F: Fn() -> C`
-#[derive(Debug, Clone, Copy)]
+/// See [`ignore2`](fn.ignore2.html).
 pub struct Ignore2<F> {
     f: F,
 }
 
-/// Takes three arguments and calls `F` with none.
-///
-/// - `FnOnce(A, B, C) -> D where F: FnOnce() -> D`
-/// - `FnMut(A, B, C) -> D where F: FnMut() -> D`
-/// - `Fn(A, B, C) -> D where F: Fn() -> D`
-#[derive(Debug, Clone, Copy)]
+/// See [`ignore3`](fn.ignore3.html).
 pub struct Ignore3<F> {
     f: F,
 }

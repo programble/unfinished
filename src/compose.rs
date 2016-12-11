@@ -1,33 +1,18 @@
 use std::ops::{FnOnce, FnMut, Fn};
 
-/// Calls `f(g(a))`.
-///
-/// - `FnOnce(A) -> C where G: FnOnce(A) -> B, F: FnOnce(B) -> C`
-/// - `FnMut(A) -> C where G: FnMut(A) -> B, F: FnMut(B) -> C`
-/// - `Fn(A) -> C where G: Fn(A) -> B, F: Fn(B) -> C`
-#[derive(Debug, Clone, Copy)]
+/// See [`compose1`](fn.compose1.html).
 pub struct Compose1<F, G> {
     f: F,
     g: G,
 }
 
-/// Calls `f(g(a, b))`.
-///
-/// - `FnOnce(A, B) -> D where G: FnOnce(A, B) -> C, F: FnOnce(C) -> D`
-/// - `FnMut(A, B) -> D where G: FnMut(A, B) -> C, F: FnMut(C) -> D`
-/// - `Fn(A, B) -> D where G: Fn(A, B) -> C, F: Fn(C) -> D`
-#[derive(Debug, Clone, Copy)]
+/// See [`compose2`](fn.compose2.html).
 pub struct Compose2<F, G> {
     f: F,
     g: G,
 }
 
-/// Calls `f(g(a, b, c))`.
-///
-/// - `FnOnce(A, B, C) -> E where G: FnOnce(A, B, C) -> D, F: FnOnce(D) -> E`
-/// - `FnMut(A, B, C) -> E where G: FnMut(A, B, C) -> D, F: FnMut(D) -> E`
-/// - `Fn(A, B, C) -> E where G: Fn(A, B, C) -> D, F: Fn(D) -> E`
-#[derive(Debug, Clone, Copy)]
+/// See [`compose3`](fn.compose3.html).
 pub struct Compose3<F, G> {
     f: F,
     g: G,

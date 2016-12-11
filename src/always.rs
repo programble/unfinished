@@ -2,12 +2,7 @@ use std::ops::{FnOnce, FnMut, Fn};
 
 use ignore::{Ignore1, Ignore2, Ignore3, ignore1, ignore2, ignore3};
 
-/// Always returns the same value.
-///
-/// - `FnOnce() -> A`
-/// - `FnMut() -> A where A: Clone`
-/// - `Fn() -> A where A: Clone`
-#[derive(Debug, Clone, Copy)]
+/// See [`always`](fn.always.html).
 pub struct Always<A> {
     a: A,
 }
