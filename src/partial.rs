@@ -70,9 +70,16 @@ where F: Fn(&A, B, C) -> D {
     }
 }
 
-/// Returns...
+/// Partially applies one argument to a binary function, returning a unary function.
 ///
 /// # Examples
+///
+/// ```
+/// # use pointfree::partial1;
+/// let vec = vec![1, 2, 3];
+/// let get = partial1(<[_]>::get, vec.as_slice());
+/// assert_eq!(Some(&2), get(1));
+/// ```
 ///
 /// ```
 /// # use pointfree::partial1;
@@ -85,18 +92,25 @@ where F: Fn(&A, B, C) -> D {
 /// }
 /// assert_eq!([1, 2, 3], vec.as_slice());
 /// ```
-///
-/// ```
-/// # use pointfree::partial1;
-/// let vec = vec![1, 2, 3];
-/// let get = partial1(<[_]>::get, vec.as_slice());
-/// assert_eq!(Some(&2), get(1));
-/// ```
 pub fn partial1<F, A>(f: F, a: A) -> Partial1<F, A> {
     Partial1 { f: f, a: a }
 }
 
-/// Returns...
+/// Partially applies one argument to a ternary function, returning a binary function.
+///
+/// # Examples
+///
+/// ```
+/// # use pointfree::partial2;
+/// let mut vec = Vec::new();
+/// {
+///     let mut insert = partial2(Vec::insert, &mut vec);
+///     insert(0, 'c');
+///     insert(0, 'a');
+///     insert(1, 'b');
+/// }
+/// assert_eq!(['a', 'b', 'c'], vec.as_slice());
+/// ```
 pub fn partial2<F, A>(f: F, a: A) -> Partial2<F, A> {
     Partial2 { f: f, a: a }
 }

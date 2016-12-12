@@ -26,7 +26,7 @@ impl<A> Fn<()> for Always<A> where A: Clone {
     }
 }
 
-/// Returns a function which always returns `a`.
+/// Returns a nullary function which always returns the same value.
 ///
 /// # Examples
 ///
@@ -39,7 +39,7 @@ pub fn always<A>(a: A) -> Always<A> {
     Always { a: a }
 }
 
-/// Returns a function which takes one argument and always returns `a`.
+/// Returns a unary function which always returns the same value.
 ///
 /// # Examples
 ///
@@ -52,7 +52,7 @@ pub fn always1<A>(a: A) -> Ignore1<Always<A>> {
     ignore1(always(a))
 }
 
-/// Returns a function which takes two arguments and always returns `a`.
+/// Returns a binary function which always returns the same value.
 ///
 /// # Examples
 ///
@@ -65,7 +65,7 @@ pub fn always2<A>(a: A) -> Ignore2<Always<A>> {
     ignore2(always(a))
 }
 
-/// Returns a function which takes three arguments and always returns `a`.
+/// Returns a ternary function which always returns the same value.
 ///
 /// # Examples
 ///

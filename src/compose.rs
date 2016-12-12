@@ -84,7 +84,7 @@ where G: Fn(A, B, C) -> D, F: Fn(D) -> E {
     }
 }
 
-/// Returns a function which calls `f(g(a))`.
+/// Composes a unary function and a unary function.
 ///
 /// # Examples
 ///
@@ -97,7 +97,7 @@ pub fn compose1<F, G>(f: F, g: G) -> Compose1<F, G> {
     Compose1 { f: f, g: g }
 }
 
-/// Returns a function which calls `f(g(a, b))`.
+/// Composes a unary function and a binary function.
 ///
 /// # Examples
 ///
@@ -110,7 +110,7 @@ pub fn compose2<F, G>(f: F, g: G) -> Compose2<F, G> {
     Compose2 { f: f, g: g }
 }
 
-/// Returns a function which calls `f(g(a, b, c))`.
+/// Composes a unary function and a ternary function.
 ///
 /// # Examples
 ///

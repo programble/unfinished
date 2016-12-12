@@ -72,7 +72,7 @@ impl<F, A, B, C, D> Fn<(A, B, C)> for Ignore3<F> where F: Fn() -> D {
     }
 }
 
-/// Returns a function which takes one argument and calls `f` with none.
+/// Wraps a nullary function in a unary function which ignores its argument.
 ///
 /// # Examples
 ///
@@ -85,7 +85,7 @@ pub fn ignore1<F>(f: F) -> Ignore1<F> {
     Ignore1 { f: f }
 }
 
-/// Returns a function which takes two arguments and calls `f` with none.
+/// Wraps a nullary function in a binary function which ignores its arguments.
 ///
 /// # Examples
 ///
@@ -98,7 +98,7 @@ pub fn ignore2<F>(f: F) -> Ignore2<F> {
     Ignore2 { f: f }
 }
 
-/// Returns a function which takes three arguments and calls `f` with none.
+/// Wraps a nullary function in a ternary function which ignores its arguments.
 ///
 /// # Examples
 ///
