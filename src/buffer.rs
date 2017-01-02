@@ -23,8 +23,10 @@ impl GapBuffer {
     /// The buffer will be able to hold exactly `capacity` elements without reallocating. If
     /// `capacity` is 0, the buffer will not allocate.
     pub fn with_capacity(capacity: usize) -> Self {
+        let mut buf = Vec::with_capacity(capacity);
+        buf.resize(capacity, 0);
         GapBuffer {
-            buf: vec![0; capacity], // Calls Vec::with_capacity.
+            buf: buf,
             gap: 0..capacity,
         }
     }
