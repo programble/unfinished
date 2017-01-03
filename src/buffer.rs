@@ -52,9 +52,8 @@ impl GapBuffer {
     /// Panics if the new capacity overflows `usize`.
     #[inline]
     pub fn reserve(&mut self, additional: usize) {
-        // Move gap to end.
         let len = self.len();
-        self.splice(len..len, &[]);
+        self.move_gap(len);
 
         self.buf.reserve(additional);
         let capacity = self.buf.capacity();
@@ -63,8 +62,22 @@ impl GapBuffer {
         self.gap.end = self.buf.len();
     }
 
-    fn splice(&mut self, _dest: Range<usize>, _src: &[u8]) {
-        unimplemented!()
+    fn move_gap(&mut self, index: usize) {
+        let gap_len = self.gap.end - self.gap.start;
+
+        if index > self.gap.start {
+            let delta = index - self.gap.start;
+            let (gap, rest) = self.buf[self.gap.start..].split_at_mut(gap_len);
+            gap[..delta].copy_from_slice(&mut rest[..delta]);
+
+        } else if index < self.gap.start {
+            let delta = self.gap.start - index;
+            let (rest, gap) = self.buf[index..].split_at_mut(gap_len);
+            gap[..delta].copy_from_slice(&mut rest[..delta]);
+        }
+
+        self.gap.start = index;
+        self.gap.end = index + gap_len;
     }
 }
 
@@ -105,9 +118,8 @@ impl FromIterator<u8> for GapBuffer {
 impl From<GapBuffer> for Vec<u8> {
     #[inline]
     fn from(mut buf: GapBuffer) -> Self {
-        // Move gap to end.
         let len = buf.len();
-        buf.splice(len..len, &[]);
+        buf.move_gap(len);
         buf.buf.truncate(len);
         buf.buf
     }
