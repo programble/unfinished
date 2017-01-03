@@ -53,6 +53,7 @@ impl GapBuffer {
 }
 
 impl Default for GapBuffer {
+    #[inline]
     fn default() -> Self {
         Self::new()
     }
