@@ -87,6 +87,13 @@ impl From<Vec<u8>> for GapBuffer {
     }
 }
 
+impl<'a> From<&'a [u8]> for GapBuffer {
+    #[inline]
+    fn from(slice: &'a [u8]) -> Self {
+        Self::from(Vec::from(slice))
+    }
+}
+
 impl From<GapBuffer> for Vec<u8> {
     #[inline]
     fn from(mut buf: GapBuffer) -> Self {
