@@ -47,7 +47,7 @@ impl GapBuffer {
 
     /// Returns `true` if the buffer contains no bytes.
     #[inline]
-    pub fn is_empty(&self) -> usize {
+    pub fn is_empty(&self) -> bool {
         self.len() == 0
     }
 }
