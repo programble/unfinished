@@ -40,6 +40,11 @@ impl GapBuffer {
     pub fn len(&self) -> usize {
         self.capacity() - (self.gap.end - self.gap.start)
     }
+
+    /// Returns `true` if the buffer contains no bytes.
+    pub fn is_empty(&self) -> usize {
+        self.len() == 0
+    }
 }
 
 impl Default for GapBuffer {
