@@ -50,6 +50,29 @@ impl GapBuffer {
     pub fn is_empty(&self) -> bool {
         self.len() == 0
     }
+
+    /// Reserves capacity for at least `additional` more bytes to be inserted in the buffer. The
+    /// buffer may reserve more space to avoid frequent reallocations.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the new capacity overflows `usize`.
+    #[inline]
+    pub fn reserve(&mut self, additional: usize) {
+        // Move gap to end.
+        let len = self.len();
+        self.splice(len..len, &[]);
+
+        self.buf.reserve(additional);
+        let capacity = self.buf.capacity();
+        self.buf.resize(capacity, 0);
+
+        self.gap.end = self.buf.len();
+    }
+
+    fn splice(&mut self, _dest: Range<usize>, _src: &[u8]) {
+        unimplemented!()
+    }
 }
 
 impl Default for GapBuffer {
