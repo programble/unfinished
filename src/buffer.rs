@@ -13,10 +13,7 @@ impl GapBuffer {
     /// The buffer will not allocate until bytes are inserted.
     #[inline]
     pub fn new() -> Self {
-        GapBuffer {
-            buf: Vec::new(),
-            gap: 0..0,
-        }
+        Self::from(Vec::new())
     }
 
     /// Constructs a new, empty gap buffer with the specified capacity.
@@ -25,12 +22,7 @@ impl GapBuffer {
     /// `capacity` is 0, the buffer will not allocate.
     #[inline]
     pub fn with_capacity(capacity: usize) -> Self {
-        let mut buf = Vec::with_capacity(capacity);
-        buf.resize(capacity, 0);
-        GapBuffer {
-            buf: buf,
-            gap: 0..capacity,
-        }
+        Self::from(Vec::with_capacity(capacity))
     }
 
     /// Returns the number of bytes the buffer can hold without reallocating.
@@ -79,5 +71,29 @@ impl Default for GapBuffer {
     #[inline]
     fn default() -> Self {
         Self::new()
+    }
+}
+
+impl From<Vec<u8>> for GapBuffer {
+    #[inline]
+    fn from(mut buf: Vec<u8>) -> Self {
+        let len = buf.len();
+        let capacity = buf.capacity();
+        buf.resize(capacity, 0);
+        GapBuffer {
+            buf: buf,
+            gap: len..capacity,
+        }
+    }
+}
+
+impl From<GapBuffer> for Vec<u8> {
+    #[inline]
+    fn from(mut buf: GapBuffer) -> Self {
+        // Move gap to end.
+        let len = buf.len();
+        buf.splice(len..len, &[]);
+        buf.buf.truncate(len);
+        buf.buf
     }
 }
