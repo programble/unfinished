@@ -1,3 +1,4 @@
+use std::iter::FromIterator;
 use std::ops::Range;
 
 /// Gap buffer...
@@ -91,6 +92,13 @@ impl<'a> From<&'a [u8]> for GapBuffer {
     #[inline]
     fn from(slice: &'a [u8]) -> Self {
         Self::from(Vec::from(slice))
+    }
+}
+
+impl FromIterator<u8> for GapBuffer {
+    #[inline]
+    fn from_iter<T>(iter: T) -> Self where T: IntoIterator<Item = u8> {
+        Self::from(Vec::from_iter(iter))
     }
 }
 
