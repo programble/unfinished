@@ -30,6 +30,16 @@ impl GapBuffer {
             gap: 0..capacity,
         }
     }
+
+    /// Returns the number of bytes the buffer can hold without reallocating.
+    pub fn capacity(&self) -> usize {
+        self.buf.len()
+    }
+
+    /// Returns the number of bytes in the buffer.
+    pub fn len(&self) -> usize {
+        self.capacity() - (self.gap.end - self.gap.start)
+    }
 }
 
 impl Default for GapBuffer {
