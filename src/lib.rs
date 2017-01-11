@@ -14,4 +14,5 @@
 
 extern crate byteorder;
 
+pub mod dns;
 pub mod s11n;
