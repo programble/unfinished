@@ -1,2 +1,2 @@
-pub mod operand;
-pub mod instruction;
+pub mod encoding;
+pub mod mnemonic;
