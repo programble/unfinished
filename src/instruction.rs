@@ -1,5 +1,6 @@
 use operand::*;
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Adc {
     AlImm8(Imm8),
     AxImm16(Imm16),
