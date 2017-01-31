@@ -88,25 +88,86 @@ pub enum R64 {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Memory(pub Option<SegmentSelector>, pub Offset);
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum SegmentSelector {
+    Cs,
+    Ss,
+    Ds,
+    Es,
+    Fs,
+    Gs,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Offset {
+    Displacement(Displacement),
+    Index(Index, Scale),
+    IndexDisplacement(Index, Scale, Displacement),
+    Base(Base),
+    BaseDisplacement(Base, Displacement),
+    BaseIndex(Base, Index, Scale),
+    BaseIndexDisplacement(Base, Index, Scale, Displacement),
+    RipDisplacement(u32),
+}
+
+pub type Base = R64;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Index {
+    Rax,
+    Rbx,
+    Rcx,
+    Rdx,
+    Rdi,
+    Rsi,
+    Rbp,
+    R8,
+    R9,
+    R10,
+    R11,
+    R12,
+    R13,
+    R14,
+    R15,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Scale {
+    X1,
+    X2,
+    X4,
+    X8,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Displacement {
+    Disp8(u8),
+    Disp16(u16),
+    Disp32(u32),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Rm8 {
     R8(R8),
-    // TODO
+    M8(Memory),
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Rm16 {
     R16(R16),
-    // TODO
+    M16(Memory),
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Rm32 {
     R32(R32),
-    // TODO
+    M32(Memory),
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Rm64 {
     R64(R64),
-    // TODO
+    M64(Memory),
 }
