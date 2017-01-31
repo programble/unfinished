@@ -8,6 +8,7 @@ pub enum Adc {
     RaxImm32(Imm32),
 
     Rm8Imm8(Rm8, Imm8),
+    Rm8xImm8(Rm8x, Imm8),
     Rm16Imm16(Rm16, Imm16),
     Rm32Imm32(Rm32, Imm32),
     Rm64Imm32(Rm64, Imm32),
@@ -17,11 +18,13 @@ pub enum Adc {
     Rm64Imm8(Rm64, Imm8),
 
     Rm8R8(Rm8, R8),
+    Rm8xR8x(Rm8x, R8x),
     Rm16R16(Rm16, R16),
     Rm32R32(Rm32, R32),
     Rm64R64(Rm64, R64),
 
     R8Rm8(R8, Rm8),
+    R8xRm8x(R8x, Rm8x),
     R16Rm16(R16, Rm16),
     R32Rm32(R32, Rm32),
     R64Rm64(R64, Rm64),
@@ -41,6 +44,7 @@ pub enum Add {
     RaxImm32(Imm32),
 
     Rm8Imm8(Rm8, Imm8),
+    Rm8xImm8(Rm8x, Imm8),
     Rm16Imm16(Rm16, Imm16),
     Rm32Imm32(Rm32, Imm32),
     Rm64Imm32(Rm64, Imm32),
@@ -50,11 +54,13 @@ pub enum Add {
     Rm64Imm8(Rm64, Imm8),
 
     Rm8R8(Rm8, R8),
+    Rm8xR8x(Rm8x, R8x),
     Rm16R16(Rm16, R16),
     Rm32R32(Rm32, R32),
     Rm64R64(Rm64, R64),
 
     R8Rm8(R8, Rm8),
+    R8xRm8x(R8x, Rm8x),
     R16Rm16(R16, Rm16),
     R32Rm32(R32, Rm32),
     R64Rm64(R64, Rm64),

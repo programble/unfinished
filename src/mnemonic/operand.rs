@@ -13,6 +13,14 @@ pub enum R8 {
     Bh,
     Ch,
     Dh,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum R8x {
+    Al,
+    Bl,
+    Cl,
+    Dl,
     Dil,
     Sil,
     Bpl,
@@ -151,6 +159,12 @@ pub enum Displacement {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Rm8 {
     R8(R8),
+    M8(Memory),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Rm8x {
+    R8x(R8x),
     M8(Memory),
 }
 
