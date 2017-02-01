@@ -121,6 +121,29 @@ pub enum Offset<B = R64, I = Index> {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum NoRexBase {
+    Rax,
+    Rbx,
+    Rcx,
+    Rdx,
+    Rdi,
+    Rsi,
+    Rbp,
+    Rsp,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum NoRexIndex {
+    Rax,
+    Rbx,
+    Rcx,
+    Rdx,
+    Rdi,
+    Rsi,
+    Rbp,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Index {
     Rax,
     Rbx,
@@ -157,7 +180,7 @@ pub enum Displacement {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum NoRexRm8 {
     R8(NoRexR8),
-    M8(Memory),
+    M8(Memory<NoRexBase, NoRexIndex>),
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
