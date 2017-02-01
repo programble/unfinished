@@ -96,7 +96,7 @@ pub enum R64 {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub struct Memory(pub Option<SegmentSelector>, pub Offset);
+pub struct Memory<B = R64, I = Index>(pub Option<SegmentSelector>, pub Offset<B, I>);
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum SegmentSelector {
@@ -109,18 +109,16 @@ pub enum SegmentSelector {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum Offset {
+pub enum Offset<B = R64, I = Index> {
     Displacement(Displacement),
-    Index(Index, Scale),
-    IndexDisplacement(Index, Scale, Displacement),
-    Base(Base),
-    BaseDisplacement(Base, Displacement),
-    BaseIndex(Base, Index, Scale),
-    BaseIndexDisplacement(Base, Index, Scale, Displacement),
+    Index(I, Scale),
+    IndexDisplacement(I, Scale, Displacement),
+    Base(B),
+    BaseDisplacement(B, Displacement),
+    BaseIndex(B, I, Scale),
+    BaseIndexDisplacement(B, I, Scale, Displacement),
     RipDisplacement(u32),
 }
-
-pub type Base = R64;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Index {
