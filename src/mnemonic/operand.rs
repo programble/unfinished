@@ -185,7 +185,7 @@ pub enum NoRexRm8 {
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Rm8 {
-    R8x(R8),
+    R8(R8),
     M8(Memory),
 }
 
