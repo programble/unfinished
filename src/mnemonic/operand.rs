@@ -4,7 +4,7 @@ pub type Imm32 = u32;
 pub type Imm64 = u64;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum R8 {
+pub enum R8h {
     Al,
     Bl,
     Cl,
@@ -16,7 +16,7 @@ pub enum R8 {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum R8x {
+pub enum R8 {
     Al,
     Bl,
     Cl,
@@ -157,14 +157,14 @@ pub enum Displacement {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum Rm8 {
-    R8(R8),
+pub enum Rm8h {
+    R8(R8h),
     M8(Memory),
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum Rm8x {
-    R8x(R8x),
+pub enum Rm8 {
+    R8x(R8),
     M8(Memory),
 }
 
