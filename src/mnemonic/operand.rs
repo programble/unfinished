@@ -29,7 +29,10 @@ pub enum R64 {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub struct Memory<B = R64, I = Index>(pub Option<SegmentSelector>, pub Offset<B, I>);
+pub enum Memory<B32 = R32, I32 = Index32, B64 = R64, I64 = Index64> {
+    Offset32(Option<SegmentSelector>, Offset<B32, I32>),
+    Offset64(Option<SegmentSelector>, Offset<B64, I64>),
+}
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum SegmentSelector {
@@ -37,29 +40,44 @@ pub enum SegmentSelector {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum Offset<B = R64, I = Index> {
+pub enum Offset<Base, Index> {
     Displacement(Displacement),
-    Index(I, Scale),
-    IndexDisplacement(I, Scale, Displacement),
-    Base(B),
-    BaseDisplacement(B, Displacement),
-    BaseIndex(B, I, Scale),
-    BaseIndexDisplacement(B, I, Scale, Displacement),
+    Index(Index, Scale),
+    IndexDisplacement(Index, Scale, Displacement),
+    Base(Base),
+    BaseDisplacement(Base, Displacement),
+    BaseIndex(Base, Index, Scale),
+    BaseIndexDisplacement(Base, Index, Scale, Displacement),
     RipDisplacement(u32),
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum NoRexBase {
+pub enum NoRexBase32 {
+    Eax, Ebx, Ecx, Edx, Edi, Esi, Ebp, Esp
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum NoRexIndex32 {
+    Eax, Ebx, Ecx, Edx, Edi, Esi, Ebp
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum NoRexBase64 {
     Rax, Rbx, Rcx, Rdx, Rdi, Rsi, Rbp, Rsp
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum NoRexIndex {
+pub enum NoRexIndex64 {
     Rax, Rbx, Rcx, Rdx, Rdi, Rsi, Rbp
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum Index {
+pub enum Index32 {
+    Eax, Ebx, Ecx, Edx, Edi, Esi, Ebp, R8d, R9d, R10d, R11d, R12d, R13d, R14d, R15d
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Index64 {
     Rax, Rbx, Rcx, Rdx, Rdi, Rsi, Rbp, R8, R9, R10, R11, R12, R13, R14, R15
 }
 
@@ -78,7 +96,7 @@ pub enum Displacement {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum NoRexRm8 {
     R8(NoRexR8),
-    M8(Memory<NoRexBase, NoRexIndex>),
+    M8(Memory<NoRexBase32, NoRexIndex32, NoRexBase64, NoRexIndex64>),
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
