@@ -5,94 +5,27 @@ pub type Imm64 = u64;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum NoRexR8 {
-    Al,
-    Bl,
-    Cl,
-    Dl,
-    Ah,
-    Bh,
-    Ch,
-    Dh,
+    Al, Bl, Cl, Dl, Ah, Bh, Ch, Dh
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum R8 {
-    Al,
-    Bl,
-    Cl,
-    Dl,
-    Dil,
-    Sil,
-    Bpl,
-    Spl,
-    R8l,
-    R9l,
-    R10l,
-    R11l,
-    R12l,
-    R13l,
-    R14l,
-    R15l,
+    Al, Bl, Cl, Dl, Dil, Sil, Bpl, Spl, R8l, R9l, R10l, R11l, R12l, R13l, R14l, R15l
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum R16 {
-    Ax,
-    Bx,
-    Cx,
-    Dx,
-    Di,
-    Si,
-    Bp,
-    Sp,
-    R8w,
-    R9w,
-    R10w,
-    R11w,
-    R12w,
-    R13w,
-    R14w,
-    R15w,
+    Ax, Bx, Cx, Dx, Di, Si, Bp, Sp, R8w, R9w, R10w, R11w, R12w, R13w, R14w, R15w
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum R32 {
-    Eax,
-    Ebx,
-    Ecx,
-    Edx,
-    Edi,
-    Esi,
-    Ebp,
-    Esp,
-    R8d,
-    R9d,
-    R10d,
-    R11d,
-    R12d,
-    R13d,
-    R14d,
-    R15d,
+    Eax, Ebx, Ecx, Edx, Edi, Esi, Ebp, Esp, R8d, R9d, R10d, R11d, R12d, R13d, R14d, R15d
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum R64 {
-    Rax,
-    Rbx,
-    Rcx,
-    Rdx,
-    Rdi,
-    Rsi,
-    Rbp,
-    Rsp,
-    R8,
-    R9,
-    R10,
-    R11,
-    R12,
-    R13,
-    R14,
-    R15,
+    Rax, Rbx, Rcx, Rdx, Rdi, Rsi, Rbp, Rsp, R8, R9, R10, R11, R12, R13, R14, R15
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -100,12 +33,7 @@ pub struct Memory<B = R64, I = Index>(pub Option<SegmentSelector>, pub Offset<B,
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum SegmentSelector {
-    Cs,
-    Ss,
-    Ds,
-    Es,
-    Fs,
-    Gs,
+    Cs, Ss, Ds, Es, Fs, Gs
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -122,52 +50,22 @@ pub enum Offset<B = R64, I = Index> {
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum NoRexBase {
-    Rax,
-    Rbx,
-    Rcx,
-    Rdx,
-    Rdi,
-    Rsi,
-    Rbp,
-    Rsp,
+    Rax, Rbx, Rcx, Rdx, Rdi, Rsi, Rbp, Rsp
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum NoRexIndex {
-    Rax,
-    Rbx,
-    Rcx,
-    Rdx,
-    Rdi,
-    Rsi,
-    Rbp,
+    Rax, Rbx, Rcx, Rdx, Rdi, Rsi, Rbp
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Index {
-    Rax,
-    Rbx,
-    Rcx,
-    Rdx,
-    Rdi,
-    Rsi,
-    Rbp,
-    R8,
-    R9,
-    R10,
-    R11,
-    R12,
-    R13,
-    R14,
-    R15,
+    Rax, Rbx, Rcx, Rdx, Rdi, Rsi, Rbp, R8, R9, R10, R11, R12, R13, R14, R15
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Scale {
-    X1,
-    X2,
-    X4,
-    X8,
+    X1, X2, X4, X8
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
