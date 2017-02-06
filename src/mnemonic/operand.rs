@@ -45,7 +45,6 @@ pub enum Rex64 {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Disp {
     Disp8(i8),
-    Disp16(i16),
     Disp32(i32),
 }
 
