@@ -20,6 +20,14 @@ pub trait Output {
         self.write_u32((x & 0xffffffff) as u32)?;
         self.write_u32((x >> 32) as u32)
     }
+
+    #[inline]
+    fn write_bytes(&mut self, bytes: &[u8]) -> Result<(), Self::Err> {
+        for &byte in bytes {
+            self.write_u8(byte)?;
+        }
+        Ok(())
+    }
 }
 
 pub struct SliceOutput<'a> {
@@ -44,6 +52,13 @@ impl<'a> Output for SliceOutput<'a> {
     fn write_u8(&mut self, x: u8) -> Result<(), ()> {
         self.slice[self.index] = x;
         self.index += 1;
+        Ok(())
+    }
+
+    #[inline]
+    fn write_bytes(&mut self, bytes: &[u8]) -> Result<(), ()> {
+        self.slice[self.index..].copy_from_slice(bytes);
+        self.index += bytes.len();
         Ok(())
     }
 }
