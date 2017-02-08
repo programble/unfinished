@@ -1,6 +1,7 @@
 pub type Imm8 = u8;
 pub type Imm16 = u16;
 pub type Imm32 = u32;
+pub type Imm64 = u64;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Reg8 {
