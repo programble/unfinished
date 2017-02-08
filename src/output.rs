@@ -1,4 +1,4 @@
-pub trait Encoder {
+pub trait Output {
     type Err;
 
     fn write_u8(&mut self, x: u8) -> Result<(), Self::Err>;
@@ -22,21 +22,21 @@ pub trait Encoder {
     }
 }
 
-pub struct SliceEncoder<'a> {
+pub struct SliceOutput<'a> {
     slice: &'a mut [u8],
     index: usize,
 }
 
-impl<'a> SliceEncoder<'a> {
+impl<'a> SliceOutput<'a> {
     pub fn new(slice: &'a mut [u8]) -> Self {
-        SliceEncoder {
+        SliceOutput {
             slice: slice,
             index: 0,
         }
     }
 }
 
-impl<'a> Encoder for SliceEncoder<'a> {
+impl<'a> Output for SliceOutput<'a> {
     // Wants to be !.
     type Err = ();
 
@@ -50,14 +50,14 @@ impl<'a> Encoder for SliceEncoder<'a> {
 
 #[cfg(test)]
 mod tests {
-    use super::{Encoder, SliceEncoder};
+    use super::{Output, SliceOutput};
 
     #[test]
     fn write_u8() {
         let mut buf = [0; 1];
         {
-            let mut encoder = SliceEncoder::new(&mut buf);
-            encoder.write_u8(0x01).unwrap();
+            let mut out = SliceOutput::new(&mut buf);
+            out.write_u8(0x01).unwrap();
         }
         assert_eq!([0x01], buf);
     }
@@ -66,8 +66,8 @@ mod tests {
     fn write_u16() {
         let mut buf = [0; 2];
         {
-            let mut encoder = SliceEncoder::new(&mut buf);
-            encoder.write_u16(0x0201).unwrap();
+            let mut out = SliceOutput::new(&mut buf);
+            out.write_u16(0x0201).unwrap();
         }
         assert_eq!([0x01, 0x02], buf);
     }
@@ -76,8 +76,8 @@ mod tests {
     fn write_u32() {
         let mut buf = [0; 4];
         {
-            let mut encoder = SliceEncoder::new(&mut buf);
-            encoder.write_u32(0x04030201).unwrap();
+            let mut out = SliceOutput::new(&mut buf);
+            out.write_u32(0x04030201).unwrap();
         }
         assert_eq!([0x01, 0x02, 0x03, 0x04], buf);
     }
@@ -86,8 +86,8 @@ mod tests {
     fn write_u64() {
         let mut buf = [0; 8];
         {
-            let mut encoder = SliceEncoder::new(&mut buf);
-            encoder.write_u64(0x0807060504030201).unwrap();
+            let mut out = SliceOutput::new(&mut buf);
+            out.write_u64(0x0807060504030201).unwrap();
         }
         assert_eq!([0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08], buf);
     }

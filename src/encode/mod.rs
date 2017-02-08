@@ -1,7 +1,5 @@
-pub mod encoder;
-
-use self::encoder::Encoder;
+use output::Output;
 
 pub trait Encode {
-    fn encode<E>(&self, encoder: &mut E) -> Result<(), E::Err> where E: Encoder;
+    fn encode<O>(&self, out: &mut O) -> Result<(), O::Err> where O: Output;
 }
