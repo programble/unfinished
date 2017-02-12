@@ -135,30 +135,30 @@ pub enum Rm64 {
 pub enum Rm8R8 {
     Reg8Reg8(Reg8, Reg8),
     Rex8Rex8(Rex8, Rex8),
-    Mem8Reg8(Mem),
-    Mex8Rex8(Mex),
+    Mem8Reg8(Mem, Reg8),
+    Mex8Rex8(Mex, Rex8),
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Rm16R16 {
     Reg16Reg16(Reg16, Reg16),
     Rex16Rex16(Rex16, Rex16),
-    Mem16Reg16(Mem),
-    Mex16Rex16(Mex),
+    Mem16Reg16(Mem, Reg16),
+    Mex16Rex16(Mex, Rex16),
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Rm32R32 {
     Reg32Reg32(Reg32, Reg32),
     Rex32Rex32(Rex32, Rex32),
-    Mem32Reg32(Mem),
-    Mex32Rex32(Mex),
+    Mem32Reg32(Mem, Reg32),
+    Mex32Rex32(Mex, Rex32),
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Rm64R64 {
     Rex64Rex64(Rex64, Rex64),
-    Mex64Rex64(Mex),
+    Mex64Rex64(Mex, Rex64),
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
