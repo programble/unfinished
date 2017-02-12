@@ -18,8 +18,24 @@ fn opcode(adc: &Adc) -> u8 {
     }
 }
 
+fn encode_imm<O>(adc: &Adc, out: &mut O) -> Result<(), O::Err> where O: Output {
+    match *adc {
+        AlImm8(x) | Rm8Imm8(_, x) | Rm16Imm8(_, x) | Rm32Imm8(_, x) | Rm64Imm8(_, x) => {
+            out.write_u8(x)
+        },
+        AxImm16(x) | Rm16Imm16(_, x) => {
+            out.write_u16(x)
+        },
+        EaxImm32(x) | RaxImm32(x) | Rm32Imm32(_, x) | Rm64Imm32(_, x) => {
+            out.write_u32(x)
+        },
+        _ => Ok(()),
+    }
+}
+
 impl Encode for Adc {
     fn encode<O>(&self, out: &mut O) -> Result<(), O::Err> where O: Output {
-        out.write_u8(opcode(self))
+        out.write_u8(opcode(self))?;
+        encode_imm(self, out)
     }
 }
