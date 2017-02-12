@@ -1,4 +1,5 @@
 use encode::{Encode, prefix};
+use encode::operand::Prefix;
 use mnemonic::instruction::Adc;
 use output::Output;
 
@@ -21,8 +22,23 @@ fn opcode(adc: &Adc) -> u8 {
 fn encode_prefix<O>(adc: &Adc, out: &mut O) -> Result<(), O::Err> where O: Output {
     match *adc {
         AxImm16(..) | Rm16Imm16(..) | Rm16Imm8(..) | Rm16R16(..) | R16Rm16(..) => {
-            out.write_u8(prefix::OPERAND_SIZE)
+            out.write_u8(prefix::OPERAND_SIZE)?;
         },
+        _ => (),
+    }
+    match *adc {
+        Rm8Imm8(ref rm8, _) => rm8.encode_prefix(out),
+        Rm16Imm16(ref rm16, _) | Rm16Imm8(ref rm16, _) => rm16.encode_prefix(out),
+        Rm32Imm32(ref rm32, _) | Rm32Imm8(ref rm32, _) => rm32.encode_prefix(out),
+        Rm64Imm32(ref rm64, _) | Rm64Imm8(ref rm64, _) => rm64.encode_prefix(out),
+        Rm8R8(ref rm8r8) => rm8r8.encode_prefix(out),
+        Rm16R16(ref rm16r16) => rm16r16.encode_prefix(out),
+        Rm32R32(ref rm32r32) => rm32r32.encode_prefix(out),
+        Rm64R64(ref rm64r64) => rm64r64.encode_prefix(out),
+        R8Rm8(ref r8rm8) => r8rm8.encode_prefix(out),
+        R16Rm16(ref r16rm16) => r16rm16.encode_prefix(out),
+        R32Rm32(ref r32rm32) => r32rm32.encode_prefix(out),
+        R64Rm64(ref r64rm64) => r64rm64.encode_prefix(out),
         _ => Ok(()),
     }
 }

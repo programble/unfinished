@@ -1,5 +1,4 @@
-use super::Encode;
-
+use encode::Encode;
 use mnemonic::prefix::{Lock, Rep, Repne};
 use output::Output;
 

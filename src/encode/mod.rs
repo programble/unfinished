@@ -1,4 +1,5 @@
 mod instruction;
+mod operand;
 mod prefix;
 
 use output::Output;
