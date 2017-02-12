@@ -18,6 +18,15 @@ fn opcode(adc: &Adc) -> u8 {
     }
 }
 
+fn encode_prefix<O>(adc: &Adc, out: &mut O) -> Result<(), O::Err> where O: Output {
+    match *adc {
+        AxImm16(..) | Rm16Imm16(..) | Rm16Imm8(..) | Rm16R16(..) | R16Rm16(..) => {
+            out.write_u8(prefix::OPERAND_SIZE)
+        },
+        _ => Ok(()),
+    }
+}
+
 fn encode_imm<O>(adc: &Adc, out: &mut O) -> Result<(), O::Err> where O: Output {
     match *adc {
         AlImm8(x) | Rm8Imm8(_, x) | Rm16Imm8(_, x) | Rm32Imm8(_, x) | Rm64Imm8(_, x) => {
@@ -35,6 +44,7 @@ fn encode_imm<O>(adc: &Adc, out: &mut O) -> Result<(), O::Err> where O: Output {
 
 impl Encode for Adc {
     fn encode<O>(&self, out: &mut O) -> Result<(), O::Err> where O: Output {
+        encode_prefix(self, out)?;
         out.write_u8(opcode(self))?;
         encode_imm(self, out)
     }
