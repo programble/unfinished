@@ -17,23 +17,43 @@ pub const OPERAND_SIZE: u8 = 0x66;
 
 pub const ADDRESS_SIZE: u8 = 0x67;
 
-impl<I> Encode for Lock<I> where I: Encode {
-    fn encode<O>(&self, out: &mut O) -> Result<(), O::Err> where O: Output {
-        out.write_u8(LOCK)?;
-        self.0.encode(out)
+macro_rules! impl_encode {
+    ($name:ident, $val:expr) => {
+        impl<I> Encode for $name<I> where I: Encode {
+            fn encode_prefix1<O>(&self, out: &mut O) -> Result<(), O::Err> where O: Output {
+                out.write_u8($val)
+            }
+            fn encode_prefix2<O>(&self, out: &mut O) -> Result<(), O::Err> where O: Output {
+                self.0.encode_prefix2(out)
+            }
+            fn encode_prefix3<O>(&self, out: &mut O) -> Result<(), O::Err> where O: Output {
+                self.0.encode_prefix3(out)
+            }
+            fn encode_prefix4<O>(&self, out: &mut O) -> Result<(), O::Err> where O: Output {
+                self.0.encode_prefix4(out)
+            }
+            fn encode_rex<O>(&self, out: &mut O) -> Result<(), O::Err> where O: Output {
+                self.0.encode_rex(out)
+            }
+            fn encode_opcode<O>(&self, out: &mut O) -> Result<(), O::Err> where O: Output {
+                self.0.encode_opcode(out)
+            }
+            fn encode_modrm<O>(&self, out: &mut O) -> Result<(), O::Err> where O: Output {
+                self.0.encode_modrm(out)
+            }
+            fn encode_sib<O>(&self, out: &mut O) -> Result<(), O::Err> where O: Output {
+                self.0.encode_sib(out)
+            }
+            fn encode_disp<O>(&self, out: &mut O) -> Result<(), O::Err> where O: Output {
+                self.0.encode_disp(out)
+            }
+            fn encode_imm<O>(&self, out: &mut O) -> Result<(), O::Err> where O: Output {
+                self.0.encode_imm(out)
+            }
+        }
     }
 }
 
-impl<I> Encode for Repne<I> where I: Encode {
-    fn encode<O>(&self, out: &mut O) -> Result<(), O::Err> where O: Output {
-        out.write_u8(REPNE)?;
-        self.0.encode(out)
-    }
-}
-
-impl<I> Encode for Rep<I> where I: Encode {
-    fn encode<O>(&self, out: &mut O) -> Result<(), O::Err> where O: Output {
-        out.write_u8(REP)?;
-        self.0.encode(out)
-    }
-}
+impl_encode!(Lock, LOCK);
+impl_encode!(Repne, REPNE);
+impl_encode!(Rep, REP);
