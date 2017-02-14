@@ -1,5 +1,5 @@
 use encode::{Encode, prefix};
-use encode::operand::Prefix;
+use encode::operand::prefix::Prefix;
 use mnemonic::instruction::Adc;
 use output::Output;
 
