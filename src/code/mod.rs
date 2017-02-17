@@ -1,4 +1,6 @@
-pub mod iter;
+mod iter;
+
+pub use self::iter::Iter;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[repr(u8)]
