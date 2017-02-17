@@ -1,4 +1,4 @@
-use core::iter::{self, Once};
+pub mod iter;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[repr(u8)]
@@ -72,74 +72,4 @@ pub struct Instruction {
     pub sib: Option<Sib>,
     pub disp: Option<Disp>,
     pub imm: Option<Imm>,
-}
-
-impl IntoIterator for Prefix1 {
-    type Item = u8;
-    type IntoIter = Once<u8>;
-
-    #[inline]
-    fn into_iter(self) -> Once<u8> {
-        iter::once(self as u8)
-    }
-}
-
-impl IntoIterator for Prefix2 {
-    type Item = u8;
-    type IntoIter = Once<u8>;
-
-    #[inline]
-    fn into_iter(self) -> Once<u8> {
-        iter::once(self as u8)
-    }
-}
-
-impl IntoIterator for Prefix3 {
-    type Item = u8;
-    type IntoIter = Once<u8>;
-
-    #[inline]
-    fn into_iter(self) -> Once<u8> {
-        iter::once(self as u8)
-    }
-}
-
-impl IntoIterator for Prefix4 {
-    type Item = u8;
-    type IntoIter = Once<u8>;
-
-    #[inline]
-    fn into_iter(self) -> Once<u8> {
-        iter::once(self as u8)
-    }
-}
-
-impl IntoIterator for Rex {
-    type Item = u8;
-    type IntoIter = Once<u8>;
-
-    #[inline]
-    fn into_iter(self) -> Once<u8> {
-        iter::once(self.0)
-    }
-}
-
-impl IntoIterator for Modrm {
-    type Item = u8;
-    type IntoIter = Once<u8>;
-
-    #[inline]
-    fn into_iter(self) -> Once<u8> {
-        iter::once(self.0)
-    }
-}
-
-impl IntoIterator for Sib {
-    type Item = u8;
-    type IntoIter = Once<u8>;
-
-    #[inline]
-    fn into_iter(self) -> Once<u8> {
-        iter::once(self.0)
-    }
 }
