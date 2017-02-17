@@ -4,65 +4,105 @@ use std::env;
 use std::ffi::CString;
 use std::io::{self, Write};
 use std::os::unix::io::RawFd;
-use std::path::Path;
 
+use nix::libc::{STDIN_FILENO, STDOUT_FILENO, pid_t};
 use nix::sys::wait::{self, WaitStatus};
 use nix::unistd::{self, ForkResult};
 
-#[derive(Debug, Clone, Copy)]
-enum Redirect<'a> {
-    Fd(RawFd),
-    File(&'a Path),
+#[derive(Debug, Clone)]
+struct Job<'a> {
+    procs: Vec<Process<'a>>,
 }
 
-#[derive(Debug)]
-struct Command<'a> {
-    args: Vec<&'a str>,
-    fds: Vec<(RawFd, Redirect<'a>)>,
-}
-
-impl<'a> From<&'a str> for Command<'a> {
+impl<'a> From<&'a str> for Job<'a> {
     fn from(input: &'a str) -> Self {
-        Command {
+        if input.trim().is_empty() {
+            return Job { procs: vec![] };
+        }
+
+        let mut job = Job {
+            procs: input.split('|').map(Process::from).collect(),
+        };
+
+        for i in 0..(job.procs.len() - 1) {
+            let (read, write) = unistd::pipe().unwrap();
+            job.procs[i].fds.push((STDOUT_FILENO, write));
+            job.procs[i + 1].fds.push((STDIN_FILENO, read));
+        }
+
+        job
+    }
+}
+
+impl<'a> Job<'a> {
+    fn run(&mut self) -> i8 {
+        for process in &mut self.procs {
+            process.start();
+        }
+        let mut exit_code = 0;
+        for process in &self.procs {
+            exit_code = process.wait();
+        }
+        exit_code
+    }
+}
+
+#[derive(Debug, Clone)]
+struct Process<'a> {
+    args: Vec<&'a str>,
+    fds: Vec<(RawFd, RawFd)>,
+    pid: Option<pid_t>,
+    builtin_exit_code: Option<i8>,
+}
+
+impl<'a> From<&'a str> for Process<'a> {
+    fn from(input: &'a str) -> Self {
+        Process {
             args: input.split_whitespace().collect(),
             fds: vec![],
+            pid: None,
+            builtin_exit_code: None,
         }
     }
 }
 
-impl<'a> Command<'a> {
-    fn run(&self) -> i8 {
+impl<'a> Process<'a> {
+    fn start(&mut self) {
         match self.args[0] {
-            "cd" => builtin_cd(&self.args[1..]),
+            "cd" => self.builtin_exit_code = Some(builtin_cd(&self.args[1..])),
             _ => self.execute(),
         }
     }
 
-    fn execute(&self) -> i8 {
+    fn execute(&mut self) {
         match unistd::fork().unwrap() {
             ForkResult::Parent { child } => {
-                match wait::waitpid(child, None).unwrap() {
-                    WaitStatus::Exited(_, code) => code,
-                    s => panic!("my child got {:?}", s),
-                }
+                self.pid = Some(child);
             },
 
             ForkResult::Child => {
+                for &(new, old) in &self.fds {
+                    unistd::dup2(old, new).unwrap();
+                }
+
                 let c_cmd = CString::new(self.args[0]).unwrap();
                 let c_args: Vec<CString> = self.args.iter()
                     .map(|&s| CString::new(s).unwrap())
                     .collect();
 
-                for &(old, new) in &self.fds {
-                    match new {
-                        Redirect::Fd(newfd) => { unistd::dup2(old, newfd).unwrap(); },
-                        _ => unimplemented!(),
-                    }
-                }
-
                 unistd::execvp(&c_cmd, &c_args).unwrap();
-                unreachable!();
+                unreachable!()
             },
+        }
+    }
+
+    fn wait(&self) -> i8 {
+        if let Some(exit_code) = self.builtin_exit_code {
+            return exit_code;
+        }
+        match wait::waitpid(self.pid.unwrap(), None).unwrap() {
+            WaitStatus::Exited(_, code) => code,
+            s => panic!("my child got {:?}", s),
         }
     }
 }
@@ -101,19 +141,11 @@ fn main() {
         stdin.read_line(&mut input).unwrap();
         if input.is_empty() { break }
 
-        let mut cmds: Vec<Command> = input.split('|').map(Command::from).collect();
+        let mut job = Job::from(input.as_str());
 
-        for pair in cmds.chunks_mut(2) {
-            let (read, write) = unistd::pipe().unwrap();
-            pair[0].fds.push((1, Redirect::Fd(write)));
-            pair[1].fds.push((0, Redirect::Fd(read)));
-        }
+        println!("{:?}", job);
 
-        println!("{:?}", cmds);
-
-        for cmd in &cmds {
-            exit_code = cmd.run();
-        }
+        exit_code = job.run();
     }
 
     println!("");
