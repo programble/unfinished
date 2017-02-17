@@ -104,7 +104,7 @@ impl<'a> Iterator for Iter<'a> {
         if let Some(ref mut prefix3) = self.prefix3 { for x in prefix3 { return Some(x); } }
         if let Some(ref mut prefix4) = self.prefix4 { for x in prefix4 { return Some(x); } }
         if let Some(ref mut rex) = self.rex { for x in rex { return Some(x); } }
-        for x in self.opcode { return Some(x); }
+        for x in &mut self.opcode { return Some(x); }
         if let Some(ref mut modrm) = self.modrm { for x in modrm { return Some(x); } }
         if let Some(ref mut sib) = self.sib { for x in sib { return Some(x); } }
         if let Some(ref mut disp) = self.disp { for x in disp { return Some(x); } }
