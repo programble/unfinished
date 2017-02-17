@@ -36,9 +36,9 @@ pub struct Rex(pub u8); // Wants to be NonZero.
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Opcode {
-    B1(u8),
-    B2(u8, u8),
-    B3(u8, u8, u8),
+    B1([u8; 1]),
+    B2([u8; 2]),
+    B3([u8; 3]),
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -49,15 +49,15 @@ pub struct Sib(pub u8);
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Disp {
-    B1(u8),
-    B4(u8, u8, u8, u8),
+    B1([u8; 1]),
+    B4([u8; 4]),
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Imm {
-    B1(u8),
-    B2(u8, u8),
-    B4(u8, u8, u8, u8),
+    B1([u8; 1]),
+    B2([u8; 2]),
+    B4([u8; 4]),
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
