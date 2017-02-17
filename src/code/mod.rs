@@ -75,3 +75,26 @@ pub struct Instruction {
     pub disp: Option<Disp>,
     pub imm: Option<Imm>,
 }
+
+impl Instruction {
+    #[inline]
+    pub fn new(opcode: Opcode) -> Self {
+        Instruction {
+            prefix1: None,
+            prefix2: None,
+            prefix3: None,
+            prefix4: None,
+            rex: None,
+            opcode: opcode,
+            modrm: None,
+            sib: None,
+            disp: None,
+            imm: None,
+        }
+    }
+
+    #[inline]
+    pub fn iter(&self) -> Iter {
+        self.into_iter()
+    }
+}
