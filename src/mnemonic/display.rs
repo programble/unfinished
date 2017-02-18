@@ -157,8 +157,8 @@ impl_display_reg!(
 impl Display for Disp {
     fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
         match *self {
-            Disp::Disp8(disp) => write!(f, "{:#02x}", disp),
-            Disp::Disp32(disp) => write!(f, "{:#08x}", disp),
+            Disp::Disp8(disp) => write!(f, "{:#04x}", disp),
+            Disp::Disp32(disp) => write!(f, "{:#010x}", disp),
         }
     }
 }
@@ -249,7 +249,7 @@ where Base: Display + Copy, Index: Display + Copy {
             Offset::BaseDisp(b, d) => write!(f, "{} + {}", b, d),
             Offset::BaseIndex(b, i, s) => write!(f, "{} + {} * {}", b, i, s),
             Offset::BaseIndexDisp(b, i, s, d) => write!(f, "{} + {} * {} + {}", b, i, s, d),
-            Offset::RipDisp(d) => write!(f, "rip + {:#08x}", d),
+            Offset::RipDisp(d) => write!(f, "rip + {:#010x}", d),
         }
     }
 }
