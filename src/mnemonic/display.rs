@@ -333,3 +333,29 @@ impl<I> Display for Rep<I> where I: Display {
         write!(f, "rep {}", self.0)
     }
 }
+
+impl Display for Adc {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Adc::AlImm8(imm)        => write!(f, "adc al, {:#04x}", imm),
+            Adc::AxImm16(imm)       => write!(f, "adc ax, {:#06x}", imm),
+            Adc::EaxImm32(imm)      => write!(f, "adc eax, {:#010x}", imm),
+            Adc::RaxImm32(imm)      => write!(f, "adc rax, {:#010x}", imm),
+            Adc::Rm8Imm8(rm, imm)   => write!(f, "adc {}, {:#04x}", rm, imm),
+            Adc::Rm16Imm16(rm, imm) => write!(f, "adc {}, {:#06x}", rm, imm),
+            Adc::Rm32Imm32(rm, imm) => write!(f, "adc {}, {:#010x}", rm, imm),
+            Adc::Rm64Imm32(rm, imm) => write!(f, "adc {}, {:#010x}", rm, imm),
+            Adc::Rm16Imm8(rm, imm)  => write!(f, "adc {}, {:#04x}", rm, imm),
+            Adc::Rm32Imm8(rm, imm)  => write!(f, "adc {}, {:#04x}", rm, imm),
+            Adc::Rm64Imm8(rm, imm)  => write!(f, "adc {}, {:#04x}", rm, imm),
+            Adc::Rm8R8(rmr)         => write!(f, "adc {}", rmr),
+            Adc::Rm16R16(rmr)       => write!(f, "adc {}", rmr),
+            Adc::Rm32R32(rmr)       => write!(f, "adc {}", rmr),
+            Adc::Rm64R64(rmr)       => write!(f, "adc {}", rmr),
+            Adc::R8Rm8(rrm)         => write!(f, "adc {}", rrm),
+            Adc::R16Rm16(rrm)       => write!(f, "adc {}", rrm),
+            Adc::R32Rm32(rrm)       => write!(f, "adc {}", rrm),
+            Adc::R64Rm64(rrm)       => write!(f, "adc {}", rrm),
+        }
+    }
+}
