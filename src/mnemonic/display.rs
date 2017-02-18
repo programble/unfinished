@@ -315,3 +315,21 @@ impl_display_rmxrmx!(R8Rm8 { Reg8Reg8, Rex8Rex8, Reg8Mem8, Rex8Mex8 });
 impl_display_rmxrmx!(R16Rm16 { Reg16Reg16, Rex16Rex16, Reg16Mem16, Rex16Mex16 });
 impl_display_rmxrmx!(R32Rm32 { Reg32Reg32, Rex32Rex32, Reg32Mem32, Rex32Mex32 });
 impl_display_rmxrmx!(R64Rm64 { Rex64Rex64, Rex64Mex64 });
+
+impl<I> Display for Lock<I> where I: Display {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        write!(f, "lock {}", self.0)
+    }
+}
+
+impl<I> Display for Repne<I> where I: Display {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        write!(f, "repne {}", self.0)
+    }
+}
+
+impl<I> Display for Rep<I> where I: Display {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        write!(f, "rep {}", self.0)
+    }
+}
