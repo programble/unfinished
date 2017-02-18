@@ -92,9 +92,4 @@ impl Instruction {
             imm: None,
         }
     }
-
-    #[inline]
-    pub fn iter(&self) -> Iter {
-        self.into_iter()
-    }
 }

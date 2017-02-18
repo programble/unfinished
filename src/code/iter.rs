@@ -1,4 +1,4 @@
-use code::*;
+use code::{Prefix1, Prefix2, Prefix3, Prefix4, Rex, Opcode, Modrm, Sib, Disp, Imm, Instruction};
 
 use core::slice;
 use core::iter::{self, Cloned, Fuse, Once};
@@ -113,4 +113,11 @@ impl<'a> Iterator for Iter<'a> {
     }
 
     // TODO: Implement size_hint.
+}
+
+impl Instruction {
+    #[inline]
+    pub fn iter(&self) -> Iter {
+        self.into_iter()
+    }
 }
