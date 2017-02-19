@@ -266,14 +266,14 @@ impl<Base, Index> Display for Offset<Base, Index>
 where Base: Display + Copy, Index: Display + Copy {
     fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
         match *self {
-            Offset::Disp(d) => write!(f, "{}", d),
-            Offset::Index(i, s) => write!(f, "{} * {}", i, s),
-            Offset::IndexDisp(i, s, d) => write!(f, "{} * {} + {}", i, s, d),
-            Offset::Base(b) => write!(f, "{}", b),
-            Offset::BaseDisp(b, d) => write!(f, "{} + {}", b, d),
-            Offset::BaseIndex(b, i, s) => write!(f, "{} + {} * {}", b, i, s),
+            Offset::Disp(d)                   => write!(f, "{}", d),
+            Offset::Index(i, s)               => write!(f, "{} * {}", i, s),
+            Offset::IndexDisp(i, s, d)        => write!(f, "{} * {} + {}", i, s, d),
+            Offset::Base(b)                   => write!(f, "{}", b),
+            Offset::BaseDisp(b, d)            => write!(f, "{} + {}", b, d),
+            Offset::BaseIndex(b, i, s)        => write!(f, "{} + {} * {}", b, i, s),
             Offset::BaseIndexDisp(b, i, s, d) => write!(f, "{} + {} * {} + {}", b, i, s, d),
-            Offset::RipDisp(d) => write!(f, "rip + {:#010x}", d),
+            Offset::RipDisp(d)                => write!(f, "rip + {:#010x}", d),
         }
     }
 }
@@ -293,52 +293,52 @@ impl<Base32, Index32, Base64, Index64> Display for Memory<Base32, Index32, Base6
 where Offset<Base32, Index32>: Display, Offset<Base64, Index64>: Display {
     fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
         match *self {
-            Memory::Offset32(None, ref offset) => write!(f, "[{}]", offset),
+            Memory::Offset32(None, ref offset)       => write!(f, "[{}]", offset),
             Memory::Offset32(Some(sreg), ref offset) => write!(f, "[{}:{}]", sreg, offset),
-            Memory::Offset64(None, ref offset) => write!(f, "[{}]", offset),
+            Memory::Offset64(None, ref offset)       => write!(f, "[{}]", offset),
             Memory::Offset64(Some(sreg), ref offset) => write!(f, "[{}:{}]", sreg, offset),
         }
     }
 }
 
-macro_rules! impl_display_rmx {
-    ($rmx:ident { $($var:ident),+ }) => {
-        impl Display for $rmx {
+macro_rules! impl_display_rm {
+    ($rm:ident { $($var:ident),+ }) => {
+        impl Display for $rm {
             fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
                 match *self {
-                    $($rmx::$var(ref x) => write!(f, "{}", x)),+
+                    $($rm::$var(ref x) => write!(f, "{}", x)),+
                 }
             }
         }
     }
 }
 
-impl_display_rmx!(Rm8 { Reg8, Rex8, Mem8, Mex8 });
-impl_display_rmx!(Rm16 { Reg16, Rex16, Mem16, Mex16 });
-impl_display_rmx!(Rm32 { Reg32, Rex32, Mem32, Mex32 });
-impl_display_rmx!(Rm64 { Rex64, Mem64, Mex64 });
+impl_display_rm!(Rm8 { Reg8, Rex8, Mem8, Mex8 });
+impl_display_rm!(Rm16 { Reg16, Rex16, Mem16, Mex16 });
+impl_display_rm!(Rm32 { Reg32, Rex32, Mem32, Mex32 });
+impl_display_rm!(Rm64 { Rex64, Mem64, Mex64 });
 
-macro_rules! impl_display_rmxrmx {
-    ($rmxrmx:ident { $($var:ident),+ }) => {
-        impl Display for $rmxrmx {
+macro_rules! impl_display_rmrm {
+    ($rmrm:ident { $($var:ident),+ }) => {
+        impl Display for $rmrm {
             fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
                 match *self {
-                    $($rmxrmx::$var(ref a, ref b) => write!(f, "{}, {}", a, b)),+
+                    $($rmrm::$var(ref a, ref b) => write!(f, "{}, {}", a, b)),+
                 }
             }
         }
     }
 }
 
-impl_display_rmxrmx!(Rm8R8 { Reg8Reg8, Rex8Rex8, Mem8Reg8, Mex8Rex8 });
-impl_display_rmxrmx!(Rm16R16 { Reg16Reg16, Rex16Rex16, Mem16Reg16, Mex16Rex16 });
-impl_display_rmxrmx!(Rm32R32 { Reg32Reg32, Rex32Rex32, Mem32Reg32, Mex32Rex32 });
-impl_display_rmxrmx!(Rm64R64 { Rex64Rex64, Mex64Rex64 });
+impl_display_rmrm!(Rm8R8 { Reg8Reg8, Rex8Rex8, Mem8Reg8, Mex8Rex8 });
+impl_display_rmrm!(Rm16R16 { Reg16Reg16, Rex16Rex16, Mem16Reg16, Mex16Rex16 });
+impl_display_rmrm!(Rm32R32 { Reg32Reg32, Rex32Rex32, Mem32Reg32, Mex32Rex32 });
+impl_display_rmrm!(Rm64R64 { Rex64Rex64, Mex64Rex64 });
 
-impl_display_rmxrmx!(R8Rm8 { Reg8Reg8, Rex8Rex8, Reg8Mem8, Rex8Mex8 });
-impl_display_rmxrmx!(R16Rm16 { Reg16Reg16, Rex16Rex16, Reg16Mem16, Rex16Mex16 });
-impl_display_rmxrmx!(R32Rm32 { Reg32Reg32, Rex32Rex32, Reg32Mem32, Rex32Mex32 });
-impl_display_rmxrmx!(R64Rm64 { Rex64Rex64, Rex64Mex64 });
+impl_display_rmrm!(R8Rm8 { Reg8Reg8, Rex8Rex8, Reg8Mem8, Rex8Mex8 });
+impl_display_rmrm!(R16Rm16 { Reg16Reg16, Rex16Rex16, Reg16Mem16, Rex16Mex16 });
+impl_display_rmrm!(R32Rm32 { Reg32Reg32, Rex32Rex32, Reg32Mem32, Rex32Mex32 });
+impl_display_rmrm!(R64Rm64 { Rex64Rex64, Rex64Mex64 });
 
 impl<I> Display for Lock<I> where I: Display {
     fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
