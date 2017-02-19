@@ -1,14 +1,16 @@
-use code::{Prefix3, Rex, Opcode, Imm, Instruction};
+use code::{Prefix3, Rex, Opcode, Modrm, Imm, Instruction};
 
 use mnemonic::instruction::Adc;
 use mnemonic::operand::{Imm8, Imm16, Imm32};
 
-impl Rex {
+impl Default for Rex {
     #[inline]
-    pub fn new() -> Self {
+    fn default() -> Self {
         Rex(0x40)
     }
+}
 
+impl Rex {
     #[inline]
     pub fn w(self) -> Self {
         Rex(self.0 | 0b1000)
@@ -30,10 +32,23 @@ impl Rex {
     }
 }
 
-impl Default for Rex {
+impl Modrm {
     #[inline]
-    fn default() -> Self {
-        Rex::new()
+    pub fn mode(self, mode: u8) -> Self {
+        debug_assert_eq!(0, mode & !0b11);
+        Modrm(self.0 & 0b00_111_111 | mode << 6)
+    }
+
+    #[inline]
+    pub fn reg(self, reg: u8) -> Self {
+        debug_assert_eq!(0, reg & !0b111);
+        Modrm(self.0 & 0b11_000_111 | (reg << 3 & 0b00_111_000))
+    }
+
+    #[inline]
+    pub fn rm(self, rm: u8) -> Self {
+        debug_assert_eq!(0, rm & !0b111);
+        Modrm(self.0 & 0b11_111_000 | (rm & 0b00_000_111))
     }
 }
 

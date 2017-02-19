@@ -44,10 +44,10 @@ pub enum Opcode {
     B3([u8; 3]),
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[derive(Debug, Default, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct Modrm(pub u8);
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[derive(Debug, Default, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct Sib(pub u8);
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
