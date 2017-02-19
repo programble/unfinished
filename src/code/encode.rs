@@ -1,4 +1,4 @@
-use code::{Prefix3, Rex, Opcode, Modrm, Imm, Instruction};
+use code::{Prefix3, Rex, Opcode, Modrm, Sib, Imm, Instruction};
 
 use mnemonic::instruction::Adc;
 use mnemonic::operand::{Imm8, Imm16, Imm32};
@@ -49,6 +49,26 @@ impl Modrm {
     pub fn rm(self, rm: u8) -> Self {
         debug_assert_eq!(0, rm & !0b111);
         Modrm(self.0 & 0b11_111_000 | (rm & 0b00_000_111))
+    }
+}
+
+impl Sib {
+    #[inline]
+    pub fn scale(self, scale: u8) -> Self {
+        debug_assert_eq!(0, scale & !0b11);
+        Sib(self.0 & 0b00_111_111 | scale << 6)
+    }
+
+    #[inline]
+    pub fn index(self, index: u8) -> Self {
+        debug_assert_eq!(0, index & !0b111);
+        Sib(self.0 & 0b11_000_111 | (index << 3 & 0b00_111_000))
+    }
+
+    #[inline]
+    pub fn base(self, base: u8) -> Self {
+        debug_assert_eq!(0, base & !0b111);
+        Sib(self.0 & 0b11_111_000 | (base & 0b00_000_111))
     }
 }
 
