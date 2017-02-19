@@ -589,12 +589,20 @@ impl Instruction {
                     .disp32(disp)
             },
             Offset::Index(index, scale) => {
-                self.modrm_mode(0)
-                    .modrm_rm(4)
+                self.modrm_mode(0b00)
+                    .modrm_rm(0b100)
                     .scale(scale)
                     .index_reg64(index)
-                    .sib_base(5)
+                    .sib_base(0b101)
                     .disp32(0)
+            },
+            Offset::IndexDisp(index, scale, disp) => {
+                self.modrm_mode(0b00)
+                    .modrm_rm(0b100)
+                    .scale(scale)
+                    .index_reg64(index)
+                    .sib_base(0b101)
+                    .disp32(disp)
             },
             _ => unimplemented!(),
         }

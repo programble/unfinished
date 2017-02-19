@@ -203,4 +203,11 @@ test_encode! {
         Rm8::Mem8(Memory::Offset64(None, Offset::Index(IndexReg64::Rdi, Scale::X8))),
         Imm8(0x01),
     ) => "80 14 fd 00 00 00 00 01",
+
+    Adc::Rm8Imm8(
+        Rm8::Mem8(
+            Memory::Offset64(None, Offset::IndexDisp(IndexReg64::Rax, Scale::X1, 0x01020304))
+        ),
+        Imm8(0x01),
+    ) => "80 14 05 04 03 02 01 01",
 }
