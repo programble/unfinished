@@ -112,8 +112,23 @@ impl<'a> Iterator for Iter<'a> {
         None
     }
 
-    // TODO: Implement size_hint.
+    #[inline]
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        let len = self.prefix1.as_ref().map(ExactSizeIterator::len).unwrap_or(0)
+            + self.prefix2.as_ref().map(ExactSizeIterator::len).unwrap_or(0)
+            + self.prefix3.as_ref().map(ExactSizeIterator::len).unwrap_or(0)
+            + self.prefix4.as_ref().map(ExactSizeIterator::len).unwrap_or(0)
+            + self.rex.as_ref().map(ExactSizeIterator::len).unwrap_or(0)
+            + self.opcode.len()
+            + self.modrm.as_ref().map(ExactSizeIterator::len).unwrap_or(0)
+            + self.sib.as_ref().map(ExactSizeIterator::len).unwrap_or(0)
+            + self.disp.as_ref().map(ExactSizeIterator::len).unwrap_or(0)
+            + self.imm.as_ref().map(ExactSizeIterator::len).unwrap_or(0);
+        (len, Some(len))
+    }
 }
+
+impl<'a> ExactSizeIterator for Iter<'a> { }
 
 impl Instruction {
     #[inline]
