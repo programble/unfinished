@@ -3,11 +3,39 @@ use code::{Prefix3, Rex, Opcode, Imm, Instruction};
 use mnemonic::instruction::Adc;
 use mnemonic::operand::{Imm8, Imm16, Imm32};
 
-const REX: u8   = 0b0100_0000;
-const REX_W: u8 = 0b0100_1000;
-const REX_R: u8 = 0b0100_0100;
-const REX_X: u8 = 0b0100_0010;
-const REX_B: u8 = 0b0100_0001;
+impl Rex {
+    #[inline]
+    pub fn new() -> Self {
+        Rex(0x40)
+    }
+
+    #[inline]
+    pub fn w(self) -> Self {
+        Rex(self.0 | 0b1000)
+    }
+
+    #[inline]
+    pub fn r(self) -> Self {
+        Rex(self.0 | 0b0100)
+    }
+
+    #[inline]
+    pub fn x(self) -> Self {
+        Rex(self.0 | 0b0010)
+    }
+
+    #[inline]
+    pub fn b(self) -> Self {
+        Rex(self.0 | 0b0001)
+    }
+}
+
+impl Default for Rex {
+    #[inline]
+    fn default() -> Self {
+        Rex::new()
+    }
+}
 
 impl Instruction {
     #[inline]
@@ -34,7 +62,7 @@ impl Instruction {
 
     #[inline]
     pub fn rex_w(mut self) -> Self {
-        self.rex = Some(self.rex.map_or(Rex(REX_W), |Rex(x)| Rex(x | REX_W)));
+        self.rex = Some(self.rex.unwrap_or_default().w());
         self
     }
 
