@@ -46,30 +46,34 @@ impl Instruction {
 
     #[inline]
     pub fn imm16(mut self, imm: Imm16) -> Self {
-        self.imm = Some(Imm::B2([(imm.0 & 0xff) as u8, (imm.0 >> 8) as u8]));
+        let bytes = [
+            imm.0 as u8,
+            (imm.0 >> 8) as u8,
+        ];
+        self.imm = Some(Imm::B2(bytes));
         self
     }
 
     #[inline]
     pub fn imm32(mut self, imm: Imm32) -> Self {
-        self.imm = Some(Imm::B4([
-            (imm.0 & 0xff) as u8,
-            (imm.0 >> 8 & 0xff) as u8,
-            (imm.0 >> 16 & 0xff) as u8,
+        let bytes = [
+            imm.0 as u8,
+            (imm.0 >> 8) as u8,
+            (imm.0 >> 16) as u8,
             (imm.0 >> 24) as u8,
-        ]));
+        ];
+        self.imm = Some(Imm::B4(bytes));
         self
     }
 }
 
 impl<'a> From<&'a Adc> for Instruction {
     fn from(adc: &'a Adc) -> Self {
-        use self::Adc::*;
         match *adc {
-            AlImm8(imm) => Instruction::opcode1(0x14).imm8(imm),
-            AxImm16(imm) => Instruction::opcode1(0x15).operand_size().imm16(imm),
-            EaxImm32(imm) => Instruction::opcode1(0x15).imm32(imm),
-            RaxImm32(imm) => Instruction::opcode1(0x15).rex_w().imm32(imm),
+            Adc::AlImm8(imm)   => Instruction::opcode1(0x14).imm8(imm),
+            Adc::AxImm16(imm)  => Instruction::opcode1(0x15).operand_size().imm16(imm),
+            Adc::EaxImm32(imm) => Instruction::opcode1(0x15).imm32(imm),
+            Adc::RaxImm32(imm) => Instruction::opcode1(0x15).rex_w().imm32(imm),
             _ => unimplemented!(),
         }
     }
