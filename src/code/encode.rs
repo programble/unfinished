@@ -4,6 +4,7 @@ use mnemonic::instruction::Adc;
 use mnemonic::operand::{
     self,
     Imm8, Imm16, Imm32,
+    Reg8, Rex8,
     Sreg,
     Scale, IndexReg32, IndexRex32, IndexReg64, IndexRex64,
 };
@@ -101,6 +102,12 @@ impl Instruction {
     }
 
     #[inline]
+    pub fn rex(mut self) -> Self {
+        self.rex = Some(self.rex.unwrap_or_default());
+        self
+    }
+
+    #[inline]
     pub fn rex_w(mut self) -> Self {
         self.rex = Some(self.rex.unwrap_or_default().w());
         self
@@ -173,6 +180,42 @@ impl Instruction {
             Sreg::Gs => Some(Prefix2::Gs),
         };
         self
+    }
+
+    #[inline]
+    pub fn reg8(self, reg: Reg8) -> Self {
+        match reg {
+            Reg8::Al => self.modrm_reg(0),
+            Reg8::Cl => self.modrm_reg(1),
+            Reg8::Dl => self.modrm_reg(2),
+            Reg8::Bl => self.modrm_reg(3),
+            Reg8::Ah => self.modrm_reg(4),
+            Reg8::Ch => self.modrm_reg(5),
+            Reg8::Dh => self.modrm_reg(6),
+            Reg8::Bh => self.modrm_reg(7),
+        }
+    }
+
+    #[inline]
+    pub fn rex8(self, rex: Rex8) -> Self {
+        match rex {
+            Rex8::Al => self.modrm_reg(0),
+            Rex8::Cl => self.modrm_reg(1),
+            Rex8::Dl => self.modrm_reg(2),
+            Rex8::Bl => self.modrm_reg(3),
+            Rex8::Spl => self.rex().modrm_reg(4),
+            Rex8::Bpl => self.rex().modrm_reg(5),
+            Rex8::Sil => self.rex().modrm_reg(6),
+            Rex8::Dil => self.rex().modrm_reg(7),
+            Rex8::R8l => self.rex_r().modrm_reg(0),
+            Rex8::R9l => self.rex_r().modrm_reg(1),
+            Rex8::R10l => self.rex_r().modrm_reg(2),
+            Rex8::R11l => self.rex_r().modrm_reg(3),
+            Rex8::R12l => self.rex_r().modrm_reg(4),
+            Rex8::R13l => self.rex_r().modrm_reg(5),
+            Rex8::R14l => self.rex_r().modrm_reg(6),
+            Rex8::R15l => self.rex_r().modrm_reg(7),
+        }
     }
 
     #[inline]
