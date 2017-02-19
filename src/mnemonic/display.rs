@@ -359,3 +359,38 @@ impl Display for Adc {
         }
     }
 }
+
+impl Display for Adcx {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Adcx::R32Rm32(rrm) => write!(f, "adcx {}", rrm),
+            Adcx::R64Rm64(rrm) => write!(f, "adcx {}", rrm),
+        }
+    }
+}
+
+impl Display for Add {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Add::AlImm8(imm)        => write!(f, "add al, {:#04x}", imm),
+            Add::AxImm16(imm)       => write!(f, "add ax, {:#06x}", imm),
+            Add::EaxImm32(imm)      => write!(f, "add eax, {:#010x}", imm),
+            Add::RaxImm32(imm)      => write!(f, "add rax, {:#010x}", imm),
+            Add::Rm8Imm8(rm, imm)   => write!(f, "add {}, {:#04x}", rm, imm),
+            Add::Rm16Imm16(rm, imm) => write!(f, "add {}, {:#06x}", rm, imm),
+            Add::Rm32Imm32(rm, imm) => write!(f, "add {}, {:#010x}", rm, imm),
+            Add::Rm64Imm32(rm, imm) => write!(f, "add {}, {:#010x}", rm, imm),
+            Add::Rm16Imm8(rm, imm)  => write!(f, "add {}, {:#04x}", rm, imm),
+            Add::Rm32Imm8(rm, imm)  => write!(f, "add {}, {:#04x}", rm, imm),
+            Add::Rm64Imm8(rm, imm)  => write!(f, "add {}, {:#04x}", rm, imm),
+            Add::Rm8R8(rmr)         => write!(f, "add {}", rmr),
+            Add::Rm16R16(rmr)       => write!(f, "add {}", rmr),
+            Add::Rm32R32(rmr)       => write!(f, "add {}", rmr),
+            Add::Rm64R64(rmr)       => write!(f, "add {}", rmr),
+            Add::R8Rm8(rrm)         => write!(f, "add {}", rrm),
+            Add::R16Rm16(rrm)       => write!(f, "add {}", rrm),
+            Add::R32Rm32(rrm)       => write!(f, "add {}", rrm),
+            Add::R64Rm64(rrm)       => write!(f, "add {}", rrm),
+        }
+    }
+}
