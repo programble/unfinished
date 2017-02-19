@@ -327,6 +327,42 @@ impl Instruction {
     }
 
     #[inline]
+    pub fn rm_reg8(self, reg: Reg8) -> Self {
+        match reg {
+            Reg8::Al => self.modrm_mode(3).modrm_rm(0),
+            Reg8::Cl => self.modrm_mode(3).modrm_rm(1),
+            Reg8::Dl => self.modrm_mode(3).modrm_rm(2),
+            Reg8::Bl => self.modrm_mode(3).modrm_rm(3),
+            Reg8::Ah => self.modrm_mode(3).modrm_rm(4),
+            Reg8::Ch => self.modrm_mode(3).modrm_rm(5),
+            Reg8::Dh => self.modrm_mode(3).modrm_rm(6),
+            Reg8::Bh => self.modrm_mode(3).modrm_rm(7),
+        }
+    }
+
+    #[inline]
+    pub fn rm_rex8(self, rex: Rex8) -> Self {
+        match rex {
+            Rex8::Al => self.modrm_mode(3).modrm_rm(0),
+            Rex8::Cl => self.modrm_mode(3).modrm_rm(1),
+            Rex8::Dl => self.modrm_mode(3).modrm_rm(2),
+            Rex8::Bl => self.modrm_mode(3).modrm_rm(3),
+            Rex8::Spl => self.rex().modrm_mode(3).modrm_rm(4),
+            Rex8::Bpl => self.rex().modrm_mode(3).modrm_rm(5),
+            Rex8::Sil => self.rex().modrm_mode(3).modrm_rm(6),
+            Rex8::Dil => self.rex().modrm_mode(3).modrm_rm(7),
+            Rex8::R8l => self.modrm_mode(3).rex_b().modrm_rm(0),
+            Rex8::R9l => self.modrm_mode(3).rex_b().modrm_rm(1),
+            Rex8::R10l => self.modrm_mode(3).rex_b().modrm_rm(2),
+            Rex8::R11l => self.modrm_mode(3).rex_b().modrm_rm(3),
+            Rex8::R12l => self.modrm_mode(3).rex_b().modrm_rm(4),
+            Rex8::R13l => self.modrm_mode(3).rex_b().modrm_rm(5),
+            Rex8::R14l => self.modrm_mode(3).rex_b().modrm_rm(6),
+            Rex8::R15l => self.modrm_mode(3).rex_b().modrm_rm(7),
+        }
+    }
+
+    #[inline]
     pub fn scale(self, scale: Scale) -> Self {
         match scale {
             Scale::X1 => self.sib_scale(0),
