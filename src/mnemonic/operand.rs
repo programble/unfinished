@@ -85,7 +85,7 @@ pub enum IndexRex64 {
 pub enum Offset<Base, Index> {
     Disp(i32),
     Index(Index, Scale),
-    IndexDisp(Index, Scale, Disp),
+    IndexDisp(Index, Scale, i32),
     Base(Base),
     BaseDisp(Base, Disp),
     BaseIndex(Base, Index, Scale),

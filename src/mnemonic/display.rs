@@ -268,7 +268,7 @@ where Base: Display + Copy, Index: Display + Copy {
         match *self {
             Offset::Disp(d)                   => write!(f, "{:#010x}", d),
             Offset::Index(i, s)               => write!(f, "{} * {}", i, s),
-            Offset::IndexDisp(i, s, d)        => write!(f, "{} * {} + {}", i, s, d),
+            Offset::IndexDisp(i, s, d)        => write!(f, "{} * {} + {:#010x}", i, s, d),
             Offset::Base(b)                   => write!(f, "{}", b),
             Offset::BaseDisp(b, d)            => write!(f, "{} + {}", b, d),
             Offset::BaseIndex(b, i, s)        => write!(f, "{} + {} * {}", b, i, s),
