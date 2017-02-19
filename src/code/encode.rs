@@ -1,7 +1,12 @@
-use code::{Prefix3, Rex, Opcode, Modrm, Sib, Imm, Instruction};
+use code::{Prefix2, Prefix3, Rex, Opcode, Modrm, Sib, Disp, Imm, Instruction};
 
 use mnemonic::instruction::Adc;
-use mnemonic::operand::{Imm8, Imm16, Imm32};
+use mnemonic::operand::{
+    self,
+    Imm8, Imm16, Imm32,
+    Sreg,
+    Scale, IndexReg32, IndexRex32, IndexReg64, IndexRex64,
+};
 
 impl Default for Rex {
     #[inline]
@@ -98,6 +103,172 @@ impl Instruction {
     #[inline]
     pub fn rex_w(mut self) -> Self {
         self.rex = Some(self.rex.unwrap_or_default().w());
+        self
+    }
+
+    #[inline]
+    pub fn rex_r(mut self) -> Self {
+        self.rex = Some(self.rex.unwrap_or_default().r());
+        self
+    }
+
+    #[inline]
+    pub fn rex_x(mut self) -> Self {
+        self.rex = Some(self.rex.unwrap_or_default().x());
+        self
+    }
+
+    #[inline]
+    pub fn rex_b(mut self) -> Self {
+        self.rex = Some(self.rex.unwrap_or_default().b());
+        self
+    }
+
+    #[inline]
+    pub fn modrm_mode(mut self, mode: u8) -> Self {
+        self.modrm = Some(self.modrm.unwrap_or_default().mode(mode));
+        self
+    }
+
+    #[inline]
+    pub fn modrm_reg(mut self, reg: u8) -> Self {
+        self.modrm = Some(self.modrm.unwrap_or_default().reg(reg));
+        self
+    }
+
+    #[inline]
+    pub fn modrm_rm(mut self, rm: u8) -> Self {
+        self.modrm = Some(self.modrm.unwrap_or_default().rm(rm));
+        self
+    }
+
+    #[inline]
+    pub fn sib_scale(mut self, scale: u8) -> Self {
+        self.sib = Some(self.sib.unwrap_or_default().scale(scale));
+        self
+    }
+
+    #[inline]
+    pub fn sib_index(mut self, index: u8) -> Self {
+        self.sib = Some(self.sib.unwrap_or_default().index(index));
+        self
+    }
+
+    #[inline]
+    pub fn sib_base(mut self, base: u8) -> Self {
+        self.sib = Some(self.sib.unwrap_or_default().base(base));
+        self
+    }
+}
+
+impl Instruction {
+    #[inline]
+    pub fn sreg(mut self, sreg: Sreg) -> Self {
+        self.prefix2 = match sreg {
+            Sreg::Cs => Some(Prefix2::Cs),
+            Sreg::Ds => Some(Prefix2::Ds),
+            Sreg::Ss => Some(Prefix2::Ss),
+            Sreg::Es => Some(Prefix2::Es),
+            Sreg::Fs => Some(Prefix2::Fs),
+            Sreg::Gs => Some(Prefix2::Gs),
+        };
+        self
+    }
+
+    #[inline]
+    pub fn scale(self, scale: Scale) -> Self {
+        match scale {
+            Scale::X1 => self.sib_scale(0),
+            Scale::X2 => self.sib_scale(1),
+            Scale::X4 => self.sib_scale(2),
+            Scale::X8 => self.sib_scale(3),
+        }
+    }
+
+    #[inline]
+    pub fn index_reg32(self, index: IndexReg32) -> Self {
+        match index {
+            IndexReg32::Eax => self.sib_index(0),
+            IndexReg32::Ecx => self.sib_index(1),
+            IndexReg32::Edx => self.sib_index(2),
+            IndexReg32::Ebx => self.sib_index(3),
+            IndexReg32::Ebp => self.sib_index(5),
+            IndexReg32::Esi => self.sib_index(6),
+            IndexReg32::Edi => self.sib_index(7),
+        }
+    }
+
+    #[inline]
+    pub fn index_rex32(self, index: IndexRex32) -> Self {
+        match index {
+            IndexRex32::Eax => self.sib_index(0),
+            IndexRex32::Ecx => self.sib_index(1),
+            IndexRex32::Edx => self.sib_index(2),
+            IndexRex32::Ebx => self.sib_index(3),
+            IndexRex32::Ebp => self.sib_index(5),
+            IndexRex32::Esi => self.sib_index(6),
+            IndexRex32::Edi => self.sib_index(7),
+            IndexRex32::R8d => self.rex_x().sib_index(0),
+            IndexRex32::R9d => self.rex_x().sib_index(1),
+            IndexRex32::R10d => self.rex_x().sib_index(2),
+            IndexRex32::R11d => self.rex_x().sib_index(3),
+            IndexRex32::R12d => self.rex_x().sib_index(4),
+            IndexRex32::R13d => self.rex_x().sib_index(5),
+            IndexRex32::R14d => self.rex_x().sib_index(6),
+            IndexRex32::R15d => self.rex_x().sib_index(7),
+        }
+    }
+
+    #[inline]
+    pub fn index_reg64(self, index: IndexReg64) -> Self {
+        match index {
+            IndexReg64::Rax => self.sib_index(0),
+            IndexReg64::Rcx => self.sib_index(1),
+            IndexReg64::Rdx => self.sib_index(2),
+            IndexReg64::Rbx => self.sib_index(3),
+            IndexReg64::Rbp => self.sib_index(5),
+            IndexReg64::Rsi => self.sib_index(6),
+            IndexReg64::Rdi => self.sib_index(7),
+        }
+    }
+
+    #[inline]
+    pub fn index_rex64(self, index: IndexRex64) -> Self {
+        match index {
+            IndexRex64::Rax => self.sib_index(0),
+            IndexRex64::Rcx => self.sib_index(1),
+            IndexRex64::Rdx => self.sib_index(2),
+            IndexRex64::Rbx => self.sib_index(3),
+            IndexRex64::Rbp => self.sib_index(5),
+            IndexRex64::Rsi => self.sib_index(6),
+            IndexRex64::Rdi => self.sib_index(7),
+            IndexRex64::R8 => self.rex_x().sib_index(0),
+            IndexRex64::R9 => self.rex_x().sib_index(1),
+            IndexRex64::R10 => self.rex_x().sib_index(2),
+            IndexRex64::R11 => self.rex_x().sib_index(3),
+            IndexRex64::R12 => self.rex_x().sib_index(4),
+            IndexRex64::R13 => self.rex_x().sib_index(5),
+            IndexRex64::R14 => self.rex_x().sib_index(6),
+            IndexRex64::R15 => self.rex_x().sib_index(7),
+        }
+    }
+
+    #[inline]
+    pub fn disp(mut self, disp: operand::Disp) -> Self {
+        match disp {
+            operand::Disp::Disp8(disp) => {
+                self.disp = Some(Disp::B1([disp as u8]));
+            },
+            operand::Disp::Disp32(disp) => {
+                let bytes = [
+                    disp as u8,
+                    (disp >> 8) as u8,
+                    (disp >> 16) as u8,
+                    (disp >> 24) as u8,
+                ];
+                self.disp = Some(Disp::B4(bytes));
+            },
+        }
         self
     }
 
