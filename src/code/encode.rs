@@ -1,12 +1,12 @@
-use code::{Prefix2, Prefix3, Rex, Opcode, Modrm, Sib, Disp, Imm, Instruction};
+use code::{Prefix2, Prefix3, Prefix4, Rex, Opcode, Modrm, Sib, Disp, Imm, Instruction};
 
 use mnemonic::instruction::Adc;
 use mnemonic::operand::{
-    self,
     Imm8, Imm16, Imm32,
     Reg8, Rex8, Reg16, Rex16, Reg32, Rex32, Reg64, Rex64,
-    Sreg,
     Scale, IndexReg32, IndexRex32, IndexReg64, IndexRex64,
+    Sreg, Offset, Memory, Mem, Mex,
+    Rm8,
 };
 
 impl Default for Rex {
@@ -102,6 +102,12 @@ impl Instruction {
     }
 
     #[inline]
+    pub fn address_size(mut self) -> Self {
+        self.prefix4 = Some(Prefix4::AddressSize);
+        self
+    }
+
+    #[inline]
     pub fn rex(mut self) -> Self {
         self.rex = Some(self.rex.unwrap_or_default());
         self
@@ -164,6 +170,24 @@ impl Instruction {
     #[inline]
     pub fn sib_base(mut self, base: u8) -> Self {
         self.sib = Some(self.sib.unwrap_or_default().base(base));
+        self
+    }
+
+    #[inline]
+    pub fn disp8(mut self, disp: i8) -> Self {
+        self.disp = Some(Disp::B1([disp as u8]));
+        self
+    }
+
+    #[inline]
+    pub fn disp32(mut self, disp: i32) -> Self {
+        let bytes = [
+            disp as u8,
+            (disp >> 8) as u8,
+            (disp >> 16) as u8,
+            (disp >> 24) as u8,
+        ];
+        self.disp = Some(Disp::B4(bytes));
         self
     }
 }
@@ -549,22 +573,64 @@ impl Instruction {
     }
 
     #[inline]
-    pub fn disp(mut self, disp: operand::Disp) -> Self {
-        match disp {
-            operand::Disp::Disp8(disp) => {
-                self.disp = Some(Disp::B1([disp as u8]));
+    pub fn offset_mem32(self, offset: Offset<Reg32, IndexReg32>) -> Self {
+        unimplemented!()
+    }
+
+    #[inline]
+    pub fn offset_mem64(self, offset: Offset<Reg64, IndexReg64>) -> Self {
+        match offset {
+            Offset::Disp(disp) => {
+                self.modrm_mode(0b00)
+                    .modrm_rm(0b100)
+                    .sib_scale(0b00)
+                    .sib_index(0b100)
+                    .sib_base(0b101)
+                    .disp32(disp)
             },
-            operand::Disp::Disp32(disp) => {
-                let bytes = [
-                    disp as u8,
-                    (disp >> 8) as u8,
-                    (disp >> 16) as u8,
-                    (disp >> 24) as u8,
-                ];
-                self.disp = Some(Disp::B4(bytes));
+            Offset::Index(index, scale) => {
+                self.modrm_mode(0)
+                    .modrm_rm(4)
+                    .scale(scale)
+                    .index_reg64(index)
+                    .sib_base(5)
+                    .disp32(0)
+            },
+            _ => unimplemented!(),
+        }
+    }
+
+    #[inline]
+    pub fn mem(self, mem: Mem) -> Self {
+        match mem {
+            Memory::Offset32(None, offset) => {
+                self.address_size().offset_mem32(offset)
+            },
+            Memory::Offset32(Some(sreg), offset) => {
+                self.address_size().sreg(sreg).offset_mem32(offset)
+            },
+            Memory::Offset64(None, offset) => {
+                self.offset_mem64(offset)
+            },
+            Memory::Offset64(Some(sreg), offset) => {
+                self.sreg(sreg).offset_mem64(offset)
             },
         }
-        self
+    }
+
+    #[inline]
+    pub fn mex(self, mex: Mex) -> Self {
+        unimplemented!()
+    }
+
+    #[inline]
+    pub fn rm8(self, rm8: Rm8) -> Self {
+        match rm8 {
+            Rm8::Reg8(reg) => self.rm_reg8(reg),
+            Rm8::Rex8(rex) => self.rm_rex8(rex),
+            Rm8::Mem8(mem) => self.mem(mem),
+            Rm8::Mex8(mex) => self.mex(mex),
+        }
     }
 
     #[inline]
@@ -599,10 +665,11 @@ impl Instruction {
 impl<'a> From<&'a Adc> for Instruction {
     fn from(adc: &'a Adc) -> Self {
         match *adc {
-            Adc::AlImm8(imm)   => Instruction::opcode1(0x14).imm8(imm),
-            Adc::AxImm16(imm)  => Instruction::opcode1(0x15).operand_size().imm16(imm),
-            Adc::EaxImm32(imm) => Instruction::opcode1(0x15).imm32(imm),
-            Adc::RaxImm32(imm) => Instruction::opcode1(0x15).rex_w().imm32(imm),
+            Adc::AlImm8(imm)       => Instruction::opcode1(0x14).imm8(imm),
+            Adc::AxImm16(imm)      => Instruction::opcode1(0x15).operand_size().imm16(imm),
+            Adc::EaxImm32(imm)     => Instruction::opcode1(0x15).imm32(imm),
+            Adc::RaxImm32(imm)     => Instruction::opcode1(0x15).rex_w().imm32(imm),
+            Adc::Rm8Imm8(rm8, imm) => Instruction::opcode1(0x80).modrm_reg(2).rm8(rm8).imm8(imm),
             _ => unimplemented!(),
         }
     }
