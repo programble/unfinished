@@ -363,6 +363,114 @@ impl Instruction {
     }
 
     #[inline]
+    pub fn rm_reg16(self, reg: Reg16) -> Self {
+        match reg {
+            Reg16::Ax => self.modrm_mode(3).modrm_rm(0),
+            Reg16::Cx => self.modrm_mode(3).modrm_rm(1),
+            Reg16::Dx => self.modrm_mode(3).modrm_rm(2),
+            Reg16::Bx => self.modrm_mode(3).modrm_rm(3),
+            Reg16::Sp => self.modrm_mode(3).modrm_rm(4),
+            Reg16::Bp => self.modrm_mode(3).modrm_rm(5),
+            Reg16::Si => self.modrm_mode(3).modrm_rm(6),
+            Reg16::Di => self.modrm_mode(3).modrm_rm(7),
+        }
+    }
+
+    #[inline]
+    pub fn rm_rex16(self, rex: Rex16) -> Self {
+        match rex {
+            Rex16::Ax => self.modrm_mode(3).modrm_rm(0),
+            Rex16::Cx => self.modrm_mode(3).modrm_rm(1),
+            Rex16::Dx => self.modrm_mode(3).modrm_rm(2),
+            Rex16::Bx => self.modrm_mode(3).modrm_rm(3),
+            Rex16::Sp => self.modrm_mode(3).modrm_rm(4),
+            Rex16::Bp => self.modrm_mode(3).modrm_rm(5),
+            Rex16::Si => self.modrm_mode(3).modrm_rm(6),
+            Rex16::Di => self.modrm_mode(3).modrm_rm(7),
+            Rex16::R8w => self.modrm_mode(3).rex_b().modrm_rm(0),
+            Rex16::R9w => self.modrm_mode(3).rex_b().modrm_rm(1),
+            Rex16::R10w => self.modrm_mode(3).rex_b().modrm_rm(2),
+            Rex16::R11w => self.modrm_mode(3).rex_b().modrm_rm(3),
+            Rex16::R12w => self.modrm_mode(3).rex_b().modrm_rm(4),
+            Rex16::R13w => self.modrm_mode(3).rex_b().modrm_rm(5),
+            Rex16::R14w => self.modrm_mode(3).rex_b().modrm_rm(6),
+            Rex16::R15w => self.modrm_mode(3).rex_b().modrm_rm(7),
+        }
+    }
+
+    #[inline]
+    pub fn rm_reg32(self, reg: Reg32) -> Self {
+        match reg {
+            Reg32::Eax => self.modrm_mode(3).modrm_rm(0),
+            Reg32::Ecx => self.modrm_mode(3).modrm_rm(1),
+            Reg32::Edx => self.modrm_mode(3).modrm_rm(2),
+            Reg32::Ebx => self.modrm_mode(3).modrm_rm(3),
+            Reg32::Esp => self.modrm_mode(3).modrm_rm(4),
+            Reg32::Ebp => self.modrm_mode(3).modrm_rm(5),
+            Reg32::Esi => self.modrm_mode(3).modrm_rm(6),
+            Reg32::Edi => self.modrm_mode(3).modrm_rm(7),
+        }
+    }
+
+    #[inline]
+    pub fn rm_rex32(self, rex: Rex32) -> Self {
+        match rex {
+            Rex32::Eax => self.modrm_mode(3).modrm_rm(0),
+            Rex32::Ecx => self.modrm_mode(3).modrm_rm(1),
+            Rex32::Edx => self.modrm_mode(3).modrm_rm(2),
+            Rex32::Ebx => self.modrm_mode(3).modrm_rm(3),
+            Rex32::Esp => self.modrm_mode(3).modrm_rm(4),
+            Rex32::Ebp => self.modrm_mode(3).modrm_rm(5),
+            Rex32::Esi => self.modrm_mode(3).modrm_rm(6),
+            Rex32::Edi => self.modrm_mode(3).modrm_rm(7),
+            Rex32::R8d => self.modrm_mode(3).rex_b().modrm_rm(0),
+            Rex32::R9d => self.modrm_mode(3).rex_b().modrm_rm(1),
+            Rex32::R10d => self.modrm_mode(3).rex_b().modrm_rm(2),
+            Rex32::R11d => self.modrm_mode(3).rex_b().modrm_rm(3),
+            Rex32::R12d => self.modrm_mode(3).rex_b().modrm_rm(4),
+            Rex32::R13d => self.modrm_mode(3).rex_b().modrm_rm(5),
+            Rex32::R14d => self.modrm_mode(3).rex_b().modrm_rm(6),
+            Rex32::R15d => self.modrm_mode(3).rex_b().modrm_rm(7),
+        }
+    }
+
+    #[inline]
+    pub fn rm_reg64(self, reg: Reg64) -> Self {
+        match reg {
+            Reg64::Rax => self.modrm_mode(3).modrm_rm(0),
+            Reg64::Rcx => self.modrm_mode(3).modrm_rm(1),
+            Reg64::Rdx => self.modrm_mode(3).modrm_rm(2),
+            Reg64::Rbx => self.modrm_mode(3).modrm_rm(3),
+            Reg64::Rsp => self.modrm_mode(3).modrm_rm(4),
+            Reg64::Rbp => self.modrm_mode(3).modrm_rm(5),
+            Reg64::Rsi => self.modrm_mode(3).modrm_rm(6),
+            Reg64::Rdi => self.modrm_mode(3).modrm_rm(7),
+        }
+    }
+
+    #[inline]
+    pub fn rm_rex64(self, rex: Rex64) -> Self {
+        match rex {
+            Rex64::Rax => self.modrm_mode(3).modrm_rm(0),
+            Rex64::Rcx => self.modrm_mode(3).modrm_rm(1),
+            Rex64::Rdx => self.modrm_mode(3).modrm_rm(2),
+            Rex64::Rbx => self.modrm_mode(3).modrm_rm(3),
+            Rex64::Rsp => self.modrm_mode(3).modrm_rm(4),
+            Rex64::Rbp => self.modrm_mode(3).modrm_rm(5),
+            Rex64::Rsi => self.modrm_mode(3).modrm_rm(6),
+            Rex64::Rdi => self.modrm_mode(3).modrm_rm(7),
+            Rex64::R8 => self.modrm_mode(3).rex_b().modrm_rm(0),
+            Rex64::R9 => self.modrm_mode(3).rex_b().modrm_rm(1),
+            Rex64::R10 => self.modrm_mode(3).rex_b().modrm_rm(2),
+            Rex64::R11 => self.modrm_mode(3).rex_b().modrm_rm(3),
+            Rex64::R12 => self.modrm_mode(3).rex_b().modrm_rm(4),
+            Rex64::R13 => self.modrm_mode(3).rex_b().modrm_rm(5),
+            Rex64::R14 => self.modrm_mode(3).rex_b().modrm_rm(6),
+            Rex64::R15 => self.modrm_mode(3).rex_b().modrm_rm(7),
+        }
+    }
+
+    #[inline]
     pub fn scale(self, scale: Scale) -> Self {
         match scale {
             Scale::X1 => self.sib_scale(0),
