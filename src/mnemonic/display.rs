@@ -301,22 +301,48 @@ where Offset<Base32, Index32>: Display, Offset<Base64, Index64>: Display {
     }
 }
 
-macro_rules! impl_display_rm {
-    ($rm:ident { $($var:ident),+ }) => {
-        impl Display for $rm {
-            fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-                match *self {
-                    $($rm::$var(ref x) => write!(f, "{}", x)),+
-                }
-            }
+impl Display for Rm8 {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Rm8::Reg8(reg)     => write!(f, "{}", reg),
+            Rm8::Rex8(rex)     => write!(f, "{}", rex),
+            Rm8::Mem8(ref mem) => write!(f, "byte {}", mem),
+            Rm8::Mex8(ref mex) => write!(f, "byte {}", mex),
         }
     }
 }
 
-impl_display_rm!(Rm8 { Reg8, Rex8, Mem8, Mex8 });
-impl_display_rm!(Rm16 { Reg16, Rex16, Mem16, Mex16 });
-impl_display_rm!(Rm32 { Reg32, Rex32, Mem32, Mex32 });
-impl_display_rm!(Rm64 { Rex64, Mem64, Mex64 });
+impl Display for Rm16 {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Rm16::Reg16(reg)     => write!(f, "{}", reg),
+            Rm16::Rex16(rex)     => write!(f, "{}", rex),
+            Rm16::Mem16(ref mem) => write!(f, "word {}", mem),
+            Rm16::Mex16(ref mex) => write!(f, "word {}", mex),
+        }
+    }
+}
+
+impl Display for Rm32 {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Rm32::Reg32(reg)     => write!(f, "{}", reg),
+            Rm32::Rex32(rex)     => write!(f, "{}", rex),
+            Rm32::Mem32(ref mem) => write!(f, "dword {}", mem),
+            Rm32::Mex32(ref mex) => write!(f, "dword {}", mex),
+        }
+    }
+}
+
+impl Display for Rm64 {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Rm64::Rex64(rex)     => write!(f, "{}", rex),
+            Rm64::Mem64(ref mem) => write!(f, "qword {}", mem),
+            Rm64::Mex64(ref mex) => write!(f, "qword {}", mex),
+        }
+    }
+}
 
 macro_rules! impl_display_rmrm {
     ($rmrm:ident { $($var:ident),+ }) => {
