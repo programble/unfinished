@@ -4,6 +4,30 @@ use mnemonic::prefix::*;
 
 use core::fmt::{Display, Formatter, Error};
 
+impl Display for Imm8 {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        write!(f, "{:#04x}", self.0)
+    }
+}
+
+impl Display for Imm16 {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        write!(f, "{:#06x}", self.0)
+    }
+}
+
+impl Display for Imm32 {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        write!(f, "{:#010x}", self.0)
+    }
+}
+
+impl Display for Imm64 {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        write!(f, "{:#018x}", self.0)
+    }
+}
+
 macro_rules! impl_display_reg {
     ($reg:ident { $($var:ident => $str:expr,)+ }) => {
         impl Display for $reg {
@@ -337,17 +361,17 @@ impl<I> Display for Rep<I> where I: Display {
 impl Display for Adc {
     fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
         match *self {
-            Adc::AlImm8(imm)        => write!(f, "adc al, {:#04x}", imm),
-            Adc::AxImm16(imm)       => write!(f, "adc ax, {:#06x}", imm),
-            Adc::EaxImm32(imm)      => write!(f, "adc eax, {:#010x}", imm),
-            Adc::RaxImm32(imm)      => write!(f, "adc rax, {:#010x}", imm),
-            Adc::Rm8Imm8(rm, imm)   => write!(f, "adc {}, {:#04x}", rm, imm),
-            Adc::Rm16Imm16(rm, imm) => write!(f, "adc {}, {:#06x}", rm, imm),
-            Adc::Rm32Imm32(rm, imm) => write!(f, "adc {}, {:#010x}", rm, imm),
-            Adc::Rm64Imm32(rm, imm) => write!(f, "adc {}, {:#010x}", rm, imm),
-            Adc::Rm16Imm8(rm, imm)  => write!(f, "adc {}, {:#04x}", rm, imm),
-            Adc::Rm32Imm8(rm, imm)  => write!(f, "adc {}, {:#04x}", rm, imm),
-            Adc::Rm64Imm8(rm, imm)  => write!(f, "adc {}, {:#04x}", rm, imm),
+            Adc::AlImm8(imm)        => write!(f, "adc al, {}", imm),
+            Adc::AxImm16(imm)       => write!(f, "adc ax, {}", imm),
+            Adc::EaxImm32(imm)      => write!(f, "adc eax, {}", imm),
+            Adc::RaxImm32(imm)      => write!(f, "adc rax, {}", imm),
+            Adc::Rm8Imm8(rm, imm)   => write!(f, "adc {}, {}", rm, imm),
+            Adc::Rm16Imm16(rm, imm) => write!(f, "adc {}, {}", rm, imm),
+            Adc::Rm32Imm32(rm, imm) => write!(f, "adc {}, {}", rm, imm),
+            Adc::Rm64Imm32(rm, imm) => write!(f, "adc {}, {}", rm, imm),
+            Adc::Rm16Imm8(rm, imm)  => write!(f, "adc {}, {}", rm, imm),
+            Adc::Rm32Imm8(rm, imm)  => write!(f, "adc {}, {}", rm, imm),
+            Adc::Rm64Imm8(rm, imm)  => write!(f, "adc {}, {}", rm, imm),
             Adc::Rm8R8(rmr)         => write!(f, "adc {}", rmr),
             Adc::Rm16R16(rmr)       => write!(f, "adc {}", rmr),
             Adc::Rm32R32(rmr)       => write!(f, "adc {}", rmr),
@@ -372,17 +396,17 @@ impl Display for Adcx {
 impl Display for Add {
     fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
         match *self {
-            Add::AlImm8(imm)        => write!(f, "add al, {:#04x}", imm),
-            Add::AxImm16(imm)       => write!(f, "add ax, {:#06x}", imm),
-            Add::EaxImm32(imm)      => write!(f, "add eax, {:#010x}", imm),
-            Add::RaxImm32(imm)      => write!(f, "add rax, {:#010x}", imm),
-            Add::Rm8Imm8(rm, imm)   => write!(f, "add {}, {:#04x}", rm, imm),
-            Add::Rm16Imm16(rm, imm) => write!(f, "add {}, {:#06x}", rm, imm),
-            Add::Rm32Imm32(rm, imm) => write!(f, "add {}, {:#010x}", rm, imm),
-            Add::Rm64Imm32(rm, imm) => write!(f, "add {}, {:#010x}", rm, imm),
-            Add::Rm16Imm8(rm, imm)  => write!(f, "add {}, {:#04x}", rm, imm),
-            Add::Rm32Imm8(rm, imm)  => write!(f, "add {}, {:#04x}", rm, imm),
-            Add::Rm64Imm8(rm, imm)  => write!(f, "add {}, {:#04x}", rm, imm),
+            Add::AlImm8(imm)        => write!(f, "add al, {}", imm),
+            Add::AxImm16(imm)       => write!(f, "add ax, {}", imm),
+            Add::EaxImm32(imm)      => write!(f, "add eax, {}", imm),
+            Add::RaxImm32(imm)      => write!(f, "add rax, {}", imm),
+            Add::Rm8Imm8(rm, imm)   => write!(f, "add {}, {}", rm, imm),
+            Add::Rm16Imm16(rm, imm) => write!(f, "add {}, {}", rm, imm),
+            Add::Rm32Imm32(rm, imm) => write!(f, "add {}, {}", rm, imm),
+            Add::Rm64Imm32(rm, imm) => write!(f, "add {}, {}", rm, imm),
+            Add::Rm16Imm8(rm, imm)  => write!(f, "add {}, {}", rm, imm),
+            Add::Rm32Imm8(rm, imm)  => write!(f, "add {}, {}", rm, imm),
+            Add::Rm64Imm8(rm, imm)  => write!(f, "add {}, {}", rm, imm),
             Add::Rm8R8(rmr)         => write!(f, "add {}", rmr),
             Add::Rm16R16(rmr)       => write!(f, "add {}", rmr),
             Add::Rm32R32(rmr)       => write!(f, "add {}", rmr),

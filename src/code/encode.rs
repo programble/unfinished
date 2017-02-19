@@ -40,23 +40,23 @@ impl Instruction {
 
     #[inline]
     pub fn imm8(mut self, imm: Imm8) -> Self {
-        self.imm = Some(Imm::B1([imm]));
+        self.imm = Some(Imm::B1([imm.0]));
         self
     }
 
     #[inline]
     pub fn imm16(mut self, imm: Imm16) -> Self {
-        self.imm = Some(Imm::B2([(imm & 0xff) as u8, (imm >> 8) as u8]));
+        self.imm = Some(Imm::B2([(imm.0 & 0xff) as u8, (imm.0 >> 8) as u8]));
         self
     }
 
     #[inline]
     pub fn imm32(mut self, imm: Imm32) -> Self {
         self.imm = Some(Imm::B4([
-            (imm & 0xff) as u8,
-            (imm >> 8 & 0xff) as u8,
-            (imm >> 16 & 0xff) as u8,
-            (imm >> 24) as u8,
+            (imm.0 & 0xff) as u8,
+            (imm.0 >> 8 & 0xff) as u8,
+            (imm.0 >> 16 & 0xff) as u8,
+            (imm.0 >> 24) as u8,
         ]));
         self
     }
