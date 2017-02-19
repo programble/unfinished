@@ -4,7 +4,7 @@ use mnemonic::instruction::Adc;
 use mnemonic::operand::{
     self,
     Imm8, Imm16, Imm32,
-    Reg8, Rex8,
+    Reg8, Rex8, Reg16, Rex16, Reg32, Rex32, Reg64, Rex64,
     Sreg,
     Scale, IndexReg32, IndexRex32, IndexReg64, IndexRex64,
 };
@@ -215,6 +215,114 @@ impl Instruction {
             Rex8::R13l => self.rex_r().modrm_reg(5),
             Rex8::R14l => self.rex_r().modrm_reg(6),
             Rex8::R15l => self.rex_r().modrm_reg(7),
+        }
+    }
+
+    #[inline]
+    pub fn reg16(self, reg: Reg16) -> Self {
+        match reg {
+            Reg16::Ax => self.modrm_reg(0),
+            Reg16::Cx => self.modrm_reg(1),
+            Reg16::Dx => self.modrm_reg(2),
+            Reg16::Bx => self.modrm_reg(3),
+            Reg16::Sp => self.modrm_reg(4),
+            Reg16::Bp => self.modrm_reg(5),
+            Reg16::Si => self.modrm_reg(6),
+            Reg16::Di => self.modrm_reg(7),
+        }
+    }
+
+    #[inline]
+    pub fn rex16(self, rex: Rex16) -> Self {
+        match rex {
+            Rex16::Ax => self.modrm_reg(0),
+            Rex16::Cx => self.modrm_reg(1),
+            Rex16::Dx => self.modrm_reg(2),
+            Rex16::Bx => self.modrm_reg(3),
+            Rex16::Sp => self.modrm_reg(4),
+            Rex16::Bp => self.modrm_reg(5),
+            Rex16::Si => self.modrm_reg(6),
+            Rex16::Di => self.modrm_reg(7),
+            Rex16::R8w => self.rex_r().modrm_reg(0),
+            Rex16::R9w => self.rex_r().modrm_reg(1),
+            Rex16::R10w => self.rex_r().modrm_reg(2),
+            Rex16::R11w => self.rex_r().modrm_reg(3),
+            Rex16::R12w => self.rex_r().modrm_reg(4),
+            Rex16::R13w => self.rex_r().modrm_reg(5),
+            Rex16::R14w => self.rex_r().modrm_reg(6),
+            Rex16::R15w => self.rex_r().modrm_reg(7),
+        }
+    }
+
+    #[inline]
+    pub fn reg32(self, reg: Reg32) -> Self {
+        match reg {
+            Reg32::Eax => self.modrm_reg(0),
+            Reg32::Ecx => self.modrm_reg(1),
+            Reg32::Edx => self.modrm_reg(2),
+            Reg32::Ebx => self.modrm_reg(3),
+            Reg32::Esp => self.modrm_reg(4),
+            Reg32::Ebp => self.modrm_reg(5),
+            Reg32::Esi => self.modrm_reg(6),
+            Reg32::Edi => self.modrm_reg(7),
+        }
+    }
+
+    #[inline]
+    pub fn rex32(self, rex: Rex32) -> Self {
+        match rex {
+            Rex32::Eax => self.modrm_reg(0),
+            Rex32::Ecx => self.modrm_reg(1),
+            Rex32::Edx => self.modrm_reg(2),
+            Rex32::Ebx => self.modrm_reg(3),
+            Rex32::Esp => self.modrm_reg(4),
+            Rex32::Ebp => self.modrm_reg(5),
+            Rex32::Esi => self.modrm_reg(6),
+            Rex32::Edi => self.modrm_reg(7),
+            Rex32::R8d => self.rex_r().modrm_reg(0),
+            Rex32::R9d => self.rex_r().modrm_reg(1),
+            Rex32::R10d => self.rex_r().modrm_reg(2),
+            Rex32::R11d => self.rex_r().modrm_reg(3),
+            Rex32::R12d => self.rex_r().modrm_reg(4),
+            Rex32::R13d => self.rex_r().modrm_reg(5),
+            Rex32::R14d => self.rex_r().modrm_reg(6),
+            Rex32::R15d => self.rex_r().modrm_reg(7),
+        }
+    }
+
+    #[inline]
+    pub fn reg64(self, reg: Reg64) -> Self {
+        match reg {
+            Reg64::Rax => self.modrm_reg(0),
+            Reg64::Rcx => self.modrm_reg(1),
+            Reg64::Rdx => self.modrm_reg(2),
+            Reg64::Rbx => self.modrm_reg(3),
+            Reg64::Rsp => self.modrm_reg(4),
+            Reg64::Rbp => self.modrm_reg(5),
+            Reg64::Rsi => self.modrm_reg(6),
+            Reg64::Rdi => self.modrm_reg(7),
+        }
+    }
+
+    #[inline]
+    pub fn rex64(self, rex: Rex64) -> Self {
+        match rex {
+            Rex64::Rax => self.modrm_reg(0),
+            Rex64::Rcx => self.modrm_reg(1),
+            Rex64::Rdx => self.modrm_reg(2),
+            Rex64::Rbx => self.modrm_reg(3),
+            Rex64::Rsp => self.modrm_reg(4),
+            Rex64::Rbp => self.modrm_reg(5),
+            Rex64::Rsi => self.modrm_reg(6),
+            Rex64::Rdi => self.modrm_reg(7),
+            Rex64::R8 => self.rex_r().modrm_reg(0),
+            Rex64::R9 => self.rex_r().modrm_reg(1),
+            Rex64::R10 => self.rex_r().modrm_reg(2),
+            Rex64::R11 => self.rex_r().modrm_reg(3),
+            Rex64::R12 => self.rex_r().modrm_reg(4),
+            Rex64::R13 => self.rex_r().modrm_reg(5),
+            Rex64::R14 => self.rex_r().modrm_reg(6),
+            Rex64::R15 => self.rex_r().modrm_reg(7),
         }
     }
 
