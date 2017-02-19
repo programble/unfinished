@@ -266,7 +266,7 @@ impl<Base, Index> Display for Offset<Base, Index>
 where Base: Display + Copy, Index: Display + Copy {
     fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
         match *self {
-            Offset::Disp(d)                   => write!(f, "{}", d),
+            Offset::Disp(d)                   => write!(f, "{:#010x}", d),
             Offset::Index(i, s)               => write!(f, "{} * {}", i, s),
             Offset::IndexDisp(i, s, d)        => write!(f, "{} * {} + {}", i, s, d),
             Offset::Base(b)                   => write!(f, "{}", b),
