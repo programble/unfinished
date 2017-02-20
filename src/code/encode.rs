@@ -658,6 +658,21 @@ impl Instruction {
                     .rm_reg64(base)
                     .disp32(disp)
             },
+            Offset::BaseIndex(Reg64::Rbp, index, scale) => {
+                self.modrm_mode(0b01)
+                    .modrm_rm(0b100)
+                    .scale(scale)
+                    .index_reg64(index)
+                    .base_reg64(Reg64::Rbp)
+                    .disp8(0)
+            },
+            Offset::BaseIndex(base, index, scale) => {
+                self.modrm_mode(0b00)
+                    .modrm_rm(0b100)
+                    .scale(scale)
+                    .index_reg64(index)
+                    .base_reg64(base)
+            },
             _ => unimplemented!(),
         }
     }
