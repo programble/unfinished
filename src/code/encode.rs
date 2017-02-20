@@ -97,18 +97,6 @@ impl Instruction {
     }
 
     #[inline]
-    pub fn operand_size(mut self) -> Self {
-        self.prefix3 = Some(Prefix3::OperandSize);
-        self
-    }
-
-    #[inline]
-    pub fn address_size(mut self) -> Self {
-        self.prefix4 = Some(Prefix4::AddressSize);
-        self
-    }
-
-    #[inline]
     pub fn rex(mut self) -> Self {
         self.rex = Some(self.rex.unwrap_or_default());
         self
@@ -194,6 +182,18 @@ impl Instruction {
 }
 
 impl Instruction {
+    #[inline]
+    pub fn operand_size(mut self) -> Self {
+        self.prefix3 = Some(Prefix3::OperandSize);
+        self
+    }
+
+    #[inline]
+    pub fn address_size(mut self) -> Self {
+        self.prefix4 = Some(Prefix4::AddressSize);
+        self
+    }
+
     #[inline]
     pub fn sreg(mut self, sreg: Sreg) -> Self {
         self.prefix2 = match sreg {
@@ -672,6 +672,11 @@ impl Instruction {
                     .scale(scale)
                     .index_reg64(index)
                     .base_reg64(base)
+            },
+            Offset::RipDisp(disp) => {
+                self.modrm_mode(0b00)
+                    .modrm_rm(0b101)
+                    .disp32(disp)
             },
             _ => unimplemented!(),
         }

@@ -358,4 +358,9 @@ test_encode! {
         ),
         Imm8(0x01),
     ) => "80 14 07 01",
+
+    Adc::Rm8Imm8(
+        Rm8::Mem8(Memory::Offset64(None, Offset::RipDisp(0x01020304))),
+        Imm8(0x05),
+    ) => "80 15 04 03 02 01 05",
 }
