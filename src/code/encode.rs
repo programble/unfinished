@@ -2,6 +2,7 @@ use code::{Prefix2, Prefix3, Prefix4, Rex, Opcode, Modrm, Sib, Disp, Imm, Instru
 
 use mnemonic::instruction::Adc;
 use mnemonic::operand::{
+    self,
     Imm8, Imm16, Imm32,
     Reg8, Rex8, Reg16, Rex16, Reg32, Rex32, Reg64, Rex64,
     Scale, IndexReg32, IndexRex32, IndexReg64, IndexRex64,
@@ -621,7 +622,6 @@ impl Instruction {
             Offset::Base(Reg64::Rsp) => {
                 self.modrm_mode(0b00)
                     .modrm_rm(0b100)
-                    .sib_scale(0b00)
                     .sib_index(0b100)
                     .base_reg64(Reg64::Rsp)
             },
@@ -630,9 +630,21 @@ impl Instruction {
                     .rm_reg64(Reg64::Rbp)
                     .disp8(0)
             },
-            Offset::Base(reg) => {
+            Offset::Base(base) => {
                 self.modrm_mode(0b00)
-                    .rm_reg64(reg)
+                    .rm_reg64(base)
+            },
+            Offset::BaseDisp(Reg64::Rsp, operand::Disp::Disp8(disp)) => {
+                self.modrm_mode(0b01)
+                    .modrm_rm(0b100)
+                    .sib_index(0b100)
+                    .base_reg64(Reg64::Rsp)
+                    .disp8(disp)
+            },
+            Offset::BaseDisp(base, operand::Disp::Disp8(disp)) => {
+                self.modrm_mode(0b01)
+                    .rm_reg64(base)
+                    .disp8(disp)
             },
             _ => unimplemented!(),
         }
