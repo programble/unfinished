@@ -276,4 +276,37 @@ test_encode! {
         Rm8::Mem8(Memory::Offset64(None, Offset::BaseDisp(Reg64::Rdi, Disp::Disp8(0x01)))),
         Imm8(0x02),
     ) => "80 57 01 02",
+
+    Adc::Rm8Imm8(
+        Rm8::Mem8(Memory::Offset64(None, Offset::BaseDisp(Reg64::Rax, Disp::Disp32(0x01020304)))),
+        Imm8(0x05),
+    ) => "80 90 04 03 02 01 05",
+    Adc::Rm8Imm8(
+        Rm8::Mem8(Memory::Offset64(None, Offset::BaseDisp(Reg64::Rcx, Disp::Disp32(0x01020304)))),
+        Imm8(0x05),
+    ) => "80 91 04 03 02 01 05",
+    Adc::Rm8Imm8(
+        Rm8::Mem8(Memory::Offset64(None, Offset::BaseDisp(Reg64::Rdx, Disp::Disp32(0x01020304)))),
+        Imm8(0x05),
+    ) => "80 92 04 03 02 01 05",
+    Adc::Rm8Imm8(
+        Rm8::Mem8(Memory::Offset64(None, Offset::BaseDisp(Reg64::Rbx, Disp::Disp32(0x01020304)))),
+        Imm8(0x05),
+    ) => "80 93 04 03 02 01 05",
+    Adc::Rm8Imm8(
+        Rm8::Mem8(Memory::Offset64(None, Offset::BaseDisp(Reg64::Rsp, Disp::Disp32(0x01020304)))),
+        Imm8(0x05),
+    ) => "80 94 24 04 03 02 01 05",
+    Adc::Rm8Imm8(
+        Rm8::Mem8(Memory::Offset64(None, Offset::BaseDisp(Reg64::Rbp, Disp::Disp32(0x01020304)))),
+        Imm8(0x05),
+    ) => "80 95 04 03 02 01 05",
+    Adc::Rm8Imm8(
+        Rm8::Mem8(Memory::Offset64(None, Offset::BaseDisp(Reg64::Rsi, Disp::Disp32(0x01020304)))),
+        Imm8(0x05),
+    ) => "80 96 04 03 02 01 05",
+    Adc::Rm8Imm8(
+        Rm8::Mem8(Memory::Offset64(None, Offset::BaseDisp(Reg64::Rdi, Disp::Disp32(0x01020304)))),
+        Imm8(0x05),
+    ) => "80 97 04 03 02 01 05",
 }

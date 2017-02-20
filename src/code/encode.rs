@@ -646,6 +646,18 @@ impl Instruction {
                     .rm_reg64(base)
                     .disp8(disp)
             },
+            Offset::BaseDisp(Reg64::Rsp, operand::Disp::Disp32(disp)) => {
+                self.modrm_mode(0b10)
+                    .modrm_rm(0b100)
+                    .sib_index(0b100)
+                    .base_reg64(Reg64::Rsp)
+                    .disp32(disp)
+            },
+            Offset::BaseDisp(base, operand::Disp::Disp32(disp)) => {
+                self.modrm_mode(0b10)
+                    .rm_reg64(base)
+                    .disp32(disp)
+            },
             _ => unimplemented!(),
         }
     }
