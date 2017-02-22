@@ -1,6 +1,7 @@
 mod encode;
 mod iter;
 mod register;
+mod rex;
 
 pub use self::iter::Iter;
 pub use self::register::Register;
