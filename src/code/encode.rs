@@ -114,6 +114,128 @@ impl Instruction {
         self.disp = Some(Disp::B4(bytes));
         self
     }
+
+    fn offset_disp(self, disp: i32) -> Self {
+        self.modrm_mode(0b00)
+            .modrm_rm(0b100)
+            .sib_scale(0b00)
+            .sib_index(0b100)
+            .sib_base(0b101)
+            .disp32(disp)
+    }
+
+    fn offset_index<Index>(self, index: Index, scale: Scale) -> Self where Index: Register {
+        self.offset_disp(0)
+            .scale(scale)
+            .index(index)
+    }
+
+    fn offset_index_disp<Index>(self, index: Index, scale: Scale, disp: i32) -> Self
+    where Index: Register {
+        self.offset_index(index, scale)
+            .disp32(disp)
+    }
+
+    fn offset_base<Base>(self, base: Base) -> Self where Base: Register {
+        match base.index() {
+            4 => { // rsp
+                self.modrm_mode(0b00)
+                    .modrm_rm(0b100)
+                    .sib_index(0b100)
+                    .base(base)
+            },
+            5 => { // rbp
+                self.modrm_mode(0b01)
+                    .rm(base)
+                    .disp8(0)
+            },
+            _ => {
+                self.modrm_mode(0b00)
+                    .rm(base)
+            },
+        }
+    }
+
+    fn offset_base_disp<Base>(self, base: Base, disp: operand::Disp) -> Self
+    where Base: Register {
+        match disp {
+            operand::Disp::Disp8(disp) => {
+                self.offset_base(base)
+                    .modrm_mode(0b01)
+                    .disp8(disp)
+            },
+            operand::Disp::Disp32(disp) => {
+                self.offset_base(base)
+                    .modrm_mode(0b10)
+                    .disp32(disp)
+            },
+        }
+    }
+
+    fn offset_base_index<Base, Index>(self, base: Base, index: Index, scale: Scale) -> Self
+    where Base: Register, Index: Register {
+        if base.index() == 5 { // rbp
+            self.offset_index(index, scale)
+                .modrm_mode(0b01)
+                .base(base)
+                .disp8(0)
+        } else {
+            self.modrm_mode(0b00)
+                .modrm_rm(0b100)
+                .scale(scale)
+                .index(index)
+                .base(base)
+        }
+    }
+
+    fn offset_rip_disp(self, disp: i32) -> Self {
+        self.modrm_mode(0b00)
+            .modrm_rm(0b101)
+            .disp32(disp)
+    }
+
+    #[inline]
+    pub fn offset<Base, Index>(self, offset: Offset<Base, Index>) -> Self
+    where Base: Register, Index: Register {
+        match offset {
+            Offset::Disp(disp) => self.offset_disp(disp),
+            Offset::Index(index, scale) => self.offset_index(index, scale),
+            Offset::IndexDisp(index, scale, disp) => self.offset_index_disp(index, scale, disp),
+            Offset::Base(base) => self.offset_base(base),
+            Offset::BaseDisp(base, disp) => self.offset_base_disp(base, disp),
+            Offset::BaseIndex(base, index, scale) => self.offset_base_index(base, index, scale),
+            Offset::RipDisp(disp) => self.offset_rip_disp(disp),
+            _ => unimplemented!(),
+        }
+    }
+
+    #[inline]
+    pub fn imm8(mut self, imm: Imm8) -> Self {
+        self.imm = Some(Imm::B1([imm.0]));
+        self
+    }
+
+    #[inline]
+    pub fn imm16(mut self, imm: Imm16) -> Self {
+        let bytes = [
+            imm.0 as u8,
+            (imm.0 >> 8) as u8,
+        ];
+        self.imm = Some(Imm::B2(bytes));
+        self
+    }
+
+    #[inline]
+    pub fn imm32(mut self, imm: Imm32) -> Self {
+        let bytes = [
+            imm.0 as u8,
+            (imm.0 >> 8) as u8,
+            (imm.0 >> 16) as u8,
+            (imm.0 >> 24) as u8,
+        ];
+        self.imm = Some(Imm::B4(bytes));
+        self
+    }
 }
 
 impl Instruction {
@@ -216,16 +338,16 @@ impl Instruction {
     pub fn mem(self, mem: Mem) -> Self {
         match mem {
             Memory::Offset32(None, offset) => {
-                self.address_size().offset_mem32(offset)
+                self.address_size().offset(offset)
             },
             Memory::Offset32(Some(sreg), offset) => {
-                self.address_size().sreg(sreg).offset_mem32(offset)
+                self.address_size().sreg(sreg).offset(offset)
             },
             Memory::Offset64(None, offset) => {
-                self.offset_mem64(offset)
+                self.offset(offset)
             },
             Memory::Offset64(Some(sreg), offset) => {
-                self.sreg(sreg).offset_mem64(offset)
+                self.sreg(sreg).offset(offset)
             },
         }
     }
@@ -243,34 +365,6 @@ impl Instruction {
             Rm8::Mem8(mem) => self.mem(mem),
             Rm8::Mex8(mex) => self.mex(mex),
         }
-    }
-
-    #[inline]
-    pub fn imm8(mut self, imm: Imm8) -> Self {
-        self.imm = Some(Imm::B1([imm.0]));
-        self
-    }
-
-    #[inline]
-    pub fn imm16(mut self, imm: Imm16) -> Self {
-        let bytes = [
-            imm.0 as u8,
-            (imm.0 >> 8) as u8,
-        ];
-        self.imm = Some(Imm::B2(bytes));
-        self
-    }
-
-    #[inline]
-    pub fn imm32(mut self, imm: Imm32) -> Self {
-        let bytes = [
-            imm.0 as u8,
-            (imm.0 >> 8) as u8,
-            (imm.0 >> 16) as u8,
-            (imm.0 >> 24) as u8,
-        ];
-        self.imm = Some(Imm::B4(bytes));
-        self
     }
 }
 
