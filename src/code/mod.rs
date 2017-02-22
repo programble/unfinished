@@ -1,7 +1,9 @@
 mod encode;
 mod iter;
+mod register;
 
 pub use self::iter::Iter;
+pub use self::register::Register;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[repr(u8)]
