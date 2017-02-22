@@ -1,6 +1,5 @@
 mod encode;
 mod iter;
-mod modrm;
 mod register;
 mod bit_field;
 

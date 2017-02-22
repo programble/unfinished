@@ -15,10 +15,24 @@ use mnemonic::operand::{
 
 pub trait Register: Copy {
     fn index(self) -> u8;
-    fn force_rex(self) -> bool { false }
+
+    #[inline]
+    fn rex_index(self) -> (bool, u8) {
+        if 0 != self.index() & 0b1000 {
+            (true, self.index() & 0b0111)
+        } else {
+            (false, self.index())
+        }
+    }
+
+    #[inline]
+    fn force_rex(self) -> bool {
+        false
+    }
 }
 
 impl Register for Reg8 {
+    #[inline]
     fn index(self) -> u8 {
         match self {
             Reg8::Al => 0,
@@ -34,6 +48,7 @@ impl Register for Reg8 {
 }
 
 impl Register for Rex8 {
+    #[inline]
     fn index(self) -> u8 {
         match self {
             Rex8::Al => 0,
@@ -55,6 +70,7 @@ impl Register for Rex8 {
         }
     }
 
+    #[inline]
     fn force_rex(self) -> bool {
         match self {
             Rex8::Spl | Rex8::Bpl | Rex8::Sil | Rex8::Dil => true,
@@ -64,6 +80,7 @@ impl Register for Rex8 {
 }
 
 impl Register for Reg16 {
+    #[inline]
     fn index(self) -> u8 {
         match self {
             Reg16::Ax => 0,
@@ -79,6 +96,7 @@ impl Register for Reg16 {
 }
 
 impl Register for Rex16 {
+    #[inline]
     fn index(self) -> u8 {
         match self {
             Rex16::Ax => 0,
@@ -102,6 +120,7 @@ impl Register for Rex16 {
 }
 
 impl Register for Reg32 {
+    #[inline]
     fn index(self) -> u8 {
         match self {
             Reg32::Eax => 0,
@@ -117,6 +136,7 @@ impl Register for Reg32 {
 }
 
 impl Register for Rex32 {
+    #[inline]
     fn index(self) -> u8 {
         match self {
             Rex32::Eax => 0,
@@ -140,6 +160,7 @@ impl Register for Rex32 {
 }
 
 impl Register for Reg64 {
+    #[inline]
     fn index(self) -> u8 {
         match self {
             Reg64::Rax => 0,
@@ -155,6 +176,7 @@ impl Register for Reg64 {
 }
 
 impl Register for Rex64 {
+    #[inline]
     fn index(self) -> u8 {
         match self {
             Rex64::Rax => 0,
@@ -178,6 +200,7 @@ impl Register for Rex64 {
 }
 
 impl Register for IndexReg32 {
+    #[inline]
     fn index(self) -> u8 {
         match self {
             IndexReg32::Eax => 0,
@@ -192,6 +215,7 @@ impl Register for IndexReg32 {
 }
 
 impl Register for IndexRex32 {
+    #[inline]
     fn index(self) -> u8 {
         match self {
             IndexRex32::Eax => 0,
@@ -214,6 +238,7 @@ impl Register for IndexRex32 {
 }
 
 impl Register for IndexReg64 {
+    #[inline]
     fn index(self) -> u8 {
         match self {
             IndexReg64::Rax => 0,
@@ -228,6 +253,7 @@ impl Register for IndexReg64 {
 }
 
 impl Register for IndexRex64 {
+    #[inline]
     fn index(self) -> u8 {
         match self {
             IndexRex64::Rax => 0,
