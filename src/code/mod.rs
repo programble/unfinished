@@ -1,7 +1,8 @@
 mod encode;
 mod iter;
+mod modrm;
 mod register;
-mod rex;
+mod bit_field;
 
 pub use self::iter::Iter;
 pub use self::register::Register;
