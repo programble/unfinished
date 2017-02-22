@@ -31,6 +31,13 @@ pub trait Register: Copy {
     }
 }
 
+impl Register for u8 {
+    #[inline]
+    fn index(self) -> u8 {
+        self
+    }
+}
+
 impl Register for Reg8 {
     #[inline]
     fn index(self) -> u8 {

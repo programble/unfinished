@@ -108,25 +108,22 @@ impl Instruction {
         self
     }
 
-    fn offset_disp(self, disp: i32) -> Self {
+    fn offset_index_disp<Index>(self, index: Index, scale: Scale, disp: i32) -> Self
+    where Index: Register {
         self.modrm_mode(0b00)
             .modrm_rm(0b100)
-            .sib_scale(0b00)
-            .sib_index(0b100)
             .sib_base(0b101)
+            .scale(scale)
+            .index(index)
             .disp32(disp)
+    }
+
+    fn offset_disp(self, disp: i32) -> Self {
+        self.offset_index_disp(0b100, Scale::X1, disp)
     }
 
     fn offset_index<Index>(self, index: Index, scale: Scale) -> Self where Index: Register {
-        self.offset_disp(0)
-            .scale(scale)
-            .index(index)
-    }
-
-    fn offset_index_disp<Index>(self, index: Index, scale: Scale, disp: i32) -> Self
-    where Index: Register {
-        self.offset_index(index, scale)
-            .disp32(disp)
+        self.offset_index_disp(index, scale, 0)
     }
 
     fn offset_base<Base>(self, base: Base) -> Self where Base: Register {
