@@ -2,14 +2,7 @@ use code::{Prefix2, Prefix3, Prefix4, Opcode, Disp, Imm, Instruction};
 use code::Register;
 
 use mnemonic::instruction::Adc;
-use mnemonic::operand::{
-    self,
-    Imm8, Imm16, Imm32,
-    Reg32, Reg64,
-    Scale, IndexReg32, IndexReg64,
-    Sreg, Offset, Memory, Mem, Mex,
-    Rm8,
-};
+use mnemonic::operand::{self, Imm8, Imm16, Imm32, Scale, Sreg, Offset, Memory, Rm8};
 
 impl Instruction {
     #[inline]
@@ -210,6 +203,31 @@ impl Instruction {
     }
 
     #[inline]
+    pub fn memory<Base32, Index32, Base64, Index64>(
+        self,
+        memory: Memory<Base32, Index32, Base64, Index64>,
+    ) -> Self where Base32: Register, Index32: Register, Base64: Register, Index64: Register {
+        match memory {
+            Memory::Offset32(None, offset) => {
+                self.address_size()
+                    .offset(offset)
+            },
+            Memory::Offset32(Some(sreg), offset) => {
+                self.address_size()
+                    .sreg(sreg)
+                    .offset(offset)
+            },
+            Memory::Offset64(None, offset) => {
+                self.offset(offset)
+            },
+            Memory::Offset64(Some(sreg), offset) => {
+                self.sreg(sreg)
+                    .offset(offset)
+            },
+        }
+    }
+
+    #[inline]
     pub fn imm8(mut self, imm: Imm8) -> Self {
         self.imm = Some(Imm::B1([imm.0]));
         self
@@ -240,35 +258,12 @@ impl Instruction {
 
 impl Instruction {
     #[inline]
-    pub fn mem(self, mem: Mem) -> Self {
-        match mem {
-            Memory::Offset32(None, offset) => {
-                self.address_size().offset(offset)
-            },
-            Memory::Offset32(Some(sreg), offset) => {
-                self.address_size().sreg(sreg).offset(offset)
-            },
-            Memory::Offset64(None, offset) => {
-                self.offset(offset)
-            },
-            Memory::Offset64(Some(sreg), offset) => {
-                self.sreg(sreg).offset(offset)
-            },
-        }
-    }
-
-    #[inline]
-    pub fn mex(self, mex: Mex) -> Self {
-        unimplemented!()
-    }
-
-    #[inline]
     pub fn rm8(self, rm8: Rm8) -> Self {
         match rm8 {
             Rm8::Reg8(reg) => self.modrm_mode(0b11).rm(reg),
             Rm8::Rex8(rex) => self.modrm_mode(0b11).rm(rex),
-            Rm8::Mem8(mem) => self.mem(mem),
-            Rm8::Mex8(mex) => self.mex(mex),
+            Rm8::Mem8(mem) => self.memory(mem),
+            Rm8::Mex8(mex) => self.memory(mex),
         }
     }
 }
