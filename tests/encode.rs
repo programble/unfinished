@@ -360,6 +360,30 @@ test_encode! {
     ) => "80 14 07 01",
 
     Adc::Rm8Imm8(
+        Rm8::Mem8(
+            Memory::Offset64(
+                None,
+                Offset::BaseIndexDisp(Reg64::Rax, IndexReg64::Rax, Scale::X1, Disp::Disp8(0x01)),
+            ),
+        ),
+        Imm8(0x02),
+    ) => "80 54 00 01 02",
+    Adc::Rm8Imm8(
+        Rm8::Mem8(
+            Memory::Offset64(
+                None,
+                Offset::BaseIndexDisp(
+                    Reg64::Rax,
+                    IndexReg64::Rax,
+                    Scale::X1,
+                    Disp::Disp32(0x01020304),
+                ),
+            ),
+        ),
+        Imm8(0x05),
+    ) => "80 94 00 04 03 02 01 05",
+
+    Adc::Rm8Imm8(
         Rm8::Mem8(Memory::Offset64(None, Offset::RipDisp(0x01020304))),
         Imm8(0x05),
     ) => "80 15 04 03 02 01 05",

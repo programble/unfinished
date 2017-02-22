@@ -178,6 +178,27 @@ impl Instruction {
         }
     }
 
+    fn offset_base_index_disp<Base, Index>(
+        self,
+        base: Base,
+        index: Index,
+        scale: Scale,
+        disp: operand::Disp,
+    ) -> Self where Base: Register, Index: Register {
+        match disp {
+            operand::Disp::Disp8(disp) => {
+                self.offset_base_index(base, index, scale)
+                    .modrm_mode(0b01)
+                    .disp8(disp)
+            },
+            operand::Disp::Disp32(disp) => {
+                self.offset_base_index(base, index, scale)
+                    .modrm_mode(0b10)
+                    .disp32(disp)
+            },
+        }
+    }
+
     fn offset_rip_disp(self, disp: i32) -> Self {
         self.modrm_mode(0b00)
             .modrm_rm(0b101)
@@ -188,14 +209,30 @@ impl Instruction {
     pub fn offset<Base, Index>(self, offset: Offset<Base, Index>) -> Self
     where Base: Register, Index: Register {
         match offset {
-            Offset::Disp(disp) => self.offset_disp(disp),
-            Offset::Index(index, scale) => self.offset_index(index, scale),
-            Offset::IndexDisp(index, scale, disp) => self.offset_index_disp(index, scale, disp),
-            Offset::Base(base) => self.offset_base(base),
-            Offset::BaseDisp(base, disp) => self.offset_base_disp(base, disp),
-            Offset::BaseIndex(base, index, scale) => self.offset_base_index(base, index, scale),
-            Offset::RipDisp(disp) => self.offset_rip_disp(disp),
-            _ => unimplemented!(),
+            Offset::Disp(disp) => {
+                self.offset_disp(disp)
+            },
+            Offset::Index(index, scale) => {
+                self.offset_index(index, scale)
+            },
+            Offset::IndexDisp(index, scale, disp) => {
+                self.offset_index_disp(index, scale, disp)
+            },
+            Offset::Base(base) => {
+                self.offset_base(base)
+            },
+            Offset::BaseDisp(base, disp) => {
+                self.offset_base_disp(base, disp)
+            },
+            Offset::BaseIndex(base, index, scale) => {
+                self.offset_base_index(base, index, scale)
+            },
+            Offset::BaseIndexDisp(base, index, scale, disp) => {
+                self.offset_base_index_disp(base, index, scale, disp)
+            },
+            Offset::RipDisp(disp) => {
+                self.offset_rip_disp(disp)
+            },
         }
     }
 
@@ -272,7 +309,7 @@ impl<'a> From<&'a Adc> for Instruction {
             Adc::AxImm16(imm)      => Instruction::opcode1(0x15).operand_size().imm16(imm),
             Adc::EaxImm32(imm)     => Instruction::opcode1(0x15).imm32(imm),
             Adc::RaxImm32(imm)     => Instruction::opcode1(0x15).rex_w().imm32(imm),
-            Adc::Rm8Imm8(rm8, imm) => Instruction::opcode1(0x80).modrm_reg(2).rm8(rm8).imm8(imm),
+            Adc::Rm8Imm8(rm8, imm) => Instruction::opcode1(0x80).reg(2).rm8(rm8).imm8(imm),
             _ => unimplemented!(),
         }
     }
