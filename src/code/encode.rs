@@ -141,9 +141,9 @@ impl Instruction {
     }
 
     fn offset_base<Base>(self, base: Base) -> Self where Base: Register {
-        match base.index() {
-            0b100 => self.offset_base_index(base, 0b100, Scale::X1),
-            0b101 => self.rm(base).offset_disp(operand::Disp::Disp8(0)),
+        match base.rex_index() {
+            (_, 0b100) => self.offset_base_index(base, 0b100, Scale::X1),
+            (_, 0b101) => self.rm(base).offset_disp(operand::Disp::Disp8(0)),
             _ => self.rm(base),
         }
     }
