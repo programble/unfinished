@@ -2,7 +2,12 @@ use code::{Prefix2, Prefix3, Prefix4, Opcode, Disp, Imm, Instruction};
 use code::Register;
 
 use mnemonic::instruction::Adc;
-use mnemonic::operand::{self, Imm8, Imm16, Imm32, Scale, Sreg, Offset, Memory, Rm8};
+use mnemonic::operand::{
+    self,
+    Imm8, Imm16, Imm32,
+    Scale, Sreg, Offset, Memory,
+    Rm8, Rm16, Rm32, Rm64,
+};
 
 impl Instruction {
     #[inline]
@@ -213,6 +218,45 @@ impl Instruction {
     }
 
     #[inline]
+    pub fn rm8(self, rm8: Rm8) -> Self {
+        match rm8 {
+            Rm8::Reg8(reg) => self.modrm_mode(0b11).rm(reg),
+            Rm8::Rex8(rex) => self.modrm_mode(0b11).rm(rex),
+            Rm8::Mem8(mem) => self.memory(mem),
+            Rm8::Mex8(mex) => self.memory(mex),
+        }
+    }
+
+    #[inline]
+    pub fn rm16(self, rm16: Rm16) -> Self {
+        match rm16 {
+            Rm16::Reg16(reg) => self.modrm_mode(0b11).rm(reg),
+            Rm16::Rex16(rex) => self.modrm_mode(0b11).rm(rex),
+            Rm16::Mem16(mem) => self.memory(mem),
+            Rm16::Mex16(mex) => self.memory(mex),
+        }
+    }
+
+    #[inline]
+    pub fn rm32(self, rm32: Rm32) -> Self {
+        match rm32 {
+            Rm32::Reg32(reg) => self.modrm_mode(0b11).rm(reg),
+            Rm32::Rex32(rex) => self.modrm_mode(0b11).rm(rex),
+            Rm32::Mem32(mem) => self.memory(mem),
+            Rm32::Mex32(mex) => self.memory(mex),
+        }
+    }
+
+    #[inline]
+    pub fn rm64(self, rm64: Rm64) -> Self {
+        match rm64 {
+            Rm64::Rex64(rex) => self.modrm_mode(0b11).rm(rex),
+            Rm64::Mem64(mem) => self.memory(mem),
+            Rm64::Mex64(mex) => self.memory(mex),
+        }
+    }
+
+    #[inline]
     pub fn imm8(mut self, imm: Imm8) -> Self {
         self.imm = Some(Imm::B1([imm.0]));
         self
@@ -241,26 +285,34 @@ impl Instruction {
     }
 }
 
-impl Instruction {
-    #[inline]
-    pub fn rm8(self, rm8: Rm8) -> Self {
-        match rm8 {
-            Rm8::Reg8(reg) => self.modrm_mode(0b11).rm(reg),
-            Rm8::Rex8(rex) => self.modrm_mode(0b11).rm(rex),
-            Rm8::Mem8(mem) => self.memory(mem),
-            Rm8::Mex8(mex) => self.memory(mex),
-        }
-    }
-}
-
 impl<'a> From<&'a Adc> for Instruction {
     fn from(adc: &'a Adc) -> Self {
         match *adc {
-            Adc::AlImm8(imm)       => Instruction::opcode1(0x14).imm8(imm),
-            Adc::AxImm16(imm)      => Instruction::opcode1(0x15).operand_size().imm16(imm),
-            Adc::EaxImm32(imm)     => Instruction::opcode1(0x15).imm32(imm),
-            Adc::RaxImm32(imm)     => Instruction::opcode1(0x15).rex_w().imm32(imm),
-            Adc::Rm8Imm8(rm8, imm) => Instruction::opcode1(0x80).reg(2).rm8(rm8).imm8(imm),
+            Adc::AlImm8(imm) =>
+                Instruction::opcode1(0x14).imm8(imm),
+            Adc::AxImm16(imm) =>
+                Instruction::opcode1(0x15).operand_size().imm16(imm),
+            Adc::EaxImm32(imm) =>
+                Instruction::opcode1(0x15).imm32(imm),
+            Adc::RaxImm32(imm) =>
+                Instruction::opcode1(0x15).rex_w().imm32(imm),
+
+            Adc::Rm8Imm8(rm, imm) =>
+                Instruction::opcode1(0x80).reg(2).rm8(rm).imm8(imm),
+            Adc::Rm16Imm16(rm, imm) =>
+                Instruction::opcode1(0x81).operand_size().reg(2).rm16(rm).imm16(imm),
+            Adc::Rm32Imm32(rm, imm) =>
+                Instruction::opcode1(0x81).reg(2).rm32(rm).imm32(imm),
+            Adc::Rm64Imm32(rm, imm) =>
+                Instruction::opcode1(0x81).rex_w().reg(2).rm64(rm).imm32(imm),
+
+            Adc::Rm16Imm8(rm, imm) =>
+                Instruction::opcode1(0x83).operand_size().reg(2).rm16(rm).imm8(imm),
+            Adc::Rm32Imm8(rm, imm) =>
+                Instruction::opcode1(0x83).reg(2).rm32(rm).imm8(imm),
+            Adc::Rm64Imm8(rm, imm) =>
+                Instruction::opcode1(0x83).rex_w().reg(2).rm64(rm).imm8(imm),
+
             _ => unimplemented!(),
         }
     }
