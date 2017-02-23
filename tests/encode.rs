@@ -509,4 +509,21 @@ test_encode! {
         Rm8::Mem8(Memory::Offset64(None, Offset::RipDisp(0x01020304))),
         Imm8(0x05),
     ) => "80 15 04 03 02 01 05",
+
+    Adc::Rm8Imm8(
+        Rm8::Mem8(Memory::Offset32(None, Offset::Base(Reg32::Eax))),
+        Imm8(0x01),
+    ) => "67 80 10 01",
+    Adc::Rm8Imm8(
+        Rm8::Mex8(Memory::Offset32(None, Offset::Base(Rex32::R8d))),
+        Imm8(0x01),
+    ) => "67 41 80 10 01",
+    Adc::Rm8Imm8(
+        Rm8::Mem8(Memory::Offset32(Some(Sreg::Cs), Offset::Base(Reg32::Eax))),
+        Imm8(0x01),
+    ) => "2e 67 80 10 01",
+    Adc::Rm8Imm8(
+        Rm8::Mex8(Memory::Offset32(Some(Sreg::Cs), Offset::Base(Rex32::R8d))),
+        Imm8(0x01),
+    ) => "2e 67 41 80 10 01",
 }
