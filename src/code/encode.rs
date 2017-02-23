@@ -133,7 +133,7 @@ impl Instruction {
 
     fn offset_base_index<Base, Index>(mut self, base: Base, index: Index, scale: Scale) -> Self
     where Base: Register, Index: Register {
-        if base.index() == 0b101 { self = self.offset_disp(operand::Disp::Disp8(0)) }
+        if let (_, 0b101) = base.rex_index() { self = self.offset_disp(operand::Disp::Disp8(0)) }
         self.modrm_rm(0b100)
             .scale(scale)
             .index(index)
