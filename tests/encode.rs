@@ -2,7 +2,7 @@ extern crate chasm;
 
 use std::fmt::Write;
 
-use chasm::code::Instruction;
+use chasm::code::Encode;
 use chasm::mnemonic::dsl::*;
 
 fn hex<I>(iter: I) -> String where I: IntoIterator<Item = u8> {
@@ -18,7 +18,7 @@ macro_rules! test_encode {
     ($($mnemonic:expr => $encoding:expr,)+) => {
         #[test]
         fn encode() {
-            $(assert_eq!($encoding, hex(&Instruction::from(&$mnemonic)));)+
+            $(assert_eq!($encoding, hex(&$mnemonic.encode()));)+
         }
     }
 }
