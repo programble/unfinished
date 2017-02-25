@@ -4,6 +4,8 @@ mod iter;
 pub use self::encode::Encode;
 pub use self::iter::Iter;
 
+use core::fmt::{Display, Formatter, Error};
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[repr(u8)]
 pub enum Prefix1 {
@@ -76,4 +78,15 @@ pub struct Instruction {
     pub sib: Option<Sib>,
     pub disp: Option<Disp>,
     pub imm: Option<Imm>,
+}
+
+impl Display for Instruction {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        let mut iter = self.iter();
+        write!(f, "{:02x}", iter.next().unwrap())?;
+        for b in iter {
+            write!(f, " {:02x}", b)?;
+        }
+        Ok(())
+    }
 }
