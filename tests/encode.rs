@@ -1,24 +1,13 @@
 extern crate chasm;
 
-use std::fmt::Write;
-
 use chasm::code::Encode;
 use chasm::mnemonic::dsl::*;
-
-fn hex<I>(iter: I) -> String where I: IntoIterator<Item = u8> {
-    let mut string = String::new();
-    for byte in iter {
-        write!(string, "{:02x} ", byte).unwrap();
-    }
-    string.pop();
-    string
-}
 
 macro_rules! test_encode {
     ($($mnemonic:expr => $encoding:expr,)+) => {
         #[test]
         fn encode() {
-            $(assert_eq!($encoding, hex(&$mnemonic.encode()));)+
+            $(assert_eq!($encoding, format!("{}", $mnemonic.encode()));)+
         }
     }
 }
