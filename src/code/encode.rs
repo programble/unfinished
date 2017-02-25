@@ -7,6 +7,8 @@ use mnemonic::operand::{
     Imm8, Imm16, Imm32,
     Scale, Sreg, Offset, Memory,
     Rm8, Rm16, Rm32, Rm64,
+    Rm8R8, Rm16R16, Rm32R32, Rm64R64,
+    R8Rm8, R16Rm16, R32Rm32, R64Rm64,
 };
 
 impl Instruction {
@@ -67,6 +69,12 @@ impl Instruction {
             (true, index) => self.rex_b().modrm_rm(index),
             (false, index) => self.modrm_rm(index),
         }
+    }
+
+    #[inline]
+    pub fn rm_reg<R>(self, reg: R) -> Self where R: Register {
+        self.modrm_mode(0b11)
+            .rm(reg)
     }
 
     #[inline]
@@ -218,41 +226,117 @@ impl Instruction {
     }
 
     #[inline]
-    pub fn rm8(self, rm8: Rm8) -> Self {
-        match rm8 {
-            Rm8::Reg8(reg) => self.modrm_mode(0b11).rm(reg),
-            Rm8::Rex8(rex) => self.modrm_mode(0b11).rm(rex),
+    pub fn rm8(self, rm: Rm8) -> Self {
+        match rm {
+            Rm8::Reg8(reg) => self.rm_reg(reg),
+            Rm8::Rex8(rex) => self.rm_reg(rex),
             Rm8::Mem8(mem) => self.memory(mem),
             Rm8::Mex8(mex) => self.memory(mex),
         }
     }
 
     #[inline]
-    pub fn rm16(self, rm16: Rm16) -> Self {
-        match rm16 {
-            Rm16::Reg16(reg) => self.modrm_mode(0b11).rm(reg),
-            Rm16::Rex16(rex) => self.modrm_mode(0b11).rm(rex),
+    pub fn rm16(self, rm: Rm16) -> Self {
+        match rm {
+            Rm16::Reg16(reg) => self.rm_reg(reg),
+            Rm16::Rex16(rex) => self.rm_reg(rex),
             Rm16::Mem16(mem) => self.memory(mem),
             Rm16::Mex16(mex) => self.memory(mex),
         }
     }
 
     #[inline]
-    pub fn rm32(self, rm32: Rm32) -> Self {
-        match rm32 {
-            Rm32::Reg32(reg) => self.modrm_mode(0b11).rm(reg),
-            Rm32::Rex32(rex) => self.modrm_mode(0b11).rm(rex),
+    pub fn rm32(self, rm: Rm32) -> Self {
+        match rm {
+            Rm32::Reg32(reg) => self.rm_reg(reg),
+            Rm32::Rex32(rex) => self.rm_reg(rex),
             Rm32::Mem32(mem) => self.memory(mem),
             Rm32::Mex32(mex) => self.memory(mex),
         }
     }
 
     #[inline]
-    pub fn rm64(self, rm64: Rm64) -> Self {
-        match rm64 {
-            Rm64::Rex64(rex) => self.modrm_mode(0b11).rm(rex),
+    pub fn rm64(self, rm: Rm64) -> Self {
+        match rm {
+            Rm64::Rex64(rex) => self.rm_reg(rex),
             Rm64::Mem64(mem) => self.memory(mem),
             Rm64::Mex64(mex) => self.memory(mex),
+        }
+    }
+
+    #[inline]
+    pub fn rm8_r8(self, rmr: Rm8R8) -> Self {
+        match rmr {
+            Rm8R8::Reg8Reg8(rm, reg) => self.rm_reg(rm).reg(reg),
+            Rm8R8::Rex8Rex8(rm, rex) => self.rm_reg(rm).reg(rex),
+            Rm8R8::Mem8Reg8(mem, reg) => self.memory(mem).reg(reg),
+            Rm8R8::Mex8Rex8(mex, rex) => self.memory(mex).reg(rex),
+        }
+    }
+
+    #[inline]
+    pub fn rm16_r16(self, rmr: Rm16R16) -> Self {
+        match rmr {
+            Rm16R16::Reg16Reg16(rm, reg) => self.rm_reg(rm).reg(reg),
+            Rm16R16::Rex16Rex16(rm, rex) => self.rm_reg(rm).reg(rex),
+            Rm16R16::Mem16Reg16(mem, reg) => self.memory(mem).reg(reg),
+            Rm16R16::Mex16Rex16(mex, rex) => self.memory(mex).reg(rex),
+        }
+    }
+
+    #[inline]
+    pub fn rm32_r32(self, rmr: Rm32R32) -> Self {
+        match rmr {
+            Rm32R32::Reg32Reg32(rm, reg) => self.rm_reg(rm).reg(reg),
+            Rm32R32::Rex32Rex32(rm, rex) => self.rm_reg(rm).reg(rex),
+            Rm32R32::Mem32Reg32(mem, reg) => self.memory(mem).reg(reg),
+            Rm32R32::Mex32Rex32(mex, rex) => self.memory(mex).reg(rex),
+        }
+    }
+
+    #[inline]
+    pub fn rm64_r64(self, rmr: Rm64R64) -> Self {
+        match rmr {
+            Rm64R64::Rex64Rex64(rm, rex) => self.rm_reg(rm).reg(rex),
+            Rm64R64::Mex64Rex64(mex, rex) => self.memory(mex).reg(rex),
+        }
+    }
+
+    #[inline]
+    pub fn r8_rm8(self, rrm: R8Rm8) -> Self {
+        match rrm {
+            R8Rm8::Reg8Reg8(reg, rm) => self.reg(reg).rm_reg(rm),
+            R8Rm8::Rex8Rex8(rex, rm) => self.reg(rex).rm_reg(rm),
+            R8Rm8::Reg8Mem8(reg, mem) => self.reg(reg).memory(mem),
+            R8Rm8::Rex8Mex8(rex, mex) => self.reg(rex).memory(mex),
+        }
+    }
+
+    #[inline]
+    pub fn r16_rm16(self, rrm: R16Rm16) -> Self {
+        match rrm {
+            R16Rm16::Reg16Reg16(reg, rm) => self.reg(reg).rm_reg(rm),
+            R16Rm16::Rex16Rex16(rex, rm) => self.reg(rex).rm_reg(rm),
+            R16Rm16::Reg16Mem16(reg, mem) => self.reg(reg).memory(mem),
+            R16Rm16::Rex16Mex16(rex, mex) => self.reg(rex).memory(mex),
+        }
+    }
+
+    #[inline]
+    pub fn r32_rm32(self, rrm: R32Rm32) -> Self {
+        match rrm {
+            R32Rm32::Reg32Reg32(reg, rm) => self.reg(reg).rm_reg(rm),
+            R32Rm32::Rex32Rex32(rex, rm) => self.reg(rex).rm_reg(rm),
+            R32Rm32::Reg32Mem32(reg, mem) => self.reg(reg).memory(mem),
+            R32Rm32::Rex32Mex32(rex, mex) => self.reg(rex).memory(mex),
+        }
+    }
+
+    #[inline]
+    pub fn r64_rm64(self, rrm: R64Rm64) -> Self {
+        match rrm {
+            R64Rm64::Rex64Rex64(rex, rm) => self.reg(rex).rm_reg(rm),
+            R64Rm64::Rex64Mex64(rex, mex) => self.reg(rex).memory(mex),
         }
     }
 
@@ -313,7 +397,23 @@ impl<'a> From<&'a Adc> for Instruction {
             Adc::Rm64Imm8(rm, imm) =>
                 Instruction::opcode1(0x83).rex_w().reg(2).rm64(rm).imm8(imm),
 
-            _ => unimplemented!(),
+            Adc::Rm8R8(rmr) =>
+                Instruction::opcode1(0x10).rm8_r8(rmr),
+            Adc::Rm16R16(rmr) =>
+                Instruction::opcode1(0x11).operand_size().rm16_r16(rmr),
+            Adc::Rm32R32(rmr) =>
+                Instruction::opcode1(0x11).rm32_r32(rmr),
+            Adc::Rm64R64(rmr) =>
+                Instruction::opcode1(0x11).rex_w().rm64_r64(rmr),
+
+            Adc::R8Rm8(rmr) =>
+                Instruction::opcode1(0x12).r8_rm8(rmr),
+            Adc::R16Rm16(rmr) =>
+                Instruction::opcode1(0x13).operand_size().r16_rm16(rmr),
+            Adc::R32Rm32(rmr) =>
+                Instruction::opcode1(0x13).r32_rm32(rmr),
+            Adc::R64Rm64(rmr) =>
+                Instruction::opcode1(0x13).rex_w().r64_rm64(rmr),
         }
     }
 }
