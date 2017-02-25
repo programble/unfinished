@@ -526,4 +526,22 @@ test_encode! {
         Rm8::Mex8(Memory::Offset32(Some(Sreg::Cs), Offset::Base(Rex32::R8d))),
         Imm8(0x01),
     ) => "2e 67 41 80 10 01",
+
+    Adc::Rm16Imm16(Rm16::Reg16(Reg16::Cx), Imm16(0x0102)) => "66 81 d1 02 01",
+    Adc::Rm32Imm32(Rm32::Reg32(Reg32::Ecx), Imm32(0x01020304)) => "81 d1 04 03 02 01",
+    Adc::Rm64Imm32(Rm64::Rex64(Rex64::Rcx), Imm32(0x01020304)) => "48 81 d1 04 03 02 01",
+
+    Adc::Rm16Imm8(Rm16::Reg16(Reg16::Cx), Imm8(0x01)) => "66 83 d1 01",
+    Adc::Rm32Imm8(Rm32::Reg32(Reg32::Ecx), Imm8(0x01)) => "83 d1 01",
+    Adc::Rm64Imm8(Rm64::Rex64(Rex64::Rcx), Imm8(0x01)) => "48 83 d1 01",
+
+    Adc::Rm8R8(Rm8R8::Reg8Reg8(Reg8::Cl, Reg8::Dl)) => "10 d1",
+    Adc::Rm16R16(Rm16R16::Reg16Reg16(Reg16::Cx, Reg16::Dx)) => "66 11 d1",
+    Adc::Rm32R32(Rm32R32::Reg32Reg32(Reg32::Ecx, Reg32::Edx)) => "11 d1",
+    Adc::Rm64R64(Rm64R64::Rex64Rex64(Rex64::Rcx, Rex64::Rdx)) => "48 11 d1",
+
+    Adc::R8Rm8(R8Rm8::Reg8Reg8(Reg8::Cl, Reg8::Dl)) => "12 ca",
+    Adc::R16Rm16(R16Rm16::Reg16Reg16(Reg16::Cx, Reg16::Dx)) => "66 13 ca",
+    Adc::R32Rm32(R32Rm32::Reg32Reg32(Reg32::Ecx, Reg32::Edx)) => "13 ca",
+    Adc::R64Rm64(R64Rm64::Rex64Rex64(Rex64::Rcx, Rex64::Rdx)) => "48 13 ca",
 }
