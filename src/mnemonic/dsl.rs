@@ -20,4 +20,3 @@ pub use mnemonic::operand::Rm8::M8;
 pub use mnemonic::operand::Rm16::*;
 pub use mnemonic::operand::Rm32::*;
 pub use mnemonic::operand::Rm64::*;
-pub use mnemonic::prefix::*;

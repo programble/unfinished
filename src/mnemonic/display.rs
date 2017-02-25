@@ -1,6 +1,5 @@
 use mnemonic::instruction::*;
 use mnemonic::operand::*;
-use mnemonic::prefix::*;
 
 use core::fmt::{Display, Formatter, Error};
 
@@ -328,24 +327,6 @@ impl Display for Rm64 {
             Rm64::R64(r) => write!(f, "{}", r),
             Rm64::M64(m) => write!(f, "qword {}", m),
         }
-    }
-}
-
-impl<I> Display for Lock<I> where I: Display {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-        write!(f, "lock {}", self.0)
-    }
-}
-
-impl<I> Display for Repne<I> where I: Display {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-        write!(f, "repne {}", self.0)
-    }
-}
-
-impl<I> Display for Rep<I> where I: Display {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-        write!(f, "rep {}", self.0)
     }
 }
 
