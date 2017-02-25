@@ -43,7 +43,7 @@ macro_rules! impl_display_reg {
 }
 
 impl_display_reg!(
-    Reg8 {
+    R8L {
         Al => "al",
         Bl => "bl",
         Cl => "cl",
@@ -56,7 +56,7 @@ impl_display_reg!(
 );
 
 impl_display_reg!(
-    Rex8 {
+    R8 {
         Al => "al",
         Bl => "bl",
         Cl => "cl",
@@ -77,20 +77,7 @@ impl_display_reg!(
 );
 
 impl_display_reg!(
-    Reg16 {
-        Ax => "ax",
-        Bx => "bx",
-        Cx => "cx",
-        Dx => "dx",
-        Si => "si",
-        Di => "di",
-        Bp => "bp",
-        Sp => "sp",
-    }
-);
-
-impl_display_reg!(
-    Rex16 {
+    R16 {
         Ax => "ax",
         Bx => "bx",
         Cx => "cx",
@@ -111,7 +98,7 @@ impl_display_reg!(
 );
 
 impl_display_reg!(
-    Reg32 {
+    R32L {
         Eax => "eax",
         Ebx => "ebx",
         Ecx => "ecx",
@@ -124,7 +111,7 @@ impl_display_reg!(
 );
 
 impl_display_reg!(
-    Rex32 {
+    R32 {
         Eax => "eax",
         Ebx => "ebx",
         Ecx => "ecx",
@@ -145,7 +132,7 @@ impl_display_reg!(
 );
 
 impl_display_reg!(
-    Reg64 {
+    R64L {
         Rax => "rax",
         Rbx => "rbx",
         Rcx => "rcx",
@@ -158,7 +145,7 @@ impl_display_reg!(
 );
 
 impl_display_reg!(
-    Rex64 {
+    R64 {
         Rax => "rax",
         Rbx => "rbx",
         Rcx => "rcx",
@@ -175,6 +162,79 @@ impl_display_reg!(
         R13 => "r13",
         R14 => "r14",
         R15 => "r15",
+    }
+);
+
+impl_display_reg!(
+    Index32L {
+        Eax => "eax",
+        Ebx => "ebx",
+        Ecx => "ecx",
+        Edx => "edx",
+        Esi => "esi",
+        Edi => "edi",
+        Ebp => "ebp",
+    }
+);
+
+impl_display_reg!(
+    Index32 {
+        Eax => "eax",
+        Ebx => "ebx",
+        Ecx => "ecx",
+        Edx => "edx",
+        Esi => "esi",
+        Edi => "edi",
+        Ebp => "ebp",
+        R8d => "r8d",
+        R9d => "r9d",
+        R10d => "r10d",
+        R11d => "r11d",
+        R12d => "r12d",
+        R13d => "r13d",
+        R14d => "r14d",
+        R15d => "r15d",
+    }
+);
+
+impl_display_reg!(
+    Index64L {
+        Rax => "rax",
+        Rbx => "rbx",
+        Rcx => "rcx",
+        Rdx => "rdx",
+        Rsi => "rsi",
+        Rdi => "rdi",
+        Rbp => "rbp",
+    }
+);
+
+impl_display_reg!(
+    Index64 {
+        Rax => "rax",
+        Rbx => "rbx",
+        Rcx => "rcx",
+        Rdx => "rdx",
+        Rsi => "rsi",
+        Rdi => "rdi",
+        Rbp => "rbp",
+        R8 => "r8",
+        R9 => "r9",
+        R10 => "r10",
+        R11 => "r11",
+        R12 => "r12",
+        R13 => "r13",
+        R14 => "r14",
+        R15 => "r15",
+    }
+);
+
+impl_display_reg!(
+    Scale {
+        X1 => "1",
+        X2 => "2",
+        X4 => "4",
+        X8 => "8",
     }
 );
 
@@ -187,92 +247,17 @@ impl Display for Disp {
     }
 }
 
-impl Display for Scale {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-        match *self {
-            Scale::X1 => f.write_str("1"),
-            Scale::X2 => f.write_str("2"),
-            Scale::X4 => f.write_str("4"),
-            Scale::X8 => f.write_str("8"),
-        }
-    }
-}
-
-impl_display_reg!(
-    IndexReg32 {
-        Eax => "eax",
-        Ebx => "ebx",
-        Ecx => "ecx",
-        Edx => "edx",
-        Esi => "esi",
-        Edi => "edi",
-        Ebp => "ebp",
-    }
-);
-
-impl_display_reg!(
-    IndexRex32 {
-        Eax => "eax",
-        Ebx => "ebx",
-        Ecx => "ecx",
-        Edx => "edx",
-        Esi => "esi",
-        Edi => "edi",
-        Ebp => "ebp",
-        R8d => "r8d",
-        R9d => "r9d",
-        R10d => "r10d",
-        R11d => "r11d",
-        R12d => "r12d",
-        R13d => "r13d",
-        R14d => "r14d",
-        R15d => "r15d",
-    }
-);
-
-impl_display_reg!(
-    IndexReg64 {
-        Rax => "rax",
-        Rbx => "rbx",
-        Rcx => "rcx",
-        Rdx => "rdx",
-        Rsi => "rsi",
-        Rdi => "rdi",
-        Rbp => "rbp",
-    }
-);
-
-impl_display_reg!(
-    IndexRex64 {
-        Rax => "rax",
-        Rbx => "rbx",
-        Rcx => "rcx",
-        Rdx => "rdx",
-        Rsi => "rsi",
-        Rdi => "rdi",
-        Rbp => "rbp",
-        R8 => "r8",
-        R9 => "r9",
-        R10 => "r10",
-        R11 => "r11",
-        R12 => "r12",
-        R13 => "r13",
-        R14 => "r14",
-        R15 => "r15",
-    }
-);
-
 impl<Base, Index> Display for Offset<Base, Index>
 where Base: Display + Copy, Index: Display + Copy {
     fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
         match *self {
-            Offset::Disp(d)                   => write!(f, "{:#010x}", d),
-            Offset::Index(i, s)               => write!(f, "{} * {}", i, s),
-            Offset::IndexDisp(i, s, d)        => write!(f, "{} * {} + {:#010x}", i, s, d),
             Offset::Base(b)                   => write!(f, "{}", b),
             Offset::BaseDisp(b, d)            => write!(f, "{} + {}", b, d),
             Offset::BaseIndex(b, i, s)        => write!(f, "{} + {} * {}", b, i, s),
             Offset::BaseIndexDisp(b, i, s, d) => write!(f, "{} + {} * {} + {}", b, i, s, d),
+            Offset::Index(i, s)               => write!(f, "{} * {}", i, s),
+            Offset::IndexDisp(i, s, d)        => write!(f, "{} * {} + {:#010x}", i, s, d),
+            Offset::Disp(d)                   => write!(f, "{:#010x}", d),
             Offset::RipDisp(d)                => write!(f, "rip + {:#010x}", d),
         }
     }
@@ -289,14 +274,23 @@ impl_display_reg!(
     }
 );
 
-impl<Base32, Index32, Base64, Index64> Display for Memory<Base32, Index32, Base64, Index64>
-where Offset<Base32, Index32>: Display, Offset<Base64, Index64>: Display {
+impl<B32, I32, B64, I64> Display for Mem<B32, I32, B64, I64>
+where Offset<B32, I32>: Display, Offset<B64, I64>: Display {
     fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
         match *self {
-            Memory::Offset32(None, ref offset)       => write!(f, "[{}]", offset),
-            Memory::Offset32(Some(sreg), ref offset) => write!(f, "[{}:{}]", sreg, offset),
-            Memory::Offset64(None, ref offset)       => write!(f, "[{}]", offset),
-            Memory::Offset64(Some(sreg), ref offset) => write!(f, "[{}:{}]", sreg, offset),
+            Mem::Offset32(None, ref offset)       => write!(f, "[{}]", offset),
+            Mem::Offset32(Some(sreg), ref offset) => write!(f, "[{}:{}]", sreg, offset),
+            Mem::Offset64(None, ref offset)       => write!(f, "[{}]", offset),
+            Mem::Offset64(Some(sreg), ref offset) => write!(f, "[{}:{}]", sreg, offset),
+        }
+    }
+}
+
+impl Display for Rm8L {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Rm8L::R8L(r) => write!(f, "{}", r),
+            Rm8L::M8L(m) => write!(f, "byte {}", m),
         }
     }
 }
@@ -304,10 +298,8 @@ where Offset<Base32, Index32>: Display, Offset<Base64, Index64>: Display {
 impl Display for Rm8 {
     fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
         match *self {
-            Rm8::Reg8(reg)     => write!(f, "{}", reg),
-            Rm8::Rex8(rex)     => write!(f, "{}", rex),
-            Rm8::Mem8(ref mem) => write!(f, "byte {}", mem),
-            Rm8::Mex8(ref mex) => write!(f, "byte {}", mex),
+            Rm8::R8(r) => write!(f, "{}", r),
+            Rm8::M8(m) => write!(f, "byte {}", m),
         }
     }
 }
@@ -315,10 +307,8 @@ impl Display for Rm8 {
 impl Display for Rm16 {
     fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
         match *self {
-            Rm16::Reg16(reg)     => write!(f, "{}", reg),
-            Rm16::Rex16(rex)     => write!(f, "{}", rex),
-            Rm16::Mem16(ref mem) => write!(f, "word {}", mem),
-            Rm16::Mex16(ref mex) => write!(f, "word {}", mex),
+            Rm16::R16(r) => write!(f, "{}", r),
+            Rm16::M16(m) => write!(f, "word {}", m),
         }
     }
 }
@@ -326,10 +316,8 @@ impl Display for Rm16 {
 impl Display for Rm32 {
     fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
         match *self {
-            Rm32::Reg32(reg)     => write!(f, "{}", reg),
-            Rm32::Rex32(rex)     => write!(f, "{}", rex),
-            Rm32::Mem32(ref mem) => write!(f, "dword {}", mem),
-            Rm32::Mex32(ref mex) => write!(f, "dword {}", mex),
+            Rm32::R32(r) => write!(f, "{}", r),
+            Rm32::M32(m) => write!(f, "dword {}", m),
         }
     }
 }
@@ -337,34 +325,11 @@ impl Display for Rm32 {
 impl Display for Rm64 {
     fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
         match *self {
-            Rm64::Rex64(rex)     => write!(f, "{}", rex),
-            Rm64::Mem64(ref mem) => write!(f, "qword {}", mem),
-            Rm64::Mex64(ref mex) => write!(f, "qword {}", mex),
+            Rm64::R64(r) => write!(f, "{}", r),
+            Rm64::M64(m) => write!(f, "qword {}", m),
         }
     }
 }
-
-macro_rules! impl_display_rmrm {
-    ($rmrm:ident { $($var:ident),+ }) => {
-        impl Display for $rmrm {
-            fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-                match *self {
-                    $($rmrm::$var(ref a, ref b) => write!(f, "{}, {}", a, b)),+
-                }
-            }
-        }
-    }
-}
-
-impl_display_rmrm!(Rm8R8 { Reg8Reg8, Rex8Rex8, Mem8Reg8, Mex8Rex8 });
-impl_display_rmrm!(Rm16R16 { Reg16Reg16, Rex16Rex16, Mem16Reg16, Mex16Rex16 });
-impl_display_rmrm!(Rm32R32 { Reg32Reg32, Rex32Rex32, Mem32Reg32, Mex32Rex32 });
-impl_display_rmrm!(Rm64R64 { Rex64Rex64, Mex64Rex64 });
-
-impl_display_rmrm!(R8Rm8 { Reg8Reg8, Rex8Rex8, Reg8Mem8, Rex8Mex8 });
-impl_display_rmrm!(R16Rm16 { Reg16Reg16, Rex16Rex16, Reg16Mem16, Rex16Mex16 });
-impl_display_rmrm!(R32Rm32 { Reg32Reg32, Rex32Rex32, Reg32Mem32, Rex32Mex32 });
-impl_display_rmrm!(R64Rm64 { Rex64Rex64, Rex64Mex64 });
 
 impl<I> Display for Lock<I> where I: Display {
     fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
@@ -391,6 +356,7 @@ impl Display for Adc {
             Adc::AxImm16(imm)       => write!(f, "adc ax, {}", imm),
             Adc::EaxImm32(imm)      => write!(f, "adc eax, {}", imm),
             Adc::RaxImm32(imm)      => write!(f, "adc rax, {}", imm),
+            Adc::Rm8LImm8(rm, imm)  => write!(f, "adc {}, {}", rm, imm),
             Adc::Rm8Imm8(rm, imm)   => write!(f, "adc {}, {}", rm, imm),
             Adc::Rm16Imm16(rm, imm) => write!(f, "adc {}, {}", rm, imm),
             Adc::Rm32Imm32(rm, imm) => write!(f, "adc {}, {}", rm, imm),
@@ -398,14 +364,16 @@ impl Display for Adc {
             Adc::Rm16Imm8(rm, imm)  => write!(f, "adc {}, {}", rm, imm),
             Adc::Rm32Imm8(rm, imm)  => write!(f, "adc {}, {}", rm, imm),
             Adc::Rm64Imm8(rm, imm)  => write!(f, "adc {}, {}", rm, imm),
-            Adc::Rm8R8(rmr)         => write!(f, "adc {}", rmr),
-            Adc::Rm16R16(rmr)       => write!(f, "adc {}", rmr),
-            Adc::Rm32R32(rmr)       => write!(f, "adc {}", rmr),
-            Adc::Rm64R64(rmr)       => write!(f, "adc {}", rmr),
-            Adc::R8Rm8(rrm)         => write!(f, "adc {}", rrm),
-            Adc::R16Rm16(rrm)       => write!(f, "adc {}", rrm),
-            Adc::R32Rm32(rrm)       => write!(f, "adc {}", rrm),
-            Adc::R64Rm64(rrm)       => write!(f, "adc {}", rrm),
+            Adc::Rm8LR8L(rm, r)     => write!(f, "adc {}, {}", rm, r),
+            Adc::Rm8R8(rm, r)       => write!(f, "adc {}, {}", rm, r),
+            Adc::Rm16R16(rm, r)     => write!(f, "adc {}, {}", rm, r),
+            Adc::Rm32R32(rm, r)     => write!(f, "adc {}, {}", rm, r),
+            Adc::Rm64R64(rm, r)     => write!(f, "adc {}, {}", rm, r),
+            Adc::R8LRm8L(r, rm)     => write!(f, "adc {}, {}", r, rm),
+            Adc::R8Rm8(r, rm)       => write!(f, "adc {}, {}", r, rm),
+            Adc::R16Rm16(r, rm)     => write!(f, "adc {}, {}", r, rm),
+            Adc::R32Rm32(r, rm)     => write!(f, "adc {}, {}", r, rm),
+            Adc::R64Rm64(r, rm)     => write!(f, "adc {}, {}", r, rm),
         }
     }
 }
@@ -413,8 +381,8 @@ impl Display for Adc {
 impl Display for Adcx {
     fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
         match *self {
-            Adcx::R32Rm32(rrm) => write!(f, "adcx {}", rrm),
-            Adcx::R64Rm64(rrm) => write!(f, "adcx {}", rrm),
+            Adcx::R32Rm32(r, rm) => write!(f, "adcx {}, {}", r, rm),
+            Adcx::R64Rm64(r, rm) => write!(f, "adcx {}, {}", r, rm),
         }
     }
 }
@@ -426,6 +394,7 @@ impl Display for Add {
             Add::AxImm16(imm)       => write!(f, "add ax, {}", imm),
             Add::EaxImm32(imm)      => write!(f, "add eax, {}", imm),
             Add::RaxImm32(imm)      => write!(f, "add rax, {}", imm),
+            Add::Rm8LImm8(rm, imm)  => write!(f, "add {}, {}", rm, imm),
             Add::Rm8Imm8(rm, imm)   => write!(f, "add {}, {}", rm, imm),
             Add::Rm16Imm16(rm, imm) => write!(f, "add {}, {}", rm, imm),
             Add::Rm32Imm32(rm, imm) => write!(f, "add {}, {}", rm, imm),
@@ -433,14 +402,16 @@ impl Display for Add {
             Add::Rm16Imm8(rm, imm)  => write!(f, "add {}, {}", rm, imm),
             Add::Rm32Imm8(rm, imm)  => write!(f, "add {}, {}", rm, imm),
             Add::Rm64Imm8(rm, imm)  => write!(f, "add {}, {}", rm, imm),
-            Add::Rm8R8(rmr)         => write!(f, "add {}", rmr),
-            Add::Rm16R16(rmr)       => write!(f, "add {}", rmr),
-            Add::Rm32R32(rmr)       => write!(f, "add {}", rmr),
-            Add::Rm64R64(rmr)       => write!(f, "add {}", rmr),
-            Add::R8Rm8(rrm)         => write!(f, "add {}", rrm),
-            Add::R16Rm16(rrm)       => write!(f, "add {}", rrm),
-            Add::R32Rm32(rrm)       => write!(f, "add {}", rrm),
-            Add::R64Rm64(rrm)       => write!(f, "add {}", rrm),
+            Add::Rm8LR8L(rm, r)     => write!(f, "add {}, {}", rm, r),
+            Add::Rm8R8(rm, r)       => write!(f, "add {}, {}", rm, r),
+            Add::Rm16R16(rm, r)     => write!(f, "add {}, {}", rm, r),
+            Add::Rm32R32(rm, r)     => write!(f, "add {}, {}", rm, r),
+            Add::Rm64R64(rm, r)     => write!(f, "add {}, {}", rm, r),
+            Add::R8LRm8L(r, rm)     => write!(f, "add {}, {}", r, rm),
+            Add::R8Rm8(r, rm)       => write!(f, "add {}, {}", r, rm),
+            Add::R16Rm16(r, rm)     => write!(f, "add {}, {}", r, rm),
+            Add::R32Rm32(r, rm)     => write!(f, "add {}, {}", r, rm),
+            Add::R64Rm64(r, rm)     => write!(f, "add {}, {}", r, rm),
         }
     }
 }

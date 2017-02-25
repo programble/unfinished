@@ -11,43 +11,63 @@ pub struct Imm32(pub u32);
 pub struct Imm64(pub u64);
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum Reg8 {
+pub enum R8L {
     Al, Bl, Cl, Dl, Ah, Bh, Ch, Dh
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum Rex8 {
+pub enum R8 {
     Al, Bl, Cl, Dl, Sil, Dil, Bpl, Spl, R8l, R9l, R10l, R11l, R12l, R13l, R14l, R15l
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum Reg16 {
-    Ax, Bx, Cx, Dx, Si, Di, Bp, Sp
-}
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum Rex16 {
+pub enum R16 {
     Ax, Bx, Cx, Dx, Si, Di, Bp, Sp, R8w, R9w, R10w, R11w, R12w, R13w, R14w, R15w
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum Reg32 {
+pub enum R32L {
     Eax, Ebx, Ecx, Edx, Esi, Edi, Ebp, Esp
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum Rex32 {
+pub enum R32 {
     Eax, Ebx, Ecx, Edx, Esi, Edi, Ebp, Esp, R8d, R9d, R10d, R11d, R12d, R13d, R14d, R15d
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum Reg64 {
+pub enum R64L {
     Rax, Rbx, Rcx, Rdx, Rsi, Rdi, Rbp, Rsp
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum Rex64 {
+pub enum R64 {
     Rax, Rbx, Rcx, Rdx, Rsi, Rdi, Rbp, Rsp, R8, R9, R10, R11, R12, R13, R14, R15
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Index32L {
+    Eax, Ebx, Ecx, Edx, Esi, Edi, Ebp
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Index32 {
+    Eax, Ebx, Ecx, Edx, Esi, Edi, Ebp, R8d, R9d, R10d, R11d, R12d, R13d, R14d, R15d
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Index64L {
+    Rax, Rbx, Rcx, Rdx, Rsi, Rdi, Rbp
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Index64 {
+    Rax, Rbx, Rcx, Rdx, Rsi, Rdi, Rbp, R8, R9, R10, R11, R12, R13, R14, R15
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Scale {
+    X1, X2, X4, X8
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -57,39 +77,14 @@ pub enum Disp {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum Scale {
-    X1, X2, X4, X8
-}
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum IndexReg32 {
-    Eax, Ebx, Ecx, Edx, Esi, Edi, Ebp
-}
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum IndexRex32 {
-    Eax, Ebx, Ecx, Edx, Esi, Edi, Ebp, R8d, R9d, R10d, R11d, R12d, R13d, R14d, R15d
-}
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum IndexReg64 {
-    Rax, Rbx, Rcx, Rdx, Rsi, Rdi, Rbp
-}
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum IndexRex64 {
-    Rax, Rbx, Rcx, Rdx, Rsi, Rdi, Rbp, R8, R9, R10, R11, R12, R13, R14, R15
-}
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Offset<Base, Index> {
-    Disp(i32),
-    Index(Index, Scale),
-    IndexDisp(Index, Scale, i32),
     Base(Base),
     BaseDisp(Base, Disp),
     BaseIndex(Base, Index, Scale),
     BaseIndexDisp(Base, Index, Scale, Disp),
+    Index(Index, Scale),
+    IndexDisp(Index, Scale, i32),
+    Disp(i32),
     RipDisp(i32),
 }
 
@@ -99,101 +94,37 @@ pub enum Sreg {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum Memory<Base32, Index32, Base64, Index64> {
-    Offset32(Option<Sreg>, Offset<Base32, Index32>),
-    Offset64(Option<Sreg>, Offset<Base64, Index64>),
+pub enum Mem<B32 = R32, I32 = Index32, B64 = R64, I64 = Index64> {
+    Offset32(Option<Sreg>, Offset<B32, I32>),
+    Offset64(Option<Sreg>, Offset<B64, I64>),
 }
 
-pub type Mem = Memory<Reg32, IndexReg32, Reg64, IndexReg64>;
-pub type Mex = Memory<Rex32, IndexRex32, Rex64, IndexRex64>;
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Rm8L {
+    R8L(R8L),
+    M8L(Mem<R32L, Index32L, R64L, Index64L>),
+}
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Rm8 {
-    Reg8(Reg8),
-    Rex8(Rex8),
-    Mem8(Mem),
-    Mex8(Mex),
+    R8(R8),
+    M8(Mem),
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Rm16 {
-    Reg16(Reg16),
-    Rex16(Rex16),
-    Mem16(Mem),
-    Mex16(Mex),
+    R16(R16),
+    M16(Mem),
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Rm32 {
-    Reg32(Reg32),
-    Rex32(Rex32),
-    Mem32(Mem),
-    Mex32(Mex),
+    R32(R32),
+    M32(Mem),
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Rm64 {
-    Rex64(Rex64),
-    Mem64(Mem),
-    Mex64(Mex),
-}
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum Rm8R8 {
-    Reg8Reg8(Reg8, Reg8),
-    Rex8Rex8(Rex8, Rex8),
-    Mem8Reg8(Mem, Reg8),
-    Mex8Rex8(Mex, Rex8),
-}
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum Rm16R16 {
-    Reg16Reg16(Reg16, Reg16),
-    Rex16Rex16(Rex16, Rex16),
-    Mem16Reg16(Mem, Reg16),
-    Mex16Rex16(Mex, Rex16),
-}
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum Rm32R32 {
-    Reg32Reg32(Reg32, Reg32),
-    Rex32Rex32(Rex32, Rex32),
-    Mem32Reg32(Mem, Reg32),
-    Mex32Rex32(Mex, Rex32),
-}
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum Rm64R64 {
-    Rex64Rex64(Rex64, Rex64),
-    Mex64Rex64(Mex, Rex64),
-}
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum R8Rm8 {
-    Reg8Reg8(Reg8, Reg8),
-    Rex8Rex8(Rex8, Rex8),
-    Reg8Mem8(Reg8, Mem),
-    Rex8Mex8(Reg8, Mex),
-}
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum R16Rm16 {
-    Reg16Reg16(Reg16, Reg16),
-    Rex16Rex16(Rex16, Rex16),
-    Reg16Mem16(Reg16, Mem),
-    Rex16Mex16(Reg16, Mex),
-}
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum R32Rm32 {
-    Reg32Reg32(Reg32, Reg32),
-    Rex32Rex32(Rex32, Rex32),
-    Reg32Mem32(Reg32, Mem),
-    Rex32Mex32(Reg32, Mex),
-}
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum R64Rm64 {
-    Rex64Rex64(Rex64, Rex64),
-    Rex64Mex64(Reg64, Mex),
+    R64(R64),
+    M64(Mem),
 }

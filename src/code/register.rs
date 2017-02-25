@@ -1,17 +1,4 @@
-use mnemonic::operand::{
-    Reg8,
-    Rex8,
-    Reg16,
-    Rex16,
-    Reg32,
-    Rex32,
-    Reg64,
-    Rex64,
-    IndexReg32,
-    IndexRex32,
-    IndexReg64,
-    IndexRex64,
-};
+use mnemonic::operand::{R8L, R8, R16, R32L, R32, R64L, R64, Index32L, Index32, Index64L, Index64};
 
 pub trait Register: Copy {
     fn index(self) -> u8;
@@ -38,246 +25,230 @@ impl Register for u8 {
     }
 }
 
-impl Register for Reg8 {
+impl Register for R8L {
     #[inline]
     fn index(self) -> u8 {
         match self {
-            Reg8::Al => 0,
-            Reg8::Cl => 1,
-            Reg8::Dl => 2,
-            Reg8::Bl => 3,
-            Reg8::Ah => 4,
-            Reg8::Ch => 5,
-            Reg8::Dh => 6,
-            Reg8::Bh => 7,
+            R8L::Al => 0,
+            R8L::Cl => 1,
+            R8L::Dl => 2,
+            R8L::Bl => 3,
+            R8L::Ah => 4,
+            R8L::Ch => 5,
+            R8L::Dh => 6,
+            R8L::Bh => 7,
         }
     }
 }
 
-impl Register for Rex8 {
+impl Register for R8 {
     #[inline]
     fn index(self) -> u8 {
         match self {
-            Rex8::Al => 0,
-            Rex8::Cl => 1,
-            Rex8::Dl => 2,
-            Rex8::Bl => 3,
-            Rex8::Spl => 4,
-            Rex8::Bpl => 5,
-            Rex8::Sil => 6,
-            Rex8::Dil => 7,
-            Rex8::R8l => 8,
-            Rex8::R9l => 9,
-            Rex8::R10l => 10,
-            Rex8::R11l => 11,
-            Rex8::R12l => 12,
-            Rex8::R13l => 13,
-            Rex8::R14l => 14,
-            Rex8::R15l => 15,
+            R8::Al => 0,
+            R8::Cl => 1,
+            R8::Dl => 2,
+            R8::Bl => 3,
+            R8::Spl => 4,
+            R8::Bpl => 5,
+            R8::Sil => 6,
+            R8::Dil => 7,
+            R8::R8l => 8,
+            R8::R9l => 9,
+            R8::R10l => 10,
+            R8::R11l => 11,
+            R8::R12l => 12,
+            R8::R13l => 13,
+            R8::R14l => 14,
+            R8::R15l => 15,
         }
     }
 
     #[inline]
     fn force_rex(self) -> bool {
         match self {
-            Rex8::Spl | Rex8::Bpl | Rex8::Sil | Rex8::Dil => true,
+            R8::Spl | R8::Bpl | R8::Sil | R8::Dil => true,
             _ => false,
         }
     }
 }
 
-impl Register for Reg16 {
+impl Register for R16 {
     #[inline]
     fn index(self) -> u8 {
         match self {
-            Reg16::Ax => 0,
-            Reg16::Cx => 1,
-            Reg16::Dx => 2,
-            Reg16::Bx => 3,
-            Reg16::Sp => 4,
-            Reg16::Bp => 5,
-            Reg16::Si => 6,
-            Reg16::Di => 7,
+            R16::Ax => 0,
+            R16::Cx => 1,
+            R16::Dx => 2,
+            R16::Bx => 3,
+            R16::Sp => 4,
+            R16::Bp => 5,
+            R16::Si => 6,
+            R16::Di => 7,
+            R16::R8w => 8,
+            R16::R9w => 9,
+            R16::R10w => 10,
+            R16::R11w => 11,
+            R16::R12w => 12,
+            R16::R13w => 13,
+            R16::R14w => 14,
+            R16::R15w => 15,
         }
     }
 }
 
-impl Register for Rex16 {
+impl Register for R32L {
     #[inline]
     fn index(self) -> u8 {
         match self {
-            Rex16::Ax => 0,
-            Rex16::Cx => 1,
-            Rex16::Dx => 2,
-            Rex16::Bx => 3,
-            Rex16::Sp => 4,
-            Rex16::Bp => 5,
-            Rex16::Si => 6,
-            Rex16::Di => 7,
-            Rex16::R8w => 8,
-            Rex16::R9w => 9,
-            Rex16::R10w => 10,
-            Rex16::R11w => 11,
-            Rex16::R12w => 12,
-            Rex16::R13w => 13,
-            Rex16::R14w => 14,
-            Rex16::R15w => 15,
+            R32L::Eax => 0,
+            R32L::Ecx => 1,
+            R32L::Edx => 2,
+            R32L::Ebx => 3,
+            R32L::Esp => 4,
+            R32L::Ebp => 5,
+            R32L::Esi => 6,
+            R32L::Edi => 7,
         }
     }
 }
 
-impl Register for Reg32 {
+impl Register for R32 {
     #[inline]
     fn index(self) -> u8 {
         match self {
-            Reg32::Eax => 0,
-            Reg32::Ecx => 1,
-            Reg32::Edx => 2,
-            Reg32::Ebx => 3,
-            Reg32::Esp => 4,
-            Reg32::Ebp => 5,
-            Reg32::Esi => 6,
-            Reg32::Edi => 7,
+            R32::Eax => 0,
+            R32::Ecx => 1,
+            R32::Edx => 2,
+            R32::Ebx => 3,
+            R32::Esp => 4,
+            R32::Ebp => 5,
+            R32::Esi => 6,
+            R32::Edi => 7,
+            R32::R8d => 8,
+            R32::R9d => 9,
+            R32::R10d => 10,
+            R32::R11d => 11,
+            R32::R12d => 12,
+            R32::R13d => 13,
+            R32::R14d => 14,
+            R32::R15d => 15,
         }
     }
 }
 
-impl Register for Rex32 {
+impl Register for R64L {
     #[inline]
     fn index(self) -> u8 {
         match self {
-            Rex32::Eax => 0,
-            Rex32::Ecx => 1,
-            Rex32::Edx => 2,
-            Rex32::Ebx => 3,
-            Rex32::Esp => 4,
-            Rex32::Ebp => 5,
-            Rex32::Esi => 6,
-            Rex32::Edi => 7,
-            Rex32::R8d => 8,
-            Rex32::R9d => 9,
-            Rex32::R10d => 10,
-            Rex32::R11d => 11,
-            Rex32::R12d => 12,
-            Rex32::R13d => 13,
-            Rex32::R14d => 14,
-            Rex32::R15d => 15,
+            R64L::Rax => 0,
+            R64L::Rcx => 1,
+            R64L::Rdx => 2,
+            R64L::Rbx => 3,
+            R64L::Rsp => 4,
+            R64L::Rbp => 5,
+            R64L::Rsi => 6,
+            R64L::Rdi => 7,
         }
     }
 }
 
-impl Register for Reg64 {
+impl Register for R64 {
     #[inline]
     fn index(self) -> u8 {
         match self {
-            Reg64::Rax => 0,
-            Reg64::Rcx => 1,
-            Reg64::Rdx => 2,
-            Reg64::Rbx => 3,
-            Reg64::Rsp => 4,
-            Reg64::Rbp => 5,
-            Reg64::Rsi => 6,
-            Reg64::Rdi => 7,
+            R64::Rax => 0,
+            R64::Rcx => 1,
+            R64::Rdx => 2,
+            R64::Rbx => 3,
+            R64::Rsp => 4,
+            R64::Rbp => 5,
+            R64::Rsi => 6,
+            R64::Rdi => 7,
+            R64::R8 => 8,
+            R64::R9 => 9,
+            R64::R10 => 10,
+            R64::R11 => 11,
+            R64::R12 => 12,
+            R64::R13 => 13,
+            R64::R14 => 14,
+            R64::R15 => 15,
         }
     }
 }
 
-impl Register for Rex64 {
+impl Register for Index32L {
     #[inline]
     fn index(self) -> u8 {
         match self {
-            Rex64::Rax => 0,
-            Rex64::Rcx => 1,
-            Rex64::Rdx => 2,
-            Rex64::Rbx => 3,
-            Rex64::Rsp => 4,
-            Rex64::Rbp => 5,
-            Rex64::Rsi => 6,
-            Rex64::Rdi => 7,
-            Rex64::R8 => 8,
-            Rex64::R9 => 9,
-            Rex64::R10 => 10,
-            Rex64::R11 => 11,
-            Rex64::R12 => 12,
-            Rex64::R13 => 13,
-            Rex64::R14 => 14,
-            Rex64::R15 => 15,
+            Index32L::Eax => 0,
+            Index32L::Ecx => 1,
+            Index32L::Edx => 2,
+            Index32L::Ebx => 3,
+            Index32L::Ebp => 5,
+            Index32L::Esi => 6,
+            Index32L::Edi => 7,
         }
     }
 }
 
-impl Register for IndexReg32 {
+impl Register for Index32 {
     #[inline]
     fn index(self) -> u8 {
         match self {
-            IndexReg32::Eax => 0,
-            IndexReg32::Ecx => 1,
-            IndexReg32::Edx => 2,
-            IndexReg32::Ebx => 3,
-            IndexReg32::Ebp => 5,
-            IndexReg32::Esi => 6,
-            IndexReg32::Edi => 7,
+            Index32::Eax => 0,
+            Index32::Ecx => 1,
+            Index32::Edx => 2,
+            Index32::Ebx => 3,
+            Index32::Ebp => 5,
+            Index32::Esi => 6,
+            Index32::Edi => 7,
+            Index32::R8d => 8,
+            Index32::R9d => 9,
+            Index32::R10d => 10,
+            Index32::R11d => 11,
+            Index32::R12d => 12,
+            Index32::R13d => 13,
+            Index32::R14d => 14,
+            Index32::R15d => 15,
         }
     }
 }
 
-impl Register for IndexRex32 {
+impl Register for Index64L {
     #[inline]
     fn index(self) -> u8 {
         match self {
-            IndexRex32::Eax => 0,
-            IndexRex32::Ecx => 1,
-            IndexRex32::Edx => 2,
-            IndexRex32::Ebx => 3,
-            IndexRex32::Ebp => 5,
-            IndexRex32::Esi => 6,
-            IndexRex32::Edi => 7,
-            IndexRex32::R8d => 8,
-            IndexRex32::R9d => 9,
-            IndexRex32::R10d => 10,
-            IndexRex32::R11d => 11,
-            IndexRex32::R12d => 12,
-            IndexRex32::R13d => 13,
-            IndexRex32::R14d => 14,
-            IndexRex32::R15d => 15,
+            Index64L::Rax => 0,
+            Index64L::Rcx => 1,
+            Index64L::Rdx => 2,
+            Index64L::Rbx => 3,
+            Index64L::Rbp => 5,
+            Index64L::Rsi => 6,
+            Index64L::Rdi => 7,
         }
     }
 }
 
-impl Register for IndexReg64 {
+impl Register for Index64 {
     #[inline]
     fn index(self) -> u8 {
         match self {
-            IndexReg64::Rax => 0,
-            IndexReg64::Rcx => 1,
-            IndexReg64::Rdx => 2,
-            IndexReg64::Rbx => 3,
-            IndexReg64::Rbp => 5,
-            IndexReg64::Rsi => 6,
-            IndexReg64::Rdi => 7,
-        }
-    }
-}
-
-impl Register for IndexRex64 {
-    #[inline]
-    fn index(self) -> u8 {
-        match self {
-            IndexRex64::Rax => 0,
-            IndexRex64::Rcx => 1,
-            IndexRex64::Rdx => 2,
-            IndexRex64::Rbx => 3,
-            IndexRex64::Rbp => 5,
-            IndexRex64::Rsi => 6,
-            IndexRex64::Rdi => 7,
-            IndexRex64::R8 => 8,
-            IndexRex64::R9 => 9,
-            IndexRex64::R10 => 10,
-            IndexRex64::R11 => 11,
-            IndexRex64::R12 => 12,
-            IndexRex64::R13 => 13,
-            IndexRex64::R14 => 14,
-            IndexRex64::R15 => 15,
+            Index64::Rax => 0,
+            Index64::Rcx => 1,
+            Index64::Rdx => 2,
+            Index64::Rbx => 3,
+            Index64::Rbp => 5,
+            Index64::Rsi => 6,
+            Index64::Rdi => 7,
+            Index64::R8 => 8,
+            Index64::R9 => 9,
+            Index64::R10 => 10,
+            Index64::R11 => 11,
+            Index64::R12 => 12,
+            Index64::R13 => 13,
+            Index64::R14 => 14,
+            Index64::R15 => 15,
         }
     }
 }

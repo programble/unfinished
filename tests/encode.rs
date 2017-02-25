@@ -3,8 +3,7 @@ extern crate chasm;
 use std::fmt::Write;
 
 use chasm::code::Instruction;
-use chasm::mnemonic::instruction::Adc;
-use chasm::mnemonic::operand::*;
+use chasm::mnemonic::dsl::*;
 
 fn hex<I>(iter: I) -> String where I: IntoIterator<Item = u8> {
     let mut string = String::new();
@@ -30,518 +29,213 @@ test_encode! {
     Adc::EaxImm32(Imm32(0x01020304)) => "15 04 03 02 01",
     Adc::RaxImm32(Imm32(0x01020304)) => "48 15 04 03 02 01",
 
-    Adc::Rm8Imm8(Rm8::Reg8(Reg8::Al), Imm8(0x01)) => "80 d0 01",
-    Adc::Rm8Imm8(Rm8::Reg8(Reg8::Cl), Imm8(0x01)) => "80 d1 01",
-    Adc::Rm8Imm8(Rm8::Reg8(Reg8::Dl), Imm8(0x01)) => "80 d2 01",
-    Adc::Rm8Imm8(Rm8::Reg8(Reg8::Bl), Imm8(0x01)) => "80 d3 01",
-    Adc::Rm8Imm8(Rm8::Reg8(Reg8::Ah), Imm8(0x01)) => "80 d4 01",
-    Adc::Rm8Imm8(Rm8::Reg8(Reg8::Ch), Imm8(0x01)) => "80 d5 01",
-    Adc::Rm8Imm8(Rm8::Reg8(Reg8::Dh), Imm8(0x01)) => "80 d6 01",
-    Adc::Rm8Imm8(Rm8::Reg8(Reg8::Bh), Imm8(0x01)) => "80 d7 01",
+    Adc::Rm8LImm8(Rm8L::R8L(R8L::Al), Imm8(0x01)) => "80 d0 01",
+    Adc::Rm8LImm8(Rm8L::R8L(R8L::Cl), Imm8(0x01)) => "80 d1 01",
+    Adc::Rm8LImm8(Rm8L::R8L(R8L::Dl), Imm8(0x01)) => "80 d2 01",
+    Adc::Rm8LImm8(Rm8L::R8L(R8L::Bl), Imm8(0x01)) => "80 d3 01",
+    Adc::Rm8LImm8(Rm8L::R8L(R8L::Ah), Imm8(0x01)) => "80 d4 01",
+    Adc::Rm8LImm8(Rm8L::R8L(R8L::Ch), Imm8(0x01)) => "80 d5 01",
+    Adc::Rm8LImm8(Rm8L::R8L(R8L::Dh), Imm8(0x01)) => "80 d6 01",
+    Adc::Rm8LImm8(Rm8L::R8L(R8L::Bh), Imm8(0x01)) => "80 d7 01",
 
-    Adc::Rm8Imm8(Rm8::Rex8(Rex8::Al), Imm8(0x01)) => "80 d0 01",
-    Adc::Rm8Imm8(Rm8::Rex8(Rex8::Cl), Imm8(0x01)) => "80 d1 01",
-    Adc::Rm8Imm8(Rm8::Rex8(Rex8::Dl), Imm8(0x01)) => "80 d2 01",
-    Adc::Rm8Imm8(Rm8::Rex8(Rex8::Bl), Imm8(0x01)) => "80 d3 01",
-    Adc::Rm8Imm8(Rm8::Rex8(Rex8::Spl), Imm8(0x01)) => "40 80 d4 01",
-    Adc::Rm8Imm8(Rm8::Rex8(Rex8::Bpl), Imm8(0x01)) => "40 80 d5 01",
-    Adc::Rm8Imm8(Rm8::Rex8(Rex8::Sil), Imm8(0x01)) => "40 80 d6 01",
-    Adc::Rm8Imm8(Rm8::Rex8(Rex8::Dil), Imm8(0x01)) => "40 80 d7 01",
-    Adc::Rm8Imm8(Rm8::Rex8(Rex8::R8l), Imm8(0x01)) => "41 80 d0 01",
-    Adc::Rm8Imm8(Rm8::Rex8(Rex8::R9l), Imm8(0x01)) => "41 80 d1 01",
-    Adc::Rm8Imm8(Rm8::Rex8(Rex8::R10l), Imm8(0x01)) => "41 80 d2 01",
-    Adc::Rm8Imm8(Rm8::Rex8(Rex8::R11l), Imm8(0x01)) => "41 80 d3 01",
-    Adc::Rm8Imm8(Rm8::Rex8(Rex8::R12l), Imm8(0x01)) => "41 80 d4 01",
-    Adc::Rm8Imm8(Rm8::Rex8(Rex8::R13l), Imm8(0x01)) => "41 80 d5 01",
-    Adc::Rm8Imm8(Rm8::Rex8(Rex8::R14l), Imm8(0x01)) => "41 80 d6 01",
-    Adc::Rm8Imm8(Rm8::Rex8(Rex8::R15l), Imm8(0x01)) => "41 80 d7 01",
+    Adc::Rm8Imm8(Rm8::R8(Al), Imm8(0x01)) => "80 d0 01",
+    Adc::Rm8Imm8(Rm8::R8(Cl), Imm8(0x01)) => "80 d1 01",
+    Adc::Rm8Imm8(Rm8::R8(Dl), Imm8(0x01)) => "80 d2 01",
+    Adc::Rm8Imm8(Rm8::R8(Bl), Imm8(0x01)) => "80 d3 01",
+    Adc::Rm8Imm8(Rm8::R8(Spl), Imm8(0x01)) => "40 80 d4 01",
+    Adc::Rm8Imm8(Rm8::R8(Bpl), Imm8(0x01)) => "40 80 d5 01",
+    Adc::Rm8Imm8(Rm8::R8(Sil), Imm8(0x01)) => "40 80 d6 01",
+    Adc::Rm8Imm8(Rm8::R8(Dil), Imm8(0x01)) => "40 80 d7 01",
+    Adc::Rm8Imm8(Rm8::R8(R8l), Imm8(0x01)) => "41 80 d0 01",
+    Adc::Rm8Imm8(Rm8::R8(R9l), Imm8(0x01)) => "41 80 d1 01",
+    Adc::Rm8Imm8(Rm8::R8(R10l), Imm8(0x01)) => "41 80 d2 01",
+    Adc::Rm8Imm8(Rm8::R8(R11l), Imm8(0x01)) => "41 80 d3 01",
+    Adc::Rm8Imm8(Rm8::R8(R12l), Imm8(0x01)) => "41 80 d4 01",
+    Adc::Rm8Imm8(Rm8::R8(R13l), Imm8(0x01)) => "41 80 d5 01",
+    Adc::Rm8Imm8(Rm8::R8(R14l), Imm8(0x01)) => "41 80 d6 01",
+    Adc::Rm8Imm8(Rm8::R8(R15l), Imm8(0x01)) => "41 80 d7 01",
 
-    Adc::Rm8Imm8(
-        Rm8::Mem8(Memory::Offset64(None, Offset::Disp(0x01020304))),
-        Imm8(0x05),
-    ) => "80 14 25 04 03 02 01 05",
-    Adc::Rm8Imm8(
-        Rm8::Mem8(Memory::Offset64(Some(Sreg::Cs), Offset::Disp(0x01020304))),
-        Imm8(0x05),
-    ) => "2e 80 14 25 04 03 02 01 05",
-    Adc::Rm8Imm8(
-        Rm8::Mem8(Memory::Offset64(Some(Sreg::Ss), Offset::Disp(0x01020304))),
-        Imm8(0x05),
-    ) => "36 80 14 25 04 03 02 01 05",
-    Adc::Rm8Imm8(
-        Rm8::Mem8(Memory::Offset64(Some(Sreg::Ds), Offset::Disp(0x01020304))),
-        Imm8(0x05),
-    ) => "3e 80 14 25 04 03 02 01 05",
-    Adc::Rm8Imm8(
-        Rm8::Mem8(Memory::Offset64(Some(Sreg::Es), Offset::Disp(0x01020304))),
-        Imm8(0x05),
-    ) => "26 80 14 25 04 03 02 01 05",
-    Adc::Rm8Imm8(
-        Rm8::Mem8(Memory::Offset64(Some(Sreg::Fs), Offset::Disp(0x01020304))),
-        Imm8(0x05),
-    ) => "64 80 14 25 04 03 02 01 05",
-    Adc::Rm8Imm8(
-        Rm8::Mem8(Memory::Offset64(Some(Sreg::Gs), Offset::Disp(0x01020304))),
-        Imm8(0x05),
-    ) => "65 80 14 25 04 03 02 01 05",
+    Adc::Rm8Imm8(M8(Offset64(Some(Cs), Base(Rax))), Imm8(0x01)) => "2e 80 10 01",
+    Adc::Rm8Imm8(M8(Offset64(Some(Ss), Base(Rax))), Imm8(0x01)) => "36 80 10 01",
+    Adc::Rm8Imm8(M8(Offset64(Some(Ds), Base(Rax))), Imm8(0x01)) => "3e 80 10 01",
+    Adc::Rm8Imm8(M8(Offset64(Some(Es), Base(Rax))), Imm8(0x01)) => "26 80 10 01",
+    Adc::Rm8Imm8(M8(Offset64(Some(Fs), Base(Rax))), Imm8(0x01)) => "64 80 10 01",
+    Adc::Rm8Imm8(M8(Offset64(Some(Gs), Base(Rax))), Imm8(0x01)) => "65 80 10 01",
 
-    Adc::Rm8Imm8(
-        Rm8::Mem8(Memory::Offset64(None, Offset::Index(IndexReg64::Rax, Scale::X1))),
-        Imm8(0x01),
-    ) => "80 14 05 00 00 00 00 01",
-    Adc::Rm8Imm8(
-        Rm8::Mem8(Memory::Offset64(None, Offset::Index(IndexReg64::Rax, Scale::X2))),
-        Imm8(0x01),
-    ) => "80 14 45 00 00 00 00 01",
-    Adc::Rm8Imm8(
-        Rm8::Mem8(Memory::Offset64(None, Offset::Index(IndexReg64::Rax, Scale::X4))),
-        Imm8(0x01),
-    ) => "80 14 85 00 00 00 00 01",
-    Adc::Rm8Imm8(
-        Rm8::Mem8(Memory::Offset64(None, Offset::Index(IndexReg64::Rax, Scale::X8))),
-        Imm8(0x01),
-    ) => "80 14 c5 00 00 00 00 01",
+    Adc::Rm8Imm8(M8(Offset64(None, Base(Rax))), Imm8(0x01)) => "80 10 01",
+    Adc::Rm8Imm8(M8(Offset64(None, Base(Rcx))), Imm8(0x01)) => "80 11 01",
+    Adc::Rm8Imm8(M8(Offset64(None, Base(Rdx))), Imm8(0x01)) => "80 12 01",
+    Adc::Rm8Imm8(M8(Offset64(None, Base(Rbx))), Imm8(0x01)) => "80 13 01",
+    Adc::Rm8Imm8(M8(Offset64(None, Base(Rsp))), Imm8(0x01)) => "80 14 24 01",
+    Adc::Rm8Imm8(M8(Offset64(None, Base(Rbp))), Imm8(0x01)) => "80 55 00 01",
+    Adc::Rm8Imm8(M8(Offset64(None, Base(Rsi))), Imm8(0x01)) => "80 16 01",
+    Adc::Rm8Imm8(M8(Offset64(None, Base(Rdi))), Imm8(0x01)) => "80 17 01",
+    Adc::Rm8Imm8(M8(Offset64(None, Base(R8))), Imm8(0x01)) => "41 80 10 01",
+    Adc::Rm8Imm8(M8(Offset64(None, Base(R9))), Imm8(0x01)) => "41 80 11 01",
+    Adc::Rm8Imm8(M8(Offset64(None, Base(R10))), Imm8(0x01)) => "41 80 12 01",
+    Adc::Rm8Imm8(M8(Offset64(None, Base(R11))), Imm8(0x01)) => "41 80 13 01",
+    Adc::Rm8Imm8(M8(Offset64(None, Base(R12))), Imm8(0x01)) => "41 80 14 24 01",
+    Adc::Rm8Imm8(M8(Offset64(None, Base(R13))), Imm8(0x01)) => "41 80 55 00 01",
+    Adc::Rm8Imm8(M8(Offset64(None, Base(R14))), Imm8(0x01)) => "41 80 16 01",
+    Adc::Rm8Imm8(M8(Offset64(None, Base(R15))), Imm8(0x01)) => "41 80 17 01",
 
-    Adc::Rm8Imm8(
-        Rm8::Mem8(Memory::Offset64(None, Offset::Index(IndexReg64::Rcx, Scale::X1))),
-        Imm8(0x01),
-    ) => "80 14 0d 00 00 00 00 01",
-    Adc::Rm8Imm8(
-        Rm8::Mem8(Memory::Offset64(None, Offset::Index(IndexReg64::Rdx, Scale::X1))),
-        Imm8(0x01),
-    ) => "80 14 15 00 00 00 00 01",
-    Adc::Rm8Imm8(
-        Rm8::Mem8(Memory::Offset64(None, Offset::Index(IndexReg64::Rbx, Scale::X1))),
-        Imm8(0x01),
-    ) => "80 14 1d 00 00 00 00 01",
-    Adc::Rm8Imm8(
-        Rm8::Mem8(Memory::Offset64(None, Offset::Index(IndexReg64::Rbp, Scale::X1))),
-        Imm8(0x01),
-    ) => "80 14 2d 00 00 00 00 01",
-    Adc::Rm8Imm8(
-        Rm8::Mem8(Memory::Offset64(None, Offset::Index(IndexReg64::Rsi, Scale::X1))),
-        Imm8(0x01),
-    ) => "80 14 35 00 00 00 00 01",
-    Adc::Rm8Imm8(
-        Rm8::Mem8(Memory::Offset64(None, Offset::Index(IndexReg64::Rdi, Scale::X1))),
-        Imm8(0x01),
-    ) => "80 14 3d 00 00 00 00 01",
-    Adc::Rm8Imm8(
-        Rm8::Mex8(Memory::Offset64(None, Offset::Index(IndexRex64::R8, Scale::X1))),
-        Imm8(0x01),
-    ) => "42 80 14 05 00 00 00 00 01",
-    Adc::Rm8Imm8(
-        Rm8::Mex8(Memory::Offset64(None, Offset::Index(IndexRex64::R9, Scale::X1))),
-        Imm8(0x01),
-    ) => "42 80 14 0d 00 00 00 00 01",
-    Adc::Rm8Imm8(
-        Rm8::Mex8(Memory::Offset64(None, Offset::Index(IndexRex64::R10, Scale::X1))),
-        Imm8(0x01),
-    ) => "42 80 14 15 00 00 00 00 01",
-    Adc::Rm8Imm8(
-        Rm8::Mex8(Memory::Offset64(None, Offset::Index(IndexRex64::R11, Scale::X1))),
-        Imm8(0x01),
-    ) => "42 80 14 1d 00 00 00 00 01",
-    Adc::Rm8Imm8(
-        Rm8::Mex8(Memory::Offset64(None, Offset::Index(IndexRex64::R12, Scale::X1))),
-        Imm8(0x01),
-    ) => "42 80 14 25 00 00 00 00 01",
-    Adc::Rm8Imm8(
-        Rm8::Mex8(Memory::Offset64(None, Offset::Index(IndexRex64::R13, Scale::X1))),
-        Imm8(0x01),
-    ) => "42 80 14 2d 00 00 00 00 01",
-    Adc::Rm8Imm8(
-        Rm8::Mex8(Memory::Offset64(None, Offset::Index(IndexRex64::R14, Scale::X1))),
-        Imm8(0x01),
-    ) => "42 80 14 35 00 00 00 00 01",
-    Adc::Rm8Imm8(
-        Rm8::Mex8(Memory::Offset64(None, Offset::Index(IndexRex64::R15, Scale::X1))),
-        Imm8(0x01),
-    ) => "42 80 14 3d 00 00 00 00 01",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseDisp(Rax, Disp8(0x01)))), Imm8(0x02)) => "80 50 01 02",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseDisp(Rcx, Disp8(0x01)))), Imm8(0x02)) => "80 51 01 02",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseDisp(Rdx, Disp8(0x01)))), Imm8(0x02)) => "80 52 01 02",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseDisp(Rbx, Disp8(0x01)))), Imm8(0x02)) => "80 53 01 02",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseDisp(Rsp, Disp8(0x01)))), Imm8(0x02)) => "80 54 24 01 02",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseDisp(Rbp, Disp8(0x01)))), Imm8(0x02)) => "80 55 01 02",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseDisp(Rsi, Disp8(0x01)))), Imm8(0x02)) => "80 56 01 02",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseDisp(Rdi, Disp8(0x01)))), Imm8(0x02)) => "80 57 01 02",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseDisp(R8, Disp8(0x01)))), Imm8(0x02)) => "41 80 50 01 02",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseDisp(R9, Disp8(0x01)))), Imm8(0x02)) => "41 80 51 01 02",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseDisp(R10, Disp8(0x01)))), Imm8(0x02)) => "41 80 52 01 02",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseDisp(R11, Disp8(0x01)))), Imm8(0x02)) => "41 80 53 01 02",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseDisp(R12, Disp8(0x01)))), Imm8(0x02)) => "41 80 54 24 01 02",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseDisp(R13, Disp8(0x01)))), Imm8(0x02)) => "41 80 55 01 02",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseDisp(R14, Disp8(0x01)))), Imm8(0x02)) => "41 80 56 01 02",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseDisp(R15, Disp8(0x01)))), Imm8(0x02)) => "41 80 57 01 02",
 
-    Adc::Rm8Imm8(
-        Rm8::Mem8(
-            Memory::Offset64(None, Offset::IndexDisp(IndexReg64::Rax, Scale::X1, 0x01020304))
-        ),
-        Imm8(0x05),
-    ) => "80 14 05 04 03 02 01 05",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseDisp(Rax, Disp32(0x01020304)))), Imm8(0x05)) =>
+        "80 90 04 03 02 01 05",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseDisp(Rcx, Disp32(0x01020304)))), Imm8(0x05)) =>
+        "80 91 04 03 02 01 05",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseDisp(Rdx, Disp32(0x01020304)))), Imm8(0x05)) =>
+        "80 92 04 03 02 01 05",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseDisp(Rbx, Disp32(0x01020304)))), Imm8(0x05)) =>
+        "80 93 04 03 02 01 05",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseDisp(Rsp, Disp32(0x01020304)))), Imm8(0x05)) =>
+        "80 94 24 04 03 02 01 05",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseDisp(Rbp, Disp32(0x01020304)))), Imm8(0x05)) =>
+        "80 95 04 03 02 01 05",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseDisp(Rsi, Disp32(0x01020304)))), Imm8(0x05)) =>
+        "80 96 04 03 02 01 05",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseDisp(Rdi, Disp32(0x01020304)))), Imm8(0x05)) =>
+        "80 97 04 03 02 01 05",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseDisp(R8, Disp32(0x01020304)))), Imm8(0x05)) =>
+        "41 80 90 04 03 02 01 05",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseDisp(R9, Disp32(0x01020304)))), Imm8(0x05)) =>
+        "41 80 91 04 03 02 01 05",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseDisp(R10, Disp32(0x01020304)))), Imm8(0x05)) =>
+        "41 80 92 04 03 02 01 05",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseDisp(R11, Disp32(0x01020304)))), Imm8(0x05)) =>
+        "41 80 93 04 03 02 01 05",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseDisp(R12, Disp32(0x01020304)))), Imm8(0x05)) =>
+        "41 80 94 24 04 03 02 01 05",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseDisp(R13, Disp32(0x01020304)))), Imm8(0x05)) =>
+        "41 80 95 04 03 02 01 05",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseDisp(R14, Disp32(0x01020304)))), Imm8(0x05)) =>
+        "41 80 96 04 03 02 01 05",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseDisp(R15, Disp32(0x01020304)))), Imm8(0x05)) =>
+        "41 80 97 04 03 02 01 05",
 
-    Adc::Rm8Imm8(
-        Rm8::Mem8(Memory::Offset64(None, Offset::Base(Reg64::Rax))),
-        Imm8(0x01),
-    ) => "80 10 01",
-    Adc::Rm8Imm8(
-        Rm8::Mem8(Memory::Offset64(None, Offset::Base(Reg64::Rcx))),
-        Imm8(0x01),
-    ) => "80 11 01",
-    Adc::Rm8Imm8(
-        Rm8::Mem8(Memory::Offset64(None, Offset::Base(Reg64::Rdx))),
-        Imm8(0x01),
-    ) => "80 12 01",
-    Adc::Rm8Imm8(
-        Rm8::Mem8(Memory::Offset64(None, Offset::Base(Reg64::Rbx))),
-        Imm8(0x01),
-    ) => "80 13 01",
-    Adc::Rm8Imm8(
-        Rm8::Mem8(Memory::Offset64(None, Offset::Base(Reg64::Rsp))),
-        Imm8(0x01),
-    ) => "80 14 24 01",
-    Adc::Rm8Imm8(
-        Rm8::Mem8(Memory::Offset64(None, Offset::Base(Reg64::Rbp))),
-        Imm8(0x01),
-    ) => "80 55 00 01",
-    Adc::Rm8Imm8(
-        Rm8::Mem8(Memory::Offset64(None, Offset::Base(Reg64::Rsi))),
-        Imm8(0x01),
-    ) => "80 16 01",
-    Adc::Rm8Imm8(
-        Rm8::Mem8(Memory::Offset64(None, Offset::Base(Reg64::Rdi))),
-        Imm8(0x01),
-    ) => "80 17 01",
-    Adc::Rm8Imm8(
-        Rm8::Mex8(Memory::Offset64(None, Offset::Base(Rex64::R8))),
-        Imm8(0x01),
-    ) => "41 80 10 01",
-    Adc::Rm8Imm8(
-        Rm8::Mex8(Memory::Offset64(None, Offset::Base(Rex64::R9))),
-        Imm8(0x01),
-    ) => "41 80 11 01",
-    Adc::Rm8Imm8(
-        Rm8::Mex8(Memory::Offset64(None, Offset::Base(Rex64::R10))),
-        Imm8(0x01),
-    ) => "41 80 12 01",
-    Adc::Rm8Imm8(
-        Rm8::Mex8(Memory::Offset64(None, Offset::Base(Rex64::R11))),
-        Imm8(0x01),
-    ) => "41 80 13 01",
-    Adc::Rm8Imm8(
-        Rm8::Mex8(Memory::Offset64(None, Offset::Base(Rex64::R12))),
-        Imm8(0x01),
-    ) => "41 80 14 24 01",
-    Adc::Rm8Imm8(
-        Rm8::Mex8(Memory::Offset64(None, Offset::Base(Rex64::R13))),
-        Imm8(0x01),
-    ) => "41 80 55 00 01",
-    Adc::Rm8Imm8(
-        Rm8::Mex8(Memory::Offset64(None, Offset::Base(Rex64::R14))),
-        Imm8(0x01),
-    ) => "41 80 16 01",
-    Adc::Rm8Imm8(
-        Rm8::Mex8(Memory::Offset64(None, Offset::Base(Rex64::R15))),
-        Imm8(0x01),
-    ) => "41 80 17 01",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseIndex(Rax, Index64::Rax, X1))), Imm8(0x01)) =>
+        "80 14 00 01",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseIndex(Rcx, Index64::Rax, X1))), Imm8(0x01)) =>
+        "80 14 01 01",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseIndex(Rdx, Index64::Rax, X1))), Imm8(0x01)) =>
+        "80 14 02 01",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseIndex(Rbx, Index64::Rax, X1))), Imm8(0x01)) =>
+        "80 14 03 01",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseIndex(Rsp, Index64::Rax, X1))), Imm8(0x01)) =>
+        "80 14 04 01",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseIndex(Rbp, Index64::Rax, X1))), Imm8(0x01)) =>
+        "80 54 05 00 01",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseIndex(Rsi, Index64::Rax, X1))), Imm8(0x01)) =>
+        "80 14 06 01",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseIndex(Rdi, Index64::Rax, X1))), Imm8(0x01)) =>
+        "80 14 07 01",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseIndex(R8, Index64::Rax, X1))), Imm8(0x01)) =>
+        "41 80 14 00 01",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseIndex(R9, Index64::Rax, X1))), Imm8(0x01)) =>
+        "41 80 14 01 01",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseIndex(R10, Index64::Rax, X1))), Imm8(0x01)) =>
+        "41 80 14 02 01",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseIndex(R11, Index64::Rax, X1))), Imm8(0x01)) =>
+        "41 80 14 03 01",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseIndex(R12, Index64::Rax, X1))), Imm8(0x01)) =>
+        "41 80 14 04 01",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseIndex(R13, Index64::Rax, X1))), Imm8(0x01)) =>
+        "41 80 54 05 00 01",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseIndex(R14, Index64::Rax, X1))), Imm8(0x01)) =>
+        "41 80 14 06 01",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseIndex(R15, Index64::Rax, X1))), Imm8(0x01)) =>
+        "41 80 14 07 01",
+
+    Adc::Rm8Imm8(M8(Offset64(None, BaseIndex(Rax, Index64::Rcx, X1))), Imm8(0x01)) =>
+        "80 14 08 01",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseIndex(Rax, Index64::Rdx, X1))), Imm8(0x01)) =>
+        "80 14 10 01",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseIndex(Rax, Index64::Rbx, X1))), Imm8(0x01)) =>
+        "80 14 18 01",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseIndex(Rax, Index64::Rbp, X1))), Imm8(0x01)) =>
+        "80 14 28 01",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseIndex(Rax, Index64::Rsi, X1))), Imm8(0x01)) =>
+        "80 14 30 01",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseIndex(Rax, Index64::Rdi, X1))), Imm8(0x01)) =>
+        "80 14 38 01",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseIndex(Rax, Index64::R8, X1))), Imm8(0x01)) =>
+        "42 80 14 00 01",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseIndex(Rax, Index64::R9, X1))), Imm8(0x01)) =>
+        "42 80 14 08 01",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseIndex(Rax, Index64::R10, X1))), Imm8(0x01)) =>
+        "42 80 14 10 01",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseIndex(Rax, Index64::R11, X1))), Imm8(0x01)) =>
+        "42 80 14 18 01",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseIndex(Rax, Index64::R12, X1))), Imm8(0x01)) =>
+        "42 80 14 20 01",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseIndex(Rax, Index64::R13, X1))), Imm8(0x01)) =>
+        "42 80 14 28 01",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseIndex(Rax, Index64::R14, X1))), Imm8(0x01)) =>
+        "42 80 14 30 01",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseIndex(Rax, Index64::R15, X1))), Imm8(0x01)) =>
+        "42 80 14 38 01",
+
+    Adc::Rm8Imm8(M8(Offset64(None, BaseIndex(Rax, Index64::Rax, X2))), Imm8(0x01)) =>
+        "80 14 40 01",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseIndex(Rax, Index64::Rax, X4))), Imm8(0x01)) =>
+        "80 14 80 01",
+    Adc::Rm8Imm8(M8(Offset64(None, BaseIndex(Rax, Index64::Rax, X8))), Imm8(0x01)) =>
+        "80 14 c0 01",
 
     Adc::Rm8Imm8(
-        Rm8::Mem8(Memory::Offset64(None, Offset::BaseDisp(Reg64::Rax, Disp::Disp8(0x01)))),
-        Imm8(0x02),
-    ) => "80 50 01 02",
-    Adc::Rm8Imm8(
-        Rm8::Mem8(Memory::Offset64(None, Offset::BaseDisp(Reg64::Rcx, Disp::Disp8(0x01)))),
-        Imm8(0x02),
-    ) => "80 51 01 02",
-    Adc::Rm8Imm8(
-        Rm8::Mem8(Memory::Offset64(None, Offset::BaseDisp(Reg64::Rdx, Disp::Disp8(0x01)))),
-        Imm8(0x02),
-    ) => "80 52 01 02",
-    Adc::Rm8Imm8(
-        Rm8::Mem8(Memory::Offset64(None, Offset::BaseDisp(Reg64::Rbx, Disp::Disp8(0x01)))),
-        Imm8(0x02),
-    ) => "80 53 01 02",
-    Adc::Rm8Imm8(
-        Rm8::Mem8(Memory::Offset64(None, Offset::BaseDisp(Reg64::Rsp, Disp::Disp8(0x01)))),
-        Imm8(0x02),
-    ) => "80 54 24 01 02",
-    Adc::Rm8Imm8(
-        Rm8::Mem8(Memory::Offset64(None, Offset::BaseDisp(Reg64::Rbp, Disp::Disp8(0x01)))),
-        Imm8(0x02),
-    ) => "80 55 01 02",
-    Adc::Rm8Imm8(
-        Rm8::Mem8(Memory::Offset64(None, Offset::BaseDisp(Reg64::Rsi, Disp::Disp8(0x01)))),
-        Imm8(0x02),
-    ) => "80 56 01 02",
-    Adc::Rm8Imm8(
-        Rm8::Mem8(Memory::Offset64(None, Offset::BaseDisp(Reg64::Rdi, Disp::Disp8(0x01)))),
-        Imm8(0x02),
-    ) => "80 57 01 02",
-    Adc::Rm8Imm8(
-        Rm8::Mex8(Memory::Offset64(None, Offset::BaseDisp(Rex64::R8, Disp::Disp8(0x01)))),
-        Imm8(0x02),
-    ) => "41 80 50 01 02",
-    Adc::Rm8Imm8(
-        Rm8::Mex8(Memory::Offset64(None, Offset::BaseDisp(Rex64::R9, Disp::Disp8(0x01)))),
-        Imm8(0x02),
-    ) => "41 80 51 01 02",
-    Adc::Rm8Imm8(
-        Rm8::Mex8(Memory::Offset64(None, Offset::BaseDisp(Rex64::R10, Disp::Disp8(0x01)))),
-        Imm8(0x02),
-    ) => "41 80 52 01 02",
-    Adc::Rm8Imm8(
-        Rm8::Mex8(Memory::Offset64(None, Offset::BaseDisp(Rex64::R11, Disp::Disp8(0x01)))),
-        Imm8(0x02),
-    ) => "41 80 53 01 02",
-    Adc::Rm8Imm8(
-        Rm8::Mex8(Memory::Offset64(None, Offset::BaseDisp(Rex64::R12, Disp::Disp8(0x01)))),
-        Imm8(0x02),
-    ) => "41 80 54 24 01 02",
-    Adc::Rm8Imm8(
-        Rm8::Mex8(Memory::Offset64(None, Offset::BaseDisp(Rex64::R13, Disp::Disp8(0x01)))),
-        Imm8(0x02),
-    ) => "41 80 55 01 02",
-    Adc::Rm8Imm8(
-        Rm8::Mex8(Memory::Offset64(None, Offset::BaseDisp(Rex64::R14, Disp::Disp8(0x01)))),
-        Imm8(0x02),
-    ) => "41 80 56 01 02",
-    Adc::Rm8Imm8(
-        Rm8::Mex8(Memory::Offset64(None, Offset::BaseDisp(Rex64::R15, Disp::Disp8(0x01)))),
-        Imm8(0x02),
-    ) => "41 80 57 01 02",
-
-    Adc::Rm8Imm8(
-        Rm8::Mem8(Memory::Offset64(None, Offset::BaseDisp(Reg64::Rax, Disp::Disp32(0x01020304)))),
-        Imm8(0x05),
-    ) => "80 90 04 03 02 01 05",
-    Adc::Rm8Imm8(
-        Rm8::Mem8(Memory::Offset64(None, Offset::BaseDisp(Reg64::Rcx, Disp::Disp32(0x01020304)))),
-        Imm8(0x05),
-    ) => "80 91 04 03 02 01 05",
-    Adc::Rm8Imm8(
-        Rm8::Mem8(Memory::Offset64(None, Offset::BaseDisp(Reg64::Rdx, Disp::Disp32(0x01020304)))),
-        Imm8(0x05),
-    ) => "80 92 04 03 02 01 05",
-    Adc::Rm8Imm8(
-        Rm8::Mem8(Memory::Offset64(None, Offset::BaseDisp(Reg64::Rbx, Disp::Disp32(0x01020304)))),
-        Imm8(0x05),
-    ) => "80 93 04 03 02 01 05",
-    Adc::Rm8Imm8(
-        Rm8::Mem8(Memory::Offset64(None, Offset::BaseDisp(Reg64::Rsp, Disp::Disp32(0x01020304)))),
-        Imm8(0x05),
-    ) => "80 94 24 04 03 02 01 05",
-    Adc::Rm8Imm8(
-        Rm8::Mem8(Memory::Offset64(None, Offset::BaseDisp(Reg64::Rbp, Disp::Disp32(0x01020304)))),
-        Imm8(0x05),
-    ) => "80 95 04 03 02 01 05",
-    Adc::Rm8Imm8(
-        Rm8::Mem8(Memory::Offset64(None, Offset::BaseDisp(Reg64::Rsi, Disp::Disp32(0x01020304)))),
-        Imm8(0x05),
-    ) => "80 96 04 03 02 01 05",
-    Adc::Rm8Imm8(
-        Rm8::Mem8(Memory::Offset64(None, Offset::BaseDisp(Reg64::Rdi, Disp::Disp32(0x01020304)))),
-        Imm8(0x05),
-    ) => "80 97 04 03 02 01 05",
-    Adc::Rm8Imm8(
-        Rm8::Mex8(Memory::Offset64(None, Offset::BaseDisp(Rex64::R8, Disp::Disp32(0x01020304)))),
-        Imm8(0x05),
-    ) => "41 80 90 04 03 02 01 05",
-    Adc::Rm8Imm8(
-        Rm8::Mex8(Memory::Offset64(None, Offset::BaseDisp(Rex64::R9, Disp::Disp32(0x01020304)))),
-        Imm8(0x05),
-    ) => "41 80 91 04 03 02 01 05",
-    Adc::Rm8Imm8(
-        Rm8::Mex8(Memory::Offset64(None, Offset::BaseDisp(Rex64::R10, Disp::Disp32(0x01020304)))),
-        Imm8(0x05),
-    ) => "41 80 92 04 03 02 01 05",
-    Adc::Rm8Imm8(
-        Rm8::Mex8(Memory::Offset64(None, Offset::BaseDisp(Rex64::R11, Disp::Disp32(0x01020304)))),
-        Imm8(0x05),
-    ) => "41 80 93 04 03 02 01 05",
-    Adc::Rm8Imm8(
-        Rm8::Mex8(Memory::Offset64(None, Offset::BaseDisp(Rex64::R12, Disp::Disp32(0x01020304)))),
-        Imm8(0x05),
-    ) => "41 80 94 24 04 03 02 01 05",
-    Adc::Rm8Imm8(
-        Rm8::Mex8(Memory::Offset64(None, Offset::BaseDisp(Rex64::R13, Disp::Disp32(0x01020304)))),
-        Imm8(0x05),
-    ) => "41 80 95 04 03 02 01 05",
-    Adc::Rm8Imm8(
-        Rm8::Mex8(Memory::Offset64(None, Offset::BaseDisp(Rex64::R14, Disp::Disp32(0x01020304)))),
-        Imm8(0x05),
-    ) => "41 80 96 04 03 02 01 05",
-    Adc::Rm8Imm8(
-        Rm8::Mex8(Memory::Offset64(None, Offset::BaseDisp(Rex64::R15, Disp::Disp32(0x01020304)))),
-        Imm8(0x05),
-    ) => "41 80 97 04 03 02 01 05",
-
-    Adc::Rm8Imm8(
-        Rm8::Mem8(
-            Memory::Offset64(None, Offset::BaseIndex(Reg64::Rax, IndexReg64::Rax, Scale::X1))
-        ),
-        Imm8(0x01),
-    ) => "80 14 00 01",
-    Adc::Rm8Imm8(
-        Rm8::Mem8(
-            Memory::Offset64(None, Offset::BaseIndex(Reg64::Rcx, IndexReg64::Rax, Scale::X1))
-        ),
-        Imm8(0x01),
-    ) => "80 14 01 01",
-    Adc::Rm8Imm8(
-        Rm8::Mem8(
-            Memory::Offset64(None, Offset::BaseIndex(Reg64::Rdx, IndexReg64::Rax, Scale::X1))
-        ),
-        Imm8(0x01),
-    ) => "80 14 02 01",
-    Adc::Rm8Imm8(
-        Rm8::Mem8(
-            Memory::Offset64(None, Offset::BaseIndex(Reg64::Rbx, IndexReg64::Rax, Scale::X1))
-        ),
-        Imm8(0x01),
-    ) => "80 14 03 01",
-    Adc::Rm8Imm8(
-        Rm8::Mem8(
-            Memory::Offset64(None, Offset::BaseIndex(Reg64::Rsp, IndexReg64::Rax, Scale::X1))
-        ),
-        Imm8(0x01),
-    ) => "80 14 04 01",
-    Adc::Rm8Imm8(
-        Rm8::Mem8(
-            Memory::Offset64(None, Offset::BaseIndex(Reg64::Rbp, IndexReg64::Rax, Scale::X1))
-        ),
-        Imm8(0x01),
-    ) => "80 54 05 00 01",
-    Adc::Rm8Imm8(
-        Rm8::Mem8(
-            Memory::Offset64(None, Offset::BaseIndex(Reg64::Rsi, IndexReg64::Rax, Scale::X1))
-        ),
-        Imm8(0x01),
-    ) => "80 14 06 01",
-    Adc::Rm8Imm8(
-        Rm8::Mem8(
-            Memory::Offset64(None, Offset::BaseIndex(Reg64::Rdi, IndexReg64::Rax, Scale::X1))
-        ),
-        Imm8(0x01),
-    ) => "80 14 07 01",
-    Adc::Rm8Imm8(
-        Rm8::Mex8(
-            Memory::Offset64(None, Offset::BaseIndex(Rex64::R8, IndexRex64::R8, Scale::X1))
-        ),
-        Imm8(0x01),
-    ) => "43 80 14 00 01",
-    Adc::Rm8Imm8(
-        Rm8::Mex8(
-            Memory::Offset64(None, Offset::BaseIndex(Rex64::R9, IndexRex64::R8, Scale::X1))
-        ),
-        Imm8(0x01),
-    ) => "43 80 14 01 01",
-    Adc::Rm8Imm8(
-        Rm8::Mex8(
-            Memory::Offset64(None, Offset::BaseIndex(Rex64::R10, IndexRex64::R8, Scale::X1))
-        ),
-        Imm8(0x01),
-    ) => "43 80 14 02 01",
-    Adc::Rm8Imm8(
-        Rm8::Mex8(
-            Memory::Offset64(None, Offset::BaseIndex(Rex64::R11, IndexRex64::R8, Scale::X1))
-        ),
-        Imm8(0x01),
-    ) => "43 80 14 03 01",
-    Adc::Rm8Imm8(
-        Rm8::Mex8(
-            Memory::Offset64(None, Offset::BaseIndex(Rex64::R12, IndexRex64::R8, Scale::X1))
-        ),
-        Imm8(0x01),
-    ) => "43 80 14 04 01",
-    Adc::Rm8Imm8(
-        Rm8::Mex8(
-            Memory::Offset64(None, Offset::BaseIndex(Rex64::R13, IndexRex64::R8, Scale::X1))
-        ),
-        Imm8(0x01),
-    ) => "43 80 54 05 00 01",
-    Adc::Rm8Imm8(
-        Rm8::Mex8(
-            Memory::Offset64(None, Offset::BaseIndex(Rex64::R14, IndexRex64::R8, Scale::X1))
-        ),
-        Imm8(0x01),
-    ) => "43 80 14 06 01",
-    Adc::Rm8Imm8(
-        Rm8::Mex8(
-            Memory::Offset64(None, Offset::BaseIndex(Rex64::R15, IndexRex64::R8, Scale::X1))
-        ),
-        Imm8(0x01),
-    ) => "43 80 14 07 01",
-
-    Adc::Rm8Imm8(
-        Rm8::Mem8(
-            Memory::Offset64(
-                None,
-                Offset::BaseIndexDisp(Reg64::Rax, IndexReg64::Rax, Scale::X1, Disp::Disp8(0x01)),
-            ),
-        ),
+        M8(Offset64(None, BaseIndexDisp(Rax, Index64::Rax, X1, Disp8(0x01)))),
         Imm8(0x02),
     ) => "80 54 00 01 02",
     Adc::Rm8Imm8(
-        Rm8::Mex8(
-            Memory::Offset64(
-                None,
-                Offset::BaseIndexDisp(Rex64::R8, IndexRex64::R8, Scale::X1, Disp::Disp8(0x01)),
-            ),
-        ),
-        Imm8(0x02),
-    ) => "43 80 54 00 01 02",
-    Adc::Rm8Imm8(
-        Rm8::Mem8(
-            Memory::Offset64(
-                None,
-                Offset::BaseIndexDisp(
-                    Reg64::Rax,
-                    IndexReg64::Rax,
-                    Scale::X1,
-                    Disp::Disp32(0x01020304),
-                ),
-            ),
-        ),
+        M8(Offset64(None, BaseIndexDisp(Rax, Index64::Rax, X1, Disp32(0x01020304)))),
         Imm8(0x05),
     ) => "80 94 00 04 03 02 01 05",
-    Adc::Rm8Imm8(
-        Rm8::Mex8(
-            Memory::Offset64(
-                None,
-                Offset::BaseIndexDisp(
-                    Rex64::R8,
-                    IndexRex64::R8,
-                    Scale::X1,
-                    Disp::Disp32(0x01020304),
-                ),
-            ),
-        ),
-        Imm8(0x05),
-    ) => "43 80 94 00 04 03 02 01 05",
 
-    Adc::Rm8Imm8(
-        Rm8::Mem8(Memory::Offset64(None, Offset::RipDisp(0x01020304))),
-        Imm8(0x05),
-    ) => "80 15 04 03 02 01 05",
+    Adc::Rm8Imm8(M8(Offset64(None, Index(Index64::Rax, X1))), Imm8(0x01)) =>
+        "80 14 05 00 00 00 00 01",
 
-    Adc::Rm8Imm8(
-        Rm8::Mem8(Memory::Offset32(None, Offset::Base(Reg32::Eax))),
-        Imm8(0x01),
-    ) => "67 80 10 01",
-    Adc::Rm8Imm8(
-        Rm8::Mex8(Memory::Offset32(None, Offset::Base(Rex32::R8d))),
-        Imm8(0x01),
-    ) => "67 41 80 10 01",
-    Adc::Rm8Imm8(
-        Rm8::Mem8(Memory::Offset32(Some(Sreg::Cs), Offset::Base(Reg32::Eax))),
-        Imm8(0x01),
-    ) => "2e 67 80 10 01",
-    Adc::Rm8Imm8(
-        Rm8::Mex8(Memory::Offset32(Some(Sreg::Cs), Offset::Base(Rex32::R8d))),
-        Imm8(0x01),
-    ) => "2e 67 41 80 10 01",
+    Adc::Rm8Imm8(M8(Offset64(None, IndexDisp(Index64::Rax, X1, 0x01020304))), Imm8(0x05)) =>
+        "80 14 05 04 03 02 01 05",
 
-    Adc::Rm16Imm16(Rm16::Reg16(Reg16::Cx), Imm16(0x0102)) => "66 81 d1 02 01",
-    Adc::Rm32Imm32(Rm32::Reg32(Reg32::Ecx), Imm32(0x01020304)) => "81 d1 04 03 02 01",
-    Adc::Rm64Imm32(Rm64::Rex64(Rex64::Rcx), Imm32(0x01020304)) => "48 81 d1 04 03 02 01",
+    Adc::Rm8Imm8(M8(Offset64(None, Disp(0x01020304))), Imm8(0x05)) => "80 14 25 04 03 02 01 05",
 
-    Adc::Rm16Imm8(Rm16::Reg16(Reg16::Cx), Imm8(0x01)) => "66 83 d1 01",
-    Adc::Rm32Imm8(Rm32::Reg32(Reg32::Ecx), Imm8(0x01)) => "83 d1 01",
-    Adc::Rm64Imm8(Rm64::Rex64(Rex64::Rcx), Imm8(0x01)) => "48 83 d1 01",
+    Adc::Rm8Imm8(M8(Offset64(None, RipDisp(0x01020304))), Imm8(0x05)) => "80 15 04 03 02 01 05",
 
-    Adc::Rm8R8(Rm8R8::Reg8Reg8(Reg8::Cl, Reg8::Dl)) => "10 d1",
-    Adc::Rm16R16(Rm16R16::Reg16Reg16(Reg16::Cx, Reg16::Dx)) => "66 11 d1",
-    Adc::Rm32R32(Rm32R32::Reg32Reg32(Reg32::Ecx, Reg32::Edx)) => "11 d1",
-    Adc::Rm64R64(Rm64R64::Rex64Rex64(Rex64::Rcx, Rex64::Rdx)) => "48 11 d1",
+    Adc::Rm8Imm8(M8(Offset32(None, RipDisp(0x01020304))), Imm8(0x05)) => "67 80 15 04 03 02 01 05",
 
-    Adc::R8Rm8(R8Rm8::Reg8Reg8(Reg8::Cl, Reg8::Dl)) => "12 ca",
-    Adc::R16Rm16(R16Rm16::Reg16Reg16(Reg16::Cx, Reg16::Dx)) => "66 13 ca",
-    Adc::R32Rm32(R32Rm32::Reg32Reg32(Reg32::Ecx, Reg32::Edx)) => "13 ca",
-    Adc::R64Rm64(R64Rm64::Rex64Rex64(Rex64::Rcx, Rex64::Rdx)) => "48 13 ca",
+    Adc::Rm16Imm16(R16(Cx), Imm16(0x0102)) => "66 81 d1 02 01",
+    Adc::Rm32Imm32(R32(Ecx), Imm32(0x01020304)) => "81 d1 04 03 02 01",
+    Adc::Rm64Imm32(R64(Rcx), Imm32(0x01020304)) => "48 81 d1 04 03 02 01",
+
+    Adc::Rm16Imm8(R16(Cx), Imm8(0x01)) => "66 83 d1 01",
+    Adc::Rm32Imm8(R32(Ecx), Imm8(0x01)) => "83 d1 01",
+    Adc::Rm64Imm8(R64(Rcx), Imm8(0x01)) => "48 83 d1 01",
+
+    Adc::Rm8LR8L(Rm8L::R8L(R8L::Al), R8L::Cl) => "10 c8",
+    Adc::Rm8R8(Rm8::R8(Al), Cl) => "10 c8",
+    Adc::Rm16R16(R16(Ax), Cx) => "66 11 c8",
+    Adc::Rm32R32(R32(Eax), Ecx) => "11 c8",
+    Adc::Rm64R64(R64(Rax), Rcx) => "48 11 c8",
+
+    Adc::R8LRm8L(R8L::Cl, Rm8L::R8L(R8L::Al)) => "12 c8",
+    Adc::R8Rm8(Cl, Rm8::R8(Al)) => "12 c8",
+    Adc::R16Rm16(Cx, R16(Ax)) => "66 13 c8",
+    Adc::R32Rm32(Ecx, R32(Eax)) => "13 c8",
+    Adc::R64Rm64(Rcx, R64(Rax)) => "48 13 c8",
 }

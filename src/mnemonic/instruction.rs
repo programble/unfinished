@@ -7,6 +7,7 @@ pub enum Adc {
     EaxImm32(Imm32),
     RaxImm32(Imm32),
 
+    Rm8LImm8(Rm8L, Imm8),
     Rm8Imm8(Rm8, Imm8),
     Rm16Imm16(Rm16, Imm16),
     Rm32Imm32(Rm32, Imm32),
@@ -16,21 +17,23 @@ pub enum Adc {
     Rm32Imm8(Rm32, Imm8),
     Rm64Imm8(Rm64, Imm8),
 
-    Rm8R8(Rm8R8),
-    Rm16R16(Rm16R16),
-    Rm32R32(Rm32R32),
-    Rm64R64(Rm64R64),
+    Rm8LR8L(Rm8L, R8L),
+    Rm8R8(Rm8, R8),
+    Rm16R16(Rm16, R16),
+    Rm32R32(Rm32, R32),
+    Rm64R64(Rm64, R64),
 
-    R8Rm8(R8Rm8),
-    R16Rm16(R16Rm16),
-    R32Rm32(R32Rm32),
-    R64Rm64(R64Rm64),
+    R8LRm8L(R8L, Rm8L),
+    R8Rm8(R8, Rm8),
+    R16Rm16(R16, Rm16),
+    R32Rm32(R32, Rm32),
+    R64Rm64(R64, Rm64),
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Adcx {
-    R32Rm32(R32Rm32),
-    R64Rm64(R64Rm64),
+    R32Rm32(R32, Rm32),
+    R64Rm64(R64, Rm64),
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -40,6 +43,7 @@ pub enum Add {
     EaxImm32(Imm32),
     RaxImm32(Imm32),
 
+    Rm8LImm8(Rm8L, Imm8),
     Rm8Imm8(Rm8, Imm8),
     Rm16Imm16(Rm16, Imm16),
     Rm32Imm32(Rm32, Imm32),
@@ -49,13 +53,15 @@ pub enum Add {
     Rm32Imm8(Rm32, Imm8),
     Rm64Imm8(Rm64, Imm8),
 
-    Rm8R8(Rm8R8),
-    Rm16R16(Rm16R16),
-    Rm32R32(Rm32R32),
-    Rm64R64(Rm64R64),
+    Rm8LR8L(Rm8L, R8L),
+    Rm8R8(Rm8, R8),
+    Rm16R16(Rm16, R16),
+    Rm32R32(Rm32, R32),
+    Rm64R64(Rm64, R64),
 
-    R8Rm8(R8Rm8),
-    R16Rm16(R16Rm16),
-    R32Rm32(R32Rm32),
-    R64Rm64(R64Rm64),
+    R8LRm8L(R8L, Rm8L),
+    R8Rm8(R8, Rm8),
+    R16Rm16(R16, Rm16),
+    R32Rm32(R32, Rm32),
+    R64Rm64(R64, Rm64),
 }
