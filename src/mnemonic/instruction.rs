@@ -166,3 +166,36 @@ pub enum Bt {
     Rm32Imm8(Rm32, Imm8),
     Rm64Imm8(Rm64, Imm8),
 }
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Btc {
+    Rm16R16(Rm16, R16),
+    Rm32R32(Rm32, R32),
+    Rm64R64(Rm64, R64),
+
+    Rm16Imm8(Rm16, Imm8),
+    Rm32Imm8(Rm32, Imm8),
+    Rm64Imm8(Rm64, Imm8),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Btr {
+    Rm16R16(Rm16, R16),
+    Rm32R32(Rm32, R32),
+    Rm64R64(Rm64, R64),
+
+    Rm16Imm8(Rm16, Imm8),
+    Rm32Imm8(Rm32, Imm8),
+    Rm64Imm8(Rm64, Imm8),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Bts {
+    Rm16R16(Rm16, R16),
+    Rm32R32(Rm32, R32),
+    Rm64R64(Rm64, R64),
+
+    Rm16Imm8(Rm16, Imm8),
+    Rm32Imm8(Rm32, Imm8),
+    Rm64Imm8(Rm64, Imm8),
+}

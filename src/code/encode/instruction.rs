@@ -169,3 +169,48 @@ impl Encode for Bt {
         }
     }
 }
+
+impl Encode for Btc {
+    fn encode(&self) -> Instruction {
+        use self::Btc::*;
+        match *self {
+            Rm16R16(rm, r) => Instruction::opcode2(0xbb).rm16(rm).reg(r).oper16(),
+            Rm32R32(rm, r) => Instruction::opcode2(0xbb).rm32(rm).reg(r),
+            Rm64R64(rm, r) => Instruction::opcode2(0xbb).rm64(rm).reg(r).rex_w(),
+
+            Rm16Imm8(rm, imm) => Instruction::opcode2(0xba).reg(7).rm16(rm).imm8(imm).oper16(),
+            Rm32Imm8(rm, imm) => Instruction::opcode2(0xba).reg(7).rm32(rm).imm8(imm),
+            Rm64Imm8(rm, imm) => Instruction::opcode2(0xba).reg(7).rm64(rm).imm8(imm).rex_w(),
+        }
+    }
+}
+
+impl Encode for Btr {
+    fn encode(&self) -> Instruction {
+        use self::Btr::*;
+        match *self {
+            Rm16R16(rm, r) => Instruction::opcode2(0xb3).rm16(rm).reg(r).oper16(),
+            Rm32R32(rm, r) => Instruction::opcode2(0xb3).rm32(rm).reg(r),
+            Rm64R64(rm, r) => Instruction::opcode2(0xb3).rm64(rm).reg(r).rex_w(),
+
+            Rm16Imm8(rm, imm) => Instruction::opcode2(0xba).reg(6).rm16(rm).imm8(imm).oper16(),
+            Rm32Imm8(rm, imm) => Instruction::opcode2(0xba).reg(6).rm32(rm).imm8(imm),
+            Rm64Imm8(rm, imm) => Instruction::opcode2(0xba).reg(6).rm64(rm).imm8(imm).rex_w(),
+        }
+    }
+}
+
+impl Encode for Bts {
+    fn encode(&self) -> Instruction {
+        use self::Bts::*;
+        match *self {
+            Rm16R16(rm, r) => Instruction::opcode2(0xab).rm16(rm).reg(r).oper16(),
+            Rm32R32(rm, r) => Instruction::opcode2(0xab).rm32(rm).reg(r),
+            Rm64R64(rm, r) => Instruction::opcode2(0xab).rm64(rm).reg(r).rex_w(),
+
+            Rm16Imm8(rm, imm) => Instruction::opcode2(0xba).reg(5).rm16(rm).imm8(imm).oper16(),
+            Rm32Imm8(rm, imm) => Instruction::opcode2(0xba).reg(5).rm32(rm).imm8(imm),
+            Rm64Imm8(rm, imm) => Instruction::opcode2(0xba).reg(5).rm64(rm).imm8(imm).rex_w(),
+        }
+    }
+}

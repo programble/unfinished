@@ -476,3 +476,42 @@ impl Display for Bt {
         }
     }
 }
+
+impl Display for Btc {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Btc::Rm16R16(rm, r)    => write!(f, "btc {}, {}", rm, r),
+            Btc::Rm32R32(rm, r)    => write!(f, "btc {}, {}", rm, r),
+            Btc::Rm64R64(rm, r)    => write!(f, "btc {}, {}", rm, r),
+            Btc::Rm16Imm8(rm, imm) => write!(f, "btc {}, {}", rm, imm),
+            Btc::Rm32Imm8(rm, imm) => write!(f, "btc {}, {}", rm, imm),
+            Btc::Rm64Imm8(rm, imm) => write!(f, "btc {}, {}", rm, imm),
+        }
+    }
+}
+
+impl Display for Btr {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Btr::Rm16R16(rm, r)    => write!(f, "btr {}, {}", rm, r),
+            Btr::Rm32R32(rm, r)    => write!(f, "btr {}, {}", rm, r),
+            Btr::Rm64R64(rm, r)    => write!(f, "btr {}, {}", rm, r),
+            Btr::Rm16Imm8(rm, imm) => write!(f, "btr {}, {}", rm, imm),
+            Btr::Rm32Imm8(rm, imm) => write!(f, "btr {}, {}", rm, imm),
+            Btr::Rm64Imm8(rm, imm) => write!(f, "btr {}, {}", rm, imm),
+        }
+    }
+}
+
+impl Display for Bts {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Bts::Rm16R16(rm, r)    => write!(f, "bts {}, {}", rm, r),
+            Bts::Rm32R32(rm, r)    => write!(f, "bts {}, {}", rm, r),
+            Bts::Rm64R64(rm, r)    => write!(f, "bts {}, {}", rm, r),
+            Bts::Rm16Imm8(rm, imm) => write!(f, "bts {}, {}", rm, imm),
+            Bts::Rm32Imm8(rm, imm) => write!(f, "bts {}, {}", rm, imm),
+            Bts::Rm64Imm8(rm, imm) => write!(f, "bts {}, {}", rm, imm),
+        }
+    }
+}
