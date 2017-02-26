@@ -39,10 +39,8 @@ impl Encode for Adcx {
     fn encode(&self) -> Instruction {
         use self::Adcx::*;
         match *self {
-            R32Rm32(r, rm) =>
-                Instruction::opcode3(0x0f, 0x38, 0xf6).oper16().reg(r).rm32(rm),
-            R64Rm64(r, rm) =>
-                Instruction::opcode3(0x0f, 0x38, 0xf6).oper16().reg(r).rm64(rm).rex_w(),
+            R32Rm32(r, rm) => Instruction::opcode3(0x38, 0xf6).oper16().reg(r).rm32(rm),
+            R64Rm64(r, rm) => Instruction::opcode3(0x38, 0xf6).oper16().reg(r).rm64(rm).rex_w(),
         }
     }
 }
@@ -85,10 +83,8 @@ impl Encode for Adox {
     fn encode(&self) -> Instruction {
         use self::Adox::*;
         match *self {
-            R32Rm32(r, rm) =>
-                Instruction::opcode3(0x0f, 0x38, 0xf6).rep().reg(r).rm32(rm),
-            R64Rm64(r, rm) =>
-                Instruction::opcode3(0x0f, 0x38, 0xf6).rep().reg(r).rm64(rm).rex_w(),
+            R32Rm32(r, rm) => Instruction::opcode3(0x38, 0xf6).rep().reg(r).rm32(rm),
+            R64Rm64(r, rm) => Instruction::opcode3(0x38, 0xf6).rep().reg(r).rm64(rm).rex_w(),
         }
     }
 }
@@ -131,9 +127,9 @@ impl Encode for Bsf {
     fn encode(&self) -> Instruction {
         use self::Bsf::*;
         match *self {
-            R16Rm16(r, rm) => Instruction::opcode2(0x0f, 0xbc).reg(r).rm16(rm).oper16(),
-            R32Rm32(r, rm) => Instruction::opcode2(0x0f, 0xbc).reg(r).rm32(rm),
-            R64Rm64(r, rm) => Instruction::opcode2(0x0f, 0xbc).reg(r).rm64(rm).rex_w(),
+            R16Rm16(r, rm) => Instruction::opcode2(0xbc).reg(r).rm16(rm).oper16(),
+            R32Rm32(r, rm) => Instruction::opcode2(0xbc).reg(r).rm32(rm),
+            R64Rm64(r, rm) => Instruction::opcode2(0xbc).reg(r).rm64(rm).rex_w(),
         }
     }
 }
@@ -142,9 +138,9 @@ impl Encode for Bsr {
     fn encode(&self) -> Instruction {
         use self::Bsr::*;
         match *self {
-            R16Rm16(r, rm) => Instruction::opcode2(0x0f, 0xbd).reg(r).rm16(rm).oper16(),
-            R32Rm32(r, rm) => Instruction::opcode2(0x0f, 0xbd).reg(r).rm32(rm),
-            R64Rm64(r, rm) => Instruction::opcode2(0x0f, 0xbd).reg(r).rm64(rm).rex_w(),
+            R16Rm16(r, rm) => Instruction::opcode2(0xbd).reg(r).rm16(rm).oper16(),
+            R32Rm32(r, rm) => Instruction::opcode2(0xbd).reg(r).rm32(rm),
+            R64Rm64(r, rm) => Instruction::opcode2(0xbd).reg(r).rm64(rm).rex_w(),
         }
     }
 }
@@ -153,8 +149,8 @@ impl Encode for Bswap {
     fn encode(&self) -> Instruction {
         use self::Bswap::*;
         match *self {
-            R32(r) => Instruction::opcode2(0x0f, 0xc8).plus(r),
-            R64(r) => Instruction::opcode2(0x0f, 0xc8).plus(r).rex_w(),
+            R32(r) => Instruction::opcode2(0xc8).plus(r),
+            R64(r) => Instruction::opcode2(0xc8).plus(r).rex_w(),
         }
     }
 }
