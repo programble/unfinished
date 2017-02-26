@@ -1,5 +1,5 @@
 use code::{Encode, Instruction};
-use mnemonic::instruction::Adc;
+use mnemonic::instruction::{Adc, Adcx, Add};
 
 impl Encode for Adc {
     fn encode(&self) -> Instruction {
@@ -31,6 +31,52 @@ impl Encode for Adc {
             R16Rm16(r, rm) => Instruction::opcode1(0x13).reg(r).rm16(rm).oper16(),
             R32Rm32(r, rm) => Instruction::opcode1(0x13).reg(r).rm32(rm),
             R64Rm64(r, rm) => Instruction::opcode1(0x13).reg(r).rm64(rm).rex_w(),
+        }
+    }
+}
+
+impl Encode for Adcx {
+    fn encode(&self) -> Instruction {
+        use self::Adcx::*;
+        match *self {
+            R32Rm32(r, rm) =>
+                Instruction::opcode3(0x0f, 0x38, 0xf6).reg(r).rm32(rm).oper16(),
+            R64Rm64(r, rm) =>
+                Instruction::opcode3(0x0f, 0x38, 0xf6).reg(r).rm64(rm).oper16().rex_w(),
+        }
+    }
+}
+
+impl Encode for Add {
+    fn encode(&self) -> Instruction {
+        use self::Add::*;
+        match *self {
+            AlImm8(imm)   => Instruction::opcode1(0x04).imm8(imm),
+            AxImm16(imm)  => Instruction::opcode1(0x05).imm16(imm).oper16(),
+            EaxImm32(imm) => Instruction::opcode1(0x05).imm32(imm),
+            RaxImm32(imm) => Instruction::opcode1(0x05).imm32(imm).rex_w(),
+
+            Rm8LImm8(rm, imm)  => Instruction::opcode1(0x80).reg(0).rm8l(rm).imm8(imm),
+            Rm8Imm8(rm, imm)   => Instruction::opcode1(0x80).reg(0).rm8(rm).imm8(imm),
+            Rm16Imm16(rm, imm) => Instruction::opcode1(0x81).reg(0).rm16(rm).imm16(imm).oper16(),
+            Rm32Imm32(rm, imm) => Instruction::opcode1(0x81).reg(0).rm32(rm).imm32(imm),
+            Rm64Imm32(rm, imm) => Instruction::opcode1(0x81).reg(0).rm64(rm).imm32(imm).rex_w(),
+
+            Rm16Imm8(rm, imm) => Instruction::opcode1(0x83).reg(0).rm16(rm).imm8(imm).oper16(),
+            Rm32Imm8(rm, imm) => Instruction::opcode1(0x83).reg(0).rm32(rm).imm8(imm),
+            Rm64Imm8(rm, imm) => Instruction::opcode1(0x83).reg(0).rm64(rm).imm8(imm).rex_w(),
+
+            Rm8LR8L(rm, r) => Instruction::opcode1(0x00).rm8l(rm).reg(r),
+            Rm8R8(rm, r)   => Instruction::opcode1(0x00).rm8(rm).reg(r),
+            Rm16R16(rm, r) => Instruction::opcode1(0x01).rm16(rm).reg(r).oper16(),
+            Rm32R32(rm, r) => Instruction::opcode1(0x01).rm32(rm).reg(r),
+            Rm64R64(rm, r) => Instruction::opcode1(0x01).rm64(rm).reg(r).rex_w(),
+
+            R8LRm8L(r, rm) => Instruction::opcode1(0x02).reg(r).rm8l(rm),
+            R8Rm8(r, rm)   => Instruction::opcode1(0x02).reg(r).rm8(rm),
+            R16Rm16(r, rm) => Instruction::opcode1(0x03).reg(r).rm16(rm).oper16(),
+            R32Rm32(r, rm) => Instruction::opcode1(0x03).reg(r).rm32(rm),
+            R64Rm64(r, rm) => Instruction::opcode1(0x03).reg(r).rm64(rm).rex_w(),
         }
     }
 }

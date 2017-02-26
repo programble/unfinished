@@ -63,9 +63,6 @@ impl Sib {
 }
 
 impl Instruction {
-}
-
-impl Instruction {
     fn opcode1(a: u8) -> Self {
         Instruction {
             prefix1: None,
@@ -74,6 +71,36 @@ impl Instruction {
             prefix4: None,
             rex: None,
             opcode: Opcode::B1([a]),
+            modrm: None,
+            sib: None,
+            disp: None,
+            imm: None,
+        }
+    }
+
+    fn opcode2(a: u8, b: u8) -> Self {
+        Instruction {
+            prefix1: None,
+            prefix2: None,
+            prefix3: None,
+            prefix4: None,
+            rex: None,
+            opcode: Opcode::B2([a, b]),
+            modrm: None,
+            sib: None,
+            disp: None,
+            imm: None,
+        }
+    }
+
+    fn opcode3(a: u8, b: u8, c: u8) -> Self {
+        Instruction {
+            prefix1: None,
+            prefix2: None,
+            prefix3: None,
+            prefix4: None,
+            rex: None,
+            opcode: Opcode::B3([a, b, c]),
             modrm: None,
             sib: None,
             disp: None,
