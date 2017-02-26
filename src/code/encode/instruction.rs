@@ -148,3 +148,13 @@ impl Encode for Bsr {
         }
     }
 }
+
+impl Encode for Bswap {
+    fn encode(&self) -> Instruction {
+        use self::Bswap::*;
+        match *self {
+            R32(r) => Instruction::opcode2(0x0f, 0xc8).plus(r),
+            R64(r) => Instruction::opcode2(0x0f, 0xc8).plus(r).rex_w(),
+        }
+    }
+}

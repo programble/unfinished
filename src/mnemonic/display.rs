@@ -454,3 +454,12 @@ impl Display for Bsr {
         }
     }
 }
+
+impl Display for Bswap {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Bswap::R32(r) => write!(f, "bswap {}", r),
+            Bswap::R64(r) => write!(f, "bswap {}", r),
+        }
+    }
+}

@@ -190,6 +190,18 @@ impl Instruction {
         self
     }
 
+    fn plus<R>(mut self, reg: R) -> Self where R: Register {
+        if reg.force_rex() { self = self.rex() }
+        let (rex, index) = reg.rex_index();
+        if rex { self = self.rex_b() }
+        self.opcode = match self.opcode {
+            Opcode::B1(opcode) => Opcode::B1([opcode[0] + index]),
+            Opcode::B2(opcode) => Opcode::B2([opcode[0], opcode[1] + index]),
+            Opcode::B3(opcode) => Opcode::B3([opcode[0], opcode[1], opcode[2] + index]),
+        };
+        self
+    }
+
     fn reg<R>(mut self, reg: R) -> Self where R: Register {
         if reg.force_rex() { self = self.rex() }
         match reg.rex_index() {

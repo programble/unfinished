@@ -149,3 +149,9 @@ pub enum Bsr {
     R32Rm32(R32, Rm32),
     R64Rm64(R64, Rm64),
 }
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Bswap {
+    R32(R32),
+    R64(R64),
+}
