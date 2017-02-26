@@ -1,5 +1,5 @@
 use code::{Encode, Instruction};
-use mnemonic::instruction::{Adc, Adcx, Add};
+use mnemonic::instruction::*;
 
 impl Encode for Adc {
     fn encode(&self) -> Instruction {
@@ -40,9 +40,9 @@ impl Encode for Adcx {
         use self::Adcx::*;
         match *self {
             R32Rm32(r, rm) =>
-                Instruction::opcode3(0x0f, 0x38, 0xf6).reg(r).rm32(rm).oper16(),
+                Instruction::opcode3(0x0f, 0x38, 0xf6).oper16().reg(r).rm32(rm),
             R64Rm64(r, rm) =>
-                Instruction::opcode3(0x0f, 0x38, 0xf6).reg(r).rm64(rm).oper16().rex_w(),
+                Instruction::opcode3(0x0f, 0x38, 0xf6).oper16().reg(r).rm64(rm).rex_w(),
         }
     }
 }
@@ -77,6 +77,74 @@ impl Encode for Add {
             R16Rm16(r, rm) => Instruction::opcode1(0x03).reg(r).rm16(rm).oper16(),
             R32Rm32(r, rm) => Instruction::opcode1(0x03).reg(r).rm32(rm),
             R64Rm64(r, rm) => Instruction::opcode1(0x03).reg(r).rm64(rm).rex_w(),
+        }
+    }
+}
+
+impl Encode for Adox {
+    fn encode(&self) -> Instruction {
+        use self::Adox::*;
+        match *self {
+            R32Rm32(r, rm) =>
+                Instruction::opcode3(0x0f, 0x38, 0xf6).rep().reg(r).rm32(rm),
+            R64Rm64(r, rm) =>
+                Instruction::opcode3(0x0f, 0x38, 0xf6).rep().reg(r).rm64(rm).rex_w(),
+        }
+    }
+}
+
+impl Encode for And {
+    fn encode(&self) -> Instruction {
+        use self::And::*;
+        match *self {
+            AlImm8(imm)   => Instruction::opcode1(0x24).imm8(imm),
+            AxImm16(imm)  => Instruction::opcode1(0x25).imm16(imm).oper16(),
+            EaxImm32(imm) => Instruction::opcode1(0x25).imm32(imm),
+            RaxImm32(imm) => Instruction::opcode1(0x25).imm32(imm).rex_w(),
+
+            Rm8LImm8(rm, imm)  => Instruction::opcode1(0x80).reg(4).rm8l(rm).imm8(imm),
+            Rm8Imm8(rm, imm)   => Instruction::opcode1(0x80).reg(4).rm8(rm).imm8(imm),
+            Rm16Imm16(rm, imm) => Instruction::opcode1(0x81).reg(4).rm16(rm).imm16(imm).oper16(),
+            Rm32Imm32(rm, imm) => Instruction::opcode1(0x81).reg(4).rm32(rm).imm32(imm),
+            Rm64Imm32(rm, imm) => Instruction::opcode1(0x81).reg(4).rm64(rm).imm32(imm).rex_w(),
+
+            Rm16Imm8(rm, imm) => Instruction::opcode1(0x83).reg(4).rm16(rm).imm8(imm).oper16(),
+            Rm32Imm8(rm, imm) => Instruction::opcode1(0x83).reg(4).rm32(rm).imm8(imm),
+            Rm64Imm8(rm, imm) => Instruction::opcode1(0x83).reg(4).rm64(rm).imm8(imm).rex_w(),
+
+            Rm8LR8L(rm, r) => Instruction::opcode1(0x20).rm8l(rm).reg(r),
+            Rm8R8(rm, r)   => Instruction::opcode1(0x20).rm8(rm).reg(r),
+            Rm16R16(rm, r) => Instruction::opcode1(0x21).rm16(rm).reg(r).oper16(),
+            Rm32R32(rm, r) => Instruction::opcode1(0x21).rm32(rm).reg(r),
+            Rm64R64(rm, r) => Instruction::opcode1(0x21).rm64(rm).reg(r).rex_w(),
+
+            R8LRm8L(r, rm) => Instruction::opcode1(0x22).reg(r).rm8l(rm),
+            R8Rm8(r, rm)   => Instruction::opcode1(0x22).reg(r).rm8(rm),
+            R16Rm16(r, rm) => Instruction::opcode1(0x23).reg(r).rm16(rm).oper16(),
+            R32Rm32(r, rm) => Instruction::opcode1(0x23).reg(r).rm32(rm),
+            R64Rm64(r, rm) => Instruction::opcode1(0x23).reg(r).rm64(rm).rex_w(),
+        }
+    }
+}
+
+impl Encode for Bsf {
+    fn encode(&self) -> Instruction {
+        use self::Bsf::*;
+        match *self {
+            R16Rm16(r, rm) => Instruction::opcode2(0x0f, 0xbc).reg(r).rm16(rm).oper16(),
+            R32Rm32(r, rm) => Instruction::opcode2(0x0f, 0xbc).reg(r).rm32(rm),
+            R64Rm64(r, rm) => Instruction::opcode2(0x0f, 0xbc).reg(r).rm64(rm).rex_w(),
+        }
+    }
+}
+
+impl Encode for Bsr {
+    fn encode(&self) -> Instruction {
+        use self::Bsr::*;
+        match *self {
+            R16Rm16(r, rm) => Instruction::opcode2(0x0f, 0xbd).reg(r).rm16(rm).oper16(),
+            R32Rm32(r, rm) => Instruction::opcode2(0x0f, 0xbd).reg(r).rm32(rm),
+            R64Rm64(r, rm) => Instruction::opcode2(0x0f, 0xbd).reg(r).rm64(rm).rex_w(),
         }
     }
 }

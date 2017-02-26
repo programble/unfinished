@@ -396,3 +396,61 @@ impl Display for Add {
         }
     }
 }
+
+impl Display for Adox {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Adox::R32Rm32(r, rm) => write!(f, "adox {}, {}", r, rm),
+            Adox::R64Rm64(r, rm) => write!(f, "adox {}, {}", r, rm),
+        }
+    }
+}
+
+impl Display for And {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            And::AlImm8(imm)        => write!(f, "and al, {}", imm),
+            And::AxImm16(imm)       => write!(f, "and ax, {}", imm),
+            And::EaxImm32(imm)      => write!(f, "and eax, {}", imm),
+            And::RaxImm32(imm)      => write!(f, "and rax, {}", imm),
+            And::Rm8LImm8(rm, imm)  => write!(f, "and {}, {}", rm, imm),
+            And::Rm8Imm8(rm, imm)   => write!(f, "and {}, {}", rm, imm),
+            And::Rm16Imm16(rm, imm) => write!(f, "and {}, {}", rm, imm),
+            And::Rm32Imm32(rm, imm) => write!(f, "and {}, {}", rm, imm),
+            And::Rm64Imm32(rm, imm) => write!(f, "and {}, {}", rm, imm),
+            And::Rm16Imm8(rm, imm)  => write!(f, "and {}, {}", rm, imm),
+            And::Rm32Imm8(rm, imm)  => write!(f, "and {}, {}", rm, imm),
+            And::Rm64Imm8(rm, imm)  => write!(f, "and {}, {}", rm, imm),
+            And::Rm8LR8L(rm, r)     => write!(f, "and {}, {}", rm, r),
+            And::Rm8R8(rm, r)       => write!(f, "and {}, {}", rm, r),
+            And::Rm16R16(rm, r)     => write!(f, "and {}, {}", rm, r),
+            And::Rm32R32(rm, r)     => write!(f, "and {}, {}", rm, r),
+            And::Rm64R64(rm, r)     => write!(f, "and {}, {}", rm, r),
+            And::R8LRm8L(r, rm)     => write!(f, "and {}, {}", r, rm),
+            And::R8Rm8(r, rm)       => write!(f, "and {}, {}", r, rm),
+            And::R16Rm16(r, rm)     => write!(f, "and {}, {}", r, rm),
+            And::R32Rm32(r, rm)     => write!(f, "and {}, {}", r, rm),
+            And::R64Rm64(r, rm)     => write!(f, "and {}, {}", r, rm),
+        }
+    }
+}
+
+impl Display for Bsf {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Bsf::R16Rm16(r, rm) => write!(f, "bsf {}, {}", r, rm),
+            Bsf::R32Rm32(r, rm) => write!(f, "bsf {}, {}", r, rm),
+            Bsf::R64Rm64(r, rm) => write!(f, "bsf {}, {}", r, rm),
+        }
+    }
+}
+
+impl Display for Bsr {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Bsr::R16Rm16(r, rm) => write!(f, "bsr {}, {}", r, rm),
+            Bsr::R32Rm32(r, rm) => write!(f, "bsr {}, {}", r, rm),
+            Bsr::R64Rm64(r, rm) => write!(f, "bsr {}, {}", r, rm),
+        }
+    }
+}

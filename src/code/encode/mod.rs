@@ -1,7 +1,7 @@
 mod instruction;
 mod register;
 
-use code::{Prefix2, Prefix3, Prefix4, Rex, Opcode, Modrm, Sib, Disp, Imm, Instruction};
+use code::{Prefix1, Prefix2, Prefix3, Prefix4, Rex, Opcode, Modrm, Sib, Disp, Imm, Instruction};
 use code::encode::register::Register;
 use mnemonic::operand::{
     self,
@@ -160,6 +160,11 @@ impl Instruction {
 
     fn sib_base(mut self, base: u8) -> Self {
         self.sib = Some(self.sib.unwrap_or_default().base(base));
+        self
+    }
+
+    fn rep(mut self) -> Self {
+        self.prefix1 = Some(Prefix1::Rep);
         self
     }
 
