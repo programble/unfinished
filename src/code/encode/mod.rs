@@ -148,12 +148,12 @@ impl Instruction {
         self
     }
 
-    fn operand16(mut self) -> Self {
+    fn oper16(mut self) -> Self {
         self.prefix3 = Some(Prefix3::OperandSize);
         self
     }
 
-    fn address32(mut self) -> Self {
+    fn addr32(mut self) -> Self {
         self.prefix4 = Some(Prefix4::AddressSize);
         self
     }
@@ -300,11 +300,11 @@ impl Instruction {
     where B32: Register, I32: Register, B64: Register, I64: Register {
         match mem {
             Mem::Offset32(None, offset) => {
-                self.address32()
+                self.addr32()
                     .offset(offset)
             },
             Mem::Offset32(Some(sreg), offset) => {
-                self.address32()
+                self.addr32()
                     .sreg(sreg)
                     .offset(offset)
             },
