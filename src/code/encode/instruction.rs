@@ -154,3 +154,18 @@ impl Encode for Bswap {
         }
     }
 }
+
+impl Encode for Bt {
+    fn encode(&self) -> Instruction {
+        use self::Bt::*;
+        match *self {
+            Rm16R16(rm, r) => Instruction::opcode2(0xa3).rm16(rm).reg(r).oper16(),
+            Rm32R32(rm, r) => Instruction::opcode2(0xa3).rm32(rm).reg(r),
+            Rm64R64(rm, r) => Instruction::opcode2(0xa3).rm64(rm).reg(r).rex_w(),
+
+            Rm16Imm8(rm, imm) => Instruction::opcode2(0xba).reg(4).rm16(rm).imm8(imm).oper16(),
+            Rm32Imm8(rm, imm) => Instruction::opcode2(0xba).reg(4).rm32(rm).imm8(imm),
+            Rm64Imm8(rm, imm) => Instruction::opcode2(0xba).reg(4).rm64(rm).imm8(imm).rex_w(),
+        }
+    }
+}

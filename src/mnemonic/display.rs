@@ -463,3 +463,16 @@ impl Display for Bswap {
         }
     }
 }
+
+impl Display for Bt {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Bt::Rm16R16(rm, r)    => write!(f, "bt {}, {}", rm, r),
+            Bt::Rm32R32(rm, r)    => write!(f, "bt {}, {}", rm, r),
+            Bt::Rm64R64(rm, r)    => write!(f, "bt {}, {}", rm, r),
+            Bt::Rm16Imm8(rm, imm) => write!(f, "bt {}, {}", rm, imm),
+            Bt::Rm32Imm8(rm, imm) => write!(f, "bt {}, {}", rm, imm),
+            Bt::Rm64Imm8(rm, imm) => write!(f, "bt {}, {}", rm, imm),
+        }
+    }
+}
