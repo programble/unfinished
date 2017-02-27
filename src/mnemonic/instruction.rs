@@ -202,6 +202,7 @@ pub enum Bts {
 
 // BZHI
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Call {
     Rel32(Rel32),
     Rm64(Rm64),
