@@ -238,3 +238,12 @@ pub enum Clflush {
 pub enum Clflushopt {
     M8(Mem),
 }
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Cli;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Clts;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Cmc;

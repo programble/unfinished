@@ -585,3 +585,21 @@ impl Display for Clflushopt {
         }
     }
 }
+
+impl Display for Cli {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        f.write_str("cli")
+    }
+}
+
+impl Display for Clts {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        f.write_str("clts")
+    }
+}
+
+impl Display for Cmc {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        f.write_str("cmc")
+    }
+}

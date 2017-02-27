@@ -281,3 +281,21 @@ impl Encode for Clflushopt {
         }
     }
 }
+
+impl Encode for Cli {
+    fn encode(&self) -> Instruction {
+        Instruction::opcode1(0xfa)
+    }
+}
+
+impl Encode for Clts {
+    fn encode(&self) -> Instruction {
+        Instruction::opcode2(0x06)
+    }
+}
+
+impl Encode for Cmc {
+    fn encode(&self) -> Instruction {
+        Instruction::opcode1(0xf5)
+    }
+}
