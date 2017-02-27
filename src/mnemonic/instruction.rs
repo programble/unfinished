@@ -219,3 +219,12 @@ pub struct Cwde;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct Cdqe;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Clac;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Clc;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Cld;

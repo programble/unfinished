@@ -245,3 +245,21 @@ impl Encode for Cdqe {
         Instruction::opcode1(0x98).rex_w()
     }
 }
+
+impl Encode for Clac {
+    fn encode(&self) -> Instruction {
+        Instruction::opcode3(0x01, 0xca)
+    }
+}
+
+impl Encode for Clc {
+    fn encode(&self) -> Instruction {
+        Instruction::opcode1(0xf8)
+    }
+}
+
+impl Encode for Cld {
+    fn encode(&self) -> Instruction {
+        Instruction::opcode1(0xfc)
+    }
+}

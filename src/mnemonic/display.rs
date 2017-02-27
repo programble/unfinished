@@ -551,3 +551,21 @@ impl Display for Cdqe {
         f.write_str("cdqe")
     }
 }
+
+impl Display for Clac {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        f.write_str("clac")
+    }
+}
+
+impl Display for Clc {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        f.write_str("clc")
+    }
+}
+
+impl Display for Cld {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        f.write_str("cld")
+    }
+}
