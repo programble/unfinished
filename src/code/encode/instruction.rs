@@ -263,3 +263,21 @@ impl Encode for Cld {
         Instruction::opcode1(0xfc)
     }
 }
+
+impl Encode for Clflush {
+    fn encode(&self) -> Instruction {
+        use self::Clflush::*;
+        match *self {
+            M8(m) => Instruction::opcode2(0xae).reg(7).mem(m),
+        }
+    }
+}
+
+impl Encode for Clflushopt {
+    fn encode(&self) -> Instruction {
+        use self::Clflushopt::*;
+        match *self {
+            M8(m) => Instruction::opcode2(0xae).reg(7).mem(m).oper16(),
+        }
+    }
+}

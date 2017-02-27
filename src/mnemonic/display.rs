@@ -569,3 +569,19 @@ impl Display for Cld {
         f.write_str("cld")
     }
 }
+
+impl Display for Clflush {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Clflush::M8(m) => write!(f, "clflush {}", m),
+        }
+    }
+}
+
+impl Display for Clflushopt {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Clflushopt::M8(m) => write!(f, "clflushopt {}", m),
+        }
+    }
+}
