@@ -533,3 +533,21 @@ impl Display for Call {
         }
     }
 }
+
+impl Display for Cbw {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        f.write_str("cbw")
+    }
+}
+
+impl Display for Cwde {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        f.write_str("cwde")
+    }
+}
+
+impl Display for Cdqe {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        f.write_str("cdqe")
+    }
+}

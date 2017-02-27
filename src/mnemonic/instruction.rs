@@ -210,3 +210,12 @@ pub enum Call {
     M1632(Mem),
     M1664(Mem),
 }
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Cbw;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Cwde;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Cdqe;

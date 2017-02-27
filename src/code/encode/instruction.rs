@@ -227,3 +227,21 @@ impl Encode for Call {
         }
     }
 }
+
+impl Encode for Cbw {
+    fn encode(&self) -> Instruction {
+        Instruction::opcode1(0x98).oper16()
+    }
+}
+
+impl Encode for Cwde {
+    fn encode(&self) -> Instruction {
+        Instruction::opcode1(0x98)
+    }
+}
+
+impl Encode for Cdqe {
+    fn encode(&self) -> Instruction {
+        Instruction::opcode1(0x98).rex_w()
+    }
+}
