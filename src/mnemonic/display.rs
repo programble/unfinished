@@ -27,6 +27,12 @@ impl Display for Imm64 {
     }
 }
 
+impl Display for Rel32 {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        write!(f, "{:#010x}", self.0)
+    }
+}
+
 macro_rules! impl_display_reg {
     ($reg:ident { $($var:ident => $str:expr,)+ }) => {
         impl Display for $reg {
@@ -512,6 +518,18 @@ impl Display for Bts {
             Bts::Rm16Imm8(rm, imm) => write!(f, "bts {}, {}", rm, imm),
             Bts::Rm32Imm8(rm, imm) => write!(f, "bts {}, {}", rm, imm),
             Bts::Rm64Imm8(rm, imm) => write!(f, "bts {}, {}", rm, imm),
+        }
+    }
+}
+
+impl Display for Call {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Call::Rel32(rel) => write!(f, "call rel {}", rel),
+            Call::Rm64(rm)   => write!(f, "call near {}", rm),
+            Call::M1616(m)   => write!(f, "call far {}", m),
+            Call::M1632(m)   => write!(f, "call far {}", m),
+            Call::M1664(m)   => write!(f, "call far {}", m),
         }
     }
 }

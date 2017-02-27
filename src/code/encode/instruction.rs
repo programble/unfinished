@@ -214,3 +214,16 @@ impl Encode for Bts {
         }
     }
 }
+
+impl Encode for Call {
+    fn encode(&self) -> Instruction {
+        use self::Call::*;
+        match *self {
+            Rel32(rel) => Instruction::opcode1(0xe8).disp32(rel.0),
+            Rm64(rm)   => Instruction::opcode1(0xff).reg(2).rm64(rm),
+            M1616(m)   => Instruction::opcode1(0xff).reg(3).mem(m).oper16(),
+            M1632(m)   => Instruction::opcode1(0xff).reg(3).mem(m),
+            M1664(m)   => Instruction::opcode1(0xff).reg(3).mem(m).rex_w(),
+        }
+    }
+}

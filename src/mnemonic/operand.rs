@@ -10,6 +10,9 @@ pub struct Imm32(pub u32);
 #[derive(Debug, Default, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Imm64(pub u64);
 
+#[derive(Debug, Default, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+pub struct Rel32(pub i32);
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum R8L {
     Al, Bl, Cl, Dl, Ah, Bh, Ch, Dh

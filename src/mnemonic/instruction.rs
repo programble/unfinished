@@ -199,3 +199,13 @@ pub enum Bts {
     Rm32Imm8(Rm32, Imm8),
     Rm64Imm8(Rm64, Imm8),
 }
+
+// BZHI
+
+pub enum Call {
+    Rel32(Rel32),
+    Rm64(Rm64),
+    M1616(Mem),
+    M1632(Mem),
+    M1664(Mem),
+}
