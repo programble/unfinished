@@ -648,3 +648,55 @@ impl Display for Cmov {
         }
     }
 }
+
+impl Display for Cmp {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Cmp::AlImm8(imm)        => write!(f, "cmp al, {}", imm),
+            Cmp::AxImm16(imm)       => write!(f, "cmp ax, {}", imm),
+            Cmp::EaxImm32(imm)      => write!(f, "cmp eax, {}", imm),
+            Cmp::RaxImm32(imm)      => write!(f, "cmp rax, {}", imm),
+            Cmp::Rm8LImm8(rm, imm)  => write!(f, "cmp {}, {}", rm, imm),
+            Cmp::Rm8Imm8(rm, imm)   => write!(f, "cmp {}, {}", rm, imm),
+            Cmp::Rm16Imm16(rm, imm) => write!(f, "cmp {}, {}", rm, imm),
+            Cmp::Rm32Imm32(rm, imm) => write!(f, "cmp {}, {}", rm, imm),
+            Cmp::Rm64Imm32(rm, imm) => write!(f, "cmp {}, {}", rm, imm),
+            Cmp::Rm16Imm8(rm, imm)  => write!(f, "cmp {}, {}", rm, imm),
+            Cmp::Rm32Imm8(rm, imm)  => write!(f, "cmp {}, {}", rm, imm),
+            Cmp::Rm64Imm8(rm, imm)  => write!(f, "cmp {}, {}", rm, imm),
+            Cmp::Rm8LR8L(rm, r)     => write!(f, "cmp {}, {}", rm, r),
+            Cmp::Rm8R8(rm, r)       => write!(f, "cmp {}, {}", rm, r),
+            Cmp::Rm16R16(rm, r)     => write!(f, "cmp {}, {}", rm, r),
+            Cmp::Rm32R32(rm, r)     => write!(f, "cmp {}, {}", rm, r),
+            Cmp::Rm64R64(rm, r)     => write!(f, "cmp {}, {}", rm, r),
+            Cmp::R8LRm8L(r, rm)     => write!(f, "cmp {}, {}", r, rm),
+            Cmp::R8Rm8(r, rm)       => write!(f, "cmp {}, {}", r, rm),
+            Cmp::R16Rm16(r, rm)     => write!(f, "cmp {}, {}", r, rm),
+            Cmp::R32Rm32(r, rm)     => write!(f, "cmp {}, {}", r, rm),
+            Cmp::R64Rm64(r, rm)     => write!(f, "cmp {}, {}", r, rm),
+        }
+    }
+}
+
+impl Display for Cmps {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Cmps::B => f.write_str("cmpsb"),
+            Cmps::W => f.write_str("cmpsw"),
+            Cmps::D => f.write_str("cmpsd"),
+            Cmps::Q => f.write_str("cmpsq"),
+        }
+    }
+}
+
+impl Display for Cmpxchg {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Cmpxchg::Rm8LR8L(rm, r) => write!(f, "cmpxchg {}, {}", rm, r),
+            Cmpxchg::Rm8R8(rm, r)   => write!(f, "cmpxchg {}, {}", rm, r),
+            Cmpxchg::Rm16R16(rm, r) => write!(f, "cmpxchg {}, {}", rm, r),
+            Cmpxchg::Rm32R32(rm, r) => write!(f, "cmpxchg {}, {}", rm, r),
+            Cmpxchg::Rm64R64(rm, r) => write!(f, "cmpxchg {}, {}", rm, r),
+        }
+    }
+}
