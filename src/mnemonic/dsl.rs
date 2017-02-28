@@ -1,5 +1,6 @@
 pub use mnemonic::instruction::*;
-pub use mnemonic::operand::{Imm8, Imm16, Imm32, Imm64};
+pub use mnemonic::operand::{Imm8, Imm16, Imm32, Imm64, Rel32};
+pub use mnemonic::operand::Cc::*;
 pub use mnemonic::operand::R8L;
 pub use mnemonic::operand::R8::*;
 pub use mnemonic::operand::R16::*;

@@ -6,6 +6,7 @@ use code::encode::register::Register;
 use mnemonic::operand::{
     self,
     Imm8, Imm16, Imm32,
+    Cc,
     Scale, Sreg, Offset, Mem,
     Rm8L, Rm8, Rm16, Rm32, Rm64,
 };
@@ -187,6 +188,15 @@ impl Instruction {
 
     fn addr32(mut self) -> Self {
         self.prefix4 = Some(Prefix4::AddressSize);
+        self
+    }
+
+    fn cc(mut self, cc: Cc) -> Self {
+        self.opcode = match self.opcode {
+            Opcode::B1(opcode) => Opcode::B1([opcode[0] + cc.index()]),
+            Opcode::B2(opcode) => Opcode::B2([opcode[0], opcode[1] + cc.index()]),
+            Opcode::B3(opcode) => Opcode::B3([opcode[0], opcode[1], opcode[2] + cc.index()]),
+        };
         self
     }
 

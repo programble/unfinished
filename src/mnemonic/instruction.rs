@@ -247,3 +247,10 @@ pub struct Clts;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct Cmc;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Cmov {
+    CcR16Rm16(Cc, R16, Rm16),
+    CcR32Rm32(Cc, R32, Rm32),
+    CcR64Rm64(Cc, R64, Rm64),
+}

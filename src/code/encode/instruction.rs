@@ -299,3 +299,14 @@ impl Encode for Cmc {
         Instruction::opcode1(0xf5)
     }
 }
+
+impl Encode for Cmov {
+    fn encode(&self) -> Instruction {
+        use self::Cmov::*;
+        match *self {
+            CcR16Rm16(cc, r, rm) => Instruction::opcode2(0x40).cc(cc).reg(r).rm16(rm).oper16(),
+            CcR32Rm32(cc, r, rm) => Instruction::opcode2(0x40).cc(cc).reg(r).rm32(rm),
+            CcR64Rm64(cc, r, rm) => Instruction::opcode2(0x40).cc(cc).reg(r).rm64(rm).rex_w(),
+        }
+    }
+}

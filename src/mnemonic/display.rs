@@ -48,6 +48,41 @@ macro_rules! impl_display_reg {
 }
 
 impl_display_reg!(
+    Cc {
+        A   => "a",
+        Ae  => "ae",
+        B   => "b",
+        Be  => "be",
+        C   => "c",
+        E   => "e",
+        G   => "g",
+        Ge  => "ge",
+        L   => "l",
+        Le  => "le",
+        Na  => "na",
+        Nae => "nae",
+        Nb  => "nb",
+        Nbe => "nbe",
+        Nc  => "nc",
+        Ne  => "ne",
+        Ng  => "ng",
+        Nge => "nge",
+        Nl  => "nl",
+        Nle => "nle",
+        No  => "no",
+        Np  => "np",
+        Ns  => "ns",
+        Nz  => "nz",
+        O   => "o",
+        P   => "p",
+        Pe  => "pe",
+        Po  => "po",
+        S   => "s",
+        Z   => "z",
+    }
+);
+
+impl_display_reg!(
     R8L {
         Al => "al",
         Bl => "bl",
@@ -601,5 +636,15 @@ impl Display for Clts {
 impl Display for Cmc {
     fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
         f.write_str("cmc")
+    }
+}
+
+impl Display for Cmov {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Cmov::CcR16Rm16(cc, r, rm) => write!(f, "cmov{} {}, {}", cc, r, rm),
+            Cmov::CcR32Rm32(cc, r, rm) => write!(f, "cmov{} {}, {}", cc, r, rm),
+            Cmov::CcR64Rm64(cc, r, rm) => write!(f, "cmov{} {}, {}", cc, r, rm),
+        }
     }
 }
