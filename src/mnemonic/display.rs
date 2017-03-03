@@ -371,34 +371,40 @@ impl Display for Rm64 {
     }
 }
 
-impl Display for Adc {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-        match *self {
-            Adc::AlImm8(imm)        => write!(f, "adc al, {}", imm),
-            Adc::AxImm16(imm)       => write!(f, "adc ax, {}", imm),
-            Adc::EaxImm32(imm)      => write!(f, "adc eax, {}", imm),
-            Adc::RaxImm32(imm)      => write!(f, "adc rax, {}", imm),
-            Adc::Rm8LImm8(rm, imm)  => write!(f, "adc {}, {}", rm, imm),
-            Adc::Rm8Imm8(rm, imm)   => write!(f, "adc {}, {}", rm, imm),
-            Adc::Rm16Imm16(rm, imm) => write!(f, "adc {}, {}", rm, imm),
-            Adc::Rm32Imm32(rm, imm) => write!(f, "adc {}, {}", rm, imm),
-            Adc::Rm64Imm32(rm, imm) => write!(f, "adc {}, {}", rm, imm),
-            Adc::Rm16Imm8(rm, imm)  => write!(f, "adc {}, {}", rm, imm),
-            Adc::Rm32Imm8(rm, imm)  => write!(f, "adc {}, {}", rm, imm),
-            Adc::Rm64Imm8(rm, imm)  => write!(f, "adc {}, {}", rm, imm),
-            Adc::Rm8LR8L(rm, r)     => write!(f, "adc {}, {}", rm, r),
-            Adc::Rm8R8(rm, r)       => write!(f, "adc {}, {}", rm, r),
-            Adc::Rm16R16(rm, r)     => write!(f, "adc {}, {}", rm, r),
-            Adc::Rm32R32(rm, r)     => write!(f, "adc {}, {}", rm, r),
-            Adc::Rm64R64(rm, r)     => write!(f, "adc {}, {}", rm, r),
-            Adc::R8LRm8L(r, rm)     => write!(f, "adc {}, {}", r, rm),
-            Adc::R8Rm8(r, rm)       => write!(f, "adc {}, {}", r, rm),
-            Adc::R16Rm16(r, rm)     => write!(f, "adc {}, {}", r, rm),
-            Adc::R32Rm32(r, rm)     => write!(f, "adc {}, {}", r, rm),
-            Adc::R64Rm64(r, rm)     => write!(f, "adc {}, {}", r, rm),
+macro_rules! impl_display_arith {
+    ($m:ident, $s:expr) => {
+        impl Display for $m {
+            fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+                match *self {
+                    $m::AlImm8(imm)        => write!(f, concat!($s, " al, {}"), imm),
+                    $m::AxImm16(imm)       => write!(f, concat!($s, " ax, {}"), imm),
+                    $m::EaxImm32(imm)      => write!(f, concat!($s, " eax, {}"), imm),
+                    $m::RaxImm32(imm)      => write!(f, concat!($s, " rax, {}"), imm),
+                    $m::Rm8LImm8(rm, imm)  => write!(f, concat!($s, " {}, {}"), rm, imm),
+                    $m::Rm8Imm8(rm, imm)   => write!(f, concat!($s, " {}, {}"), rm, imm),
+                    $m::Rm16Imm16(rm, imm) => write!(f, concat!($s, " {}, {}"), rm, imm),
+                    $m::Rm32Imm32(rm, imm) => write!(f, concat!($s, " {}, {}"), rm, imm),
+                    $m::Rm64Imm32(rm, imm) => write!(f, concat!($s, " {}, {}"), rm, imm),
+                    $m::Rm16Imm8(rm, imm)  => write!(f, concat!($s, " {}, {}"), rm, imm),
+                    $m::Rm32Imm8(rm, imm)  => write!(f, concat!($s, " {}, {}"), rm, imm),
+                    $m::Rm64Imm8(rm, imm)  => write!(f, concat!($s, " {}, {}"), rm, imm),
+                    $m::Rm8LR8L(rm, r)     => write!(f, concat!($s, " {}, {}"), rm, r),
+                    $m::Rm8R8(rm, r)       => write!(f, concat!($s, " {}, {}"), rm, r),
+                    $m::Rm16R16(rm, r)     => write!(f, concat!($s, " {}, {}"), rm, r),
+                    $m::Rm32R32(rm, r)     => write!(f, concat!($s, " {}, {}"), rm, r),
+                    $m::Rm64R64(rm, r)     => write!(f, concat!($s, " {}, {}"), rm, r),
+                    $m::R8LRm8L(r, rm)     => write!(f, concat!($s, " {}, {}"), r, rm),
+                    $m::R8Rm8(r, rm)       => write!(f, concat!($s, " {}, {}"), r, rm),
+                    $m::R16Rm16(r, rm)     => write!(f, concat!($s, " {}, {}"), r, rm),
+                    $m::R32Rm32(r, rm)     => write!(f, concat!($s, " {}, {}"), r, rm),
+                    $m::R64Rm64(r, rm)     => write!(f, concat!($s, " {}, {}"), r, rm),
+                }
+            }
         }
     }
 }
+
+impl_display_arith!(Adc, "adc");
 
 impl Display for Adcx {
     fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
@@ -409,34 +415,7 @@ impl Display for Adcx {
     }
 }
 
-impl Display for Add {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-        match *self {
-            Add::AlImm8(imm)        => write!(f, "add al, {}", imm),
-            Add::AxImm16(imm)       => write!(f, "add ax, {}", imm),
-            Add::EaxImm32(imm)      => write!(f, "add eax, {}", imm),
-            Add::RaxImm32(imm)      => write!(f, "add rax, {}", imm),
-            Add::Rm8LImm8(rm, imm)  => write!(f, "add {}, {}", rm, imm),
-            Add::Rm8Imm8(rm, imm)   => write!(f, "add {}, {}", rm, imm),
-            Add::Rm16Imm16(rm, imm) => write!(f, "add {}, {}", rm, imm),
-            Add::Rm32Imm32(rm, imm) => write!(f, "add {}, {}", rm, imm),
-            Add::Rm64Imm32(rm, imm) => write!(f, "add {}, {}", rm, imm),
-            Add::Rm16Imm8(rm, imm)  => write!(f, "add {}, {}", rm, imm),
-            Add::Rm32Imm8(rm, imm)  => write!(f, "add {}, {}", rm, imm),
-            Add::Rm64Imm8(rm, imm)  => write!(f, "add {}, {}", rm, imm),
-            Add::Rm8LR8L(rm, r)     => write!(f, "add {}, {}", rm, r),
-            Add::Rm8R8(rm, r)       => write!(f, "add {}, {}", rm, r),
-            Add::Rm16R16(rm, r)     => write!(f, "add {}, {}", rm, r),
-            Add::Rm32R32(rm, r)     => write!(f, "add {}, {}", rm, r),
-            Add::Rm64R64(rm, r)     => write!(f, "add {}, {}", rm, r),
-            Add::R8LRm8L(r, rm)     => write!(f, "add {}, {}", r, rm),
-            Add::R8Rm8(r, rm)       => write!(f, "add {}, {}", r, rm),
-            Add::R16Rm16(r, rm)     => write!(f, "add {}, {}", r, rm),
-            Add::R32Rm32(r, rm)     => write!(f, "add {}, {}", r, rm),
-            Add::R64Rm64(r, rm)     => write!(f, "add {}, {}", r, rm),
-        }
-    }
-}
+impl_display_arith!(Add, "add");
 
 impl Display for Adox {
     fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
@@ -447,34 +426,7 @@ impl Display for Adox {
     }
 }
 
-impl Display for And {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-        match *self {
-            And::AlImm8(imm)        => write!(f, "and al, {}", imm),
-            And::AxImm16(imm)       => write!(f, "and ax, {}", imm),
-            And::EaxImm32(imm)      => write!(f, "and eax, {}", imm),
-            And::RaxImm32(imm)      => write!(f, "and rax, {}", imm),
-            And::Rm8LImm8(rm, imm)  => write!(f, "and {}, {}", rm, imm),
-            And::Rm8Imm8(rm, imm)   => write!(f, "and {}, {}", rm, imm),
-            And::Rm16Imm16(rm, imm) => write!(f, "and {}, {}", rm, imm),
-            And::Rm32Imm32(rm, imm) => write!(f, "and {}, {}", rm, imm),
-            And::Rm64Imm32(rm, imm) => write!(f, "and {}, {}", rm, imm),
-            And::Rm16Imm8(rm, imm)  => write!(f, "and {}, {}", rm, imm),
-            And::Rm32Imm8(rm, imm)  => write!(f, "and {}, {}", rm, imm),
-            And::Rm64Imm8(rm, imm)  => write!(f, "and {}, {}", rm, imm),
-            And::Rm8LR8L(rm, r)     => write!(f, "and {}, {}", rm, r),
-            And::Rm8R8(rm, r)       => write!(f, "and {}, {}", rm, r),
-            And::Rm16R16(rm, r)     => write!(f, "and {}, {}", rm, r),
-            And::Rm32R32(rm, r)     => write!(f, "and {}, {}", rm, r),
-            And::Rm64R64(rm, r)     => write!(f, "and {}, {}", rm, r),
-            And::R8LRm8L(r, rm)     => write!(f, "and {}, {}", r, rm),
-            And::R8Rm8(r, rm)       => write!(f, "and {}, {}", r, rm),
-            And::R16Rm16(r, rm)     => write!(f, "and {}, {}", r, rm),
-            And::R32Rm32(r, rm)     => write!(f, "and {}, {}", r, rm),
-            And::R64Rm64(r, rm)     => write!(f, "and {}, {}", r, rm),
-        }
-    }
-}
+impl_display_arith!(And, "and");
 
 impl Display for Bsf {
     fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
@@ -649,34 +601,7 @@ impl Display for Cmov {
     }
 }
 
-impl Display for Cmp {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-        match *self {
-            Cmp::AlImm8(imm)        => write!(f, "cmp al, {}", imm),
-            Cmp::AxImm16(imm)       => write!(f, "cmp ax, {}", imm),
-            Cmp::EaxImm32(imm)      => write!(f, "cmp eax, {}", imm),
-            Cmp::RaxImm32(imm)      => write!(f, "cmp rax, {}", imm),
-            Cmp::Rm8LImm8(rm, imm)  => write!(f, "cmp {}, {}", rm, imm),
-            Cmp::Rm8Imm8(rm, imm)   => write!(f, "cmp {}, {}", rm, imm),
-            Cmp::Rm16Imm16(rm, imm) => write!(f, "cmp {}, {}", rm, imm),
-            Cmp::Rm32Imm32(rm, imm) => write!(f, "cmp {}, {}", rm, imm),
-            Cmp::Rm64Imm32(rm, imm) => write!(f, "cmp {}, {}", rm, imm),
-            Cmp::Rm16Imm8(rm, imm)  => write!(f, "cmp {}, {}", rm, imm),
-            Cmp::Rm32Imm8(rm, imm)  => write!(f, "cmp {}, {}", rm, imm),
-            Cmp::Rm64Imm8(rm, imm)  => write!(f, "cmp {}, {}", rm, imm),
-            Cmp::Rm8LR8L(rm, r)     => write!(f, "cmp {}, {}", rm, r),
-            Cmp::Rm8R8(rm, r)       => write!(f, "cmp {}, {}", rm, r),
-            Cmp::Rm16R16(rm, r)     => write!(f, "cmp {}, {}", rm, r),
-            Cmp::Rm32R32(rm, r)     => write!(f, "cmp {}, {}", rm, r),
-            Cmp::Rm64R64(rm, r)     => write!(f, "cmp {}, {}", rm, r),
-            Cmp::R8LRm8L(r, rm)     => write!(f, "cmp {}, {}", r, rm),
-            Cmp::R8Rm8(r, rm)       => write!(f, "cmp {}, {}", r, rm),
-            Cmp::R16Rm16(r, rm)     => write!(f, "cmp {}, {}", r, rm),
-            Cmp::R32Rm32(r, rm)     => write!(f, "cmp {}, {}", r, rm),
-            Cmp::R64Rm64(r, rm)     => write!(f, "cmp {}, {}", r, rm),
-        }
-    }
-}
+impl_display_arith!(Cmp, "cmp");
 
 impl Display for Cmps {
     fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
