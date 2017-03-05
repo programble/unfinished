@@ -193,38 +193,38 @@ impl Instruction {
 
     fn cc(mut self, cc: Cc) -> Self {
         self.opcode = match self.opcode {
-            Opcode::B1(opcode) => Opcode::B1([opcode[0] + cc.index()]),
-            Opcode::B2(opcode) => Opcode::B2([opcode[0], opcode[1] + cc.index()]),
-            Opcode::B3(opcode) => Opcode::B3([opcode[0], opcode[1], opcode[2] + cc.index()]),
+            Opcode::B1(opcode) => Opcode::B1([opcode[0] + cc.code()]),
+            Opcode::B2(opcode) => Opcode::B2([opcode[0], opcode[1] + cc.code()]),
+            Opcode::B3(opcode) => Opcode::B3([opcode[0], opcode[1], opcode[2] + cc.code()]),
         };
         self
     }
 
     fn plus<R>(mut self, reg: R) -> Self where R: Register {
         if reg.force_rex() { self = self.rex() }
-        let (rex, index) = reg.rex_index();
+        let (rex, code) = reg.rex_code();
         if rex { self = self.rex_b() }
         self.opcode = match self.opcode {
-            Opcode::B1(opcode) => Opcode::B1([opcode[0] + index]),
-            Opcode::B2(opcode) => Opcode::B2([opcode[0], opcode[1] + index]),
-            Opcode::B3(opcode) => Opcode::B3([opcode[0], opcode[1], opcode[2] + index]),
+            Opcode::B1(opcode) => Opcode::B1([opcode[0] + code]),
+            Opcode::B2(opcode) => Opcode::B2([opcode[0], opcode[1] + code]),
+            Opcode::B3(opcode) => Opcode::B3([opcode[0], opcode[1], opcode[2] + code]),
         };
         self
     }
 
     fn reg<R>(mut self, reg: R) -> Self where R: Register {
         if reg.force_rex() { self = self.rex() }
-        match reg.rex_index() {
-            (true, index) => self.rex_r().modrm_reg(index),
-            (false, index) => self.modrm_reg(index),
+        match reg.rex_code() {
+            (true, code) => self.rex_r().modrm_reg(code),
+            (false, code) => self.modrm_reg(code),
         }
     }
 
     fn rm<R>(mut self, reg: R) -> Self where R: Register {
         if reg.force_rex() { self = self.rex() }
-        match reg.rex_index() {
-            (true, index) => self.rex_b().modrm_rm(index),
-            (false, index) => self.modrm_rm(index),
+        match reg.rex_code() {
+            (true, code) => self.rex_b().modrm_rm(code),
+            (false, code) => self.modrm_rm(code),
         }
     }
 
@@ -243,16 +243,16 @@ impl Instruction {
     }
 
     fn index<R>(self, reg: R) -> Self where R: Register {
-        match reg.rex_index() {
-            (true, index) => self.rex_x().sib_index(index),
-            (false, index) => self.sib_index(index),
+        match reg.rex_code() {
+            (true, code) => self.rex_x().sib_index(code),
+            (false, code) => self.sib_index(code),
         }
     }
 
     fn base<R>(self, reg: R) -> Self where R: Register {
-        match reg.rex_index() {
-            (true, index) => self.rex_b().sib_base(index),
-            (false, index) => self.sib_base(index),
+        match reg.rex_code() {
+            (true, code) => self.rex_b().sib_base(code),
+            (false, code) => self.sib_base(code),
         }
     }
 
@@ -297,7 +297,7 @@ impl Instruction {
 
     fn offset_base_index<Base, Index>(mut self, base: Base, index: Index, scale: Scale) -> Self
     where Base: Register, Index: Register {
-        if let (_, 0b101) = base.rex_index() { self = self.offset_disp(operand::Disp::Disp8(0)) }
+        if let (_, 0b101) = base.rex_code() { self = self.offset_disp(operand::Disp::Disp8(0)) }
         self.modrm_rm(0b100)
             .scale(scale)
             .index(index)
@@ -305,7 +305,7 @@ impl Instruction {
     }
 
     fn offset_base<Base>(self, base: Base) -> Self where Base: Register {
-        match base.rex_index() {
+        match base.rex_code() {
             (_, 0b100) => self.offset_base_index(base, 0b100, Scale::X1),
             (_, 0b101) => self.rm(base).offset_disp(operand::Disp::Disp8(0)),
             _ => self.rm(base),

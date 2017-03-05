@@ -5,13 +5,13 @@ use mnemonic::operand::{
 };
 
 pub trait Register: Copy {
-    fn index(self) -> u8;
+    fn code(self) -> u8;
 
-    fn rex_index(self) -> (bool, u8) {
-        if 0 != self.index() & 0b1000 {
-            (true, self.index() & 0b0111)
+    fn rex_code(self) -> (bool, u8) {
+        if 0 != self.code() & 0b1000 {
+            (true, self.code() & 0b0111)
         } else {
-            (false, self.index())
+            (false, self.code())
         }
     }
 
@@ -21,13 +21,13 @@ pub trait Register: Copy {
 }
 
 impl Register for u8 {
-    fn index(self) -> u8 {
+    fn code(self) -> u8 {
         self
     }
 }
 
 impl Register for Cc {
-    fn index(self) -> u8 {
+    fn code(self) -> u8 {
         match self {
             Cc::O   => 0x0,
             Cc::No  => 0x1,
@@ -64,7 +64,7 @@ impl Register for Cc {
 }
 
 impl Register for R8L {
-    fn index(self) -> u8 {
+    fn code(self) -> u8 {
         match self {
             R8L::Al => 0,
             R8L::Cl => 1,
@@ -79,7 +79,7 @@ impl Register for R8L {
 }
 
 impl Register for R8 {
-    fn index(self) -> u8 {
+    fn code(self) -> u8 {
         match self {
             R8::Al => 0,
             R8::Cl => 1,
@@ -109,7 +109,7 @@ impl Register for R8 {
 }
 
 impl Register for R16 {
-    fn index(self) -> u8 {
+    fn code(self) -> u8 {
         match self {
             R16::Ax => 0,
             R16::Cx => 1,
@@ -132,7 +132,7 @@ impl Register for R16 {
 }
 
 impl Register for R32L {
-    fn index(self) -> u8 {
+    fn code(self) -> u8 {
         match self {
             R32L::Eax => 0,
             R32L::Ecx => 1,
@@ -147,7 +147,7 @@ impl Register for R32L {
 }
 
 impl Register for R32 {
-    fn index(self) -> u8 {
+    fn code(self) -> u8 {
         match self {
             R32::Eax => 0,
             R32::Ecx => 1,
@@ -170,7 +170,7 @@ impl Register for R32 {
 }
 
 impl Register for R64L {
-    fn index(self) -> u8 {
+    fn code(self) -> u8 {
         match self {
             R64L::Rax => 0,
             R64L::Rcx => 1,
@@ -185,7 +185,7 @@ impl Register for R64L {
 }
 
 impl Register for R64 {
-    fn index(self) -> u8 {
+    fn code(self) -> u8 {
         match self {
             R64::Rax => 0,
             R64::Rcx => 1,
@@ -208,7 +208,7 @@ impl Register for R64 {
 }
 
 impl Register for Index32L {
-    fn index(self) -> u8 {
+    fn code(self) -> u8 {
         match self {
             Index32L::Eax => 0,
             Index32L::Ecx => 1,
@@ -222,7 +222,7 @@ impl Register for Index32L {
 }
 
 impl Register for Index32 {
-    fn index(self) -> u8 {
+    fn code(self) -> u8 {
         match self {
             Index32::Eax => 0,
             Index32::Ecx => 1,
@@ -244,7 +244,7 @@ impl Register for Index32 {
 }
 
 impl Register for Index64L {
-    fn index(self) -> u8 {
+    fn code(self) -> u8 {
         match self {
             Index64L::Rax => 0,
             Index64L::Rcx => 1,
@@ -258,7 +258,7 @@ impl Register for Index64L {
 }
 
 impl Register for Index64 {
-    fn index(self) -> u8 {
+    fn code(self) -> u8 {
         match self {
             Index64::Rax => 0,
             Index64::Rcx => 1,
