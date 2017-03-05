@@ -428,3 +428,13 @@ pub enum Fbld {
 pub enum Fbstp {
     M80bcd(Mem),
 }
+
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Fchs;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Fclex;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Fnclex;

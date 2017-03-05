@@ -438,3 +438,21 @@ impl Encode for Fbstp {
         }
     }
 }
+
+impl Encode for Fchs {
+    fn encode(&self) -> Instruction {
+        fopcode(0xe0)
+    }
+}
+
+impl Encode for Fclex {
+    fn encode(&self) -> Instruction {
+        Instruction::opcode3(0x9b, 0xdb, 0xe2)
+    }
+}
+
+impl Encode for Fnclex {
+    fn encode(&self) -> Instruction {
+        Instruction::opcode2(0xdb, 0xe2)
+    }
+}

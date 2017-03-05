@@ -506,3 +506,6 @@ impl Display for Fiadd {
 
 impl_display_unary!("fbld", Fbld { M80dec });
 impl_display_unary!("fbstp", Fbstp { M80bcd });
+impl_display_str!("fchs", Fchs);
+impl_display_str!("fclex", Fclex);
+impl_display_str!("fnclex", Fnclex);
