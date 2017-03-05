@@ -79,14 +79,14 @@ impl Instruction {
         }
     }
 
-    fn opcode2(b: u8) -> Self {
+    fn opcode2(a: u8, b: u8) -> Self {
         Instruction {
             prefix1: None,
             prefix2: None,
             prefix3: None,
             prefix4: None,
             rex: None,
-            opcode: Opcode::B2([0x0f, b]),
+            opcode: Opcode::B2([a, b]),
             modrm: None,
             sib: None,
             disp: None,
@@ -94,14 +94,14 @@ impl Instruction {
         }
     }
 
-    fn opcode3(b: u8, c: u8) -> Self {
+    fn opcode3(a: u8, b: u8, c: u8) -> Self {
         Instruction {
             prefix1: None,
             prefix2: None,
             prefix3: None,
             prefix4: None,
             rex: None,
-            opcode: Opcode::B3([0x0f, b, c]),
+            opcode: Opcode::B3([a, b, c]),
             modrm: None,
             sib: None,
             disp: None,

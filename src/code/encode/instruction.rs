@@ -6,11 +6,15 @@ fn opcode1(a: u8) -> Instruction {
 }
 
 fn opcode2(b: u8) -> Instruction {
-    Instruction::opcode2(b)
+    Instruction::opcode2(0x0f, b)
 }
 
 fn opcode3(b: u8, c: u8) -> Instruction {
-    Instruction::opcode3(b, c)
+    Instruction::opcode3(0x0f, b, c)
+}
+
+fn fopcode(b: u8) -> Instruction {
+    Instruction::opcode2(0xd9, b)
 }
 
 macro_rules! impl_encode_arith {
@@ -371,5 +375,17 @@ impl Encode for Div {
             Rm32(rm) => opcode1(0xf7).reg(6).rm32(rm),
             Rm64(rm) => opcode1(0xf7).reg(6).rm64(rm).rex_w(),
         }
+    }
+}
+
+impl Encode for F2xm1 {
+    fn encode(&self) -> Instruction {
+        fopcode(0xf0)
+    }
+}
+
+impl Encode for Fabs {
+    fn encode(&self) -> Instruction {
+        fopcode(0xe1)
     }
 }

@@ -383,3 +383,19 @@ pub enum Div {
     Rm32(Rm32),
     Rm64(Rm64),
 }
+
+// DIVPD
+// DIVPS
+// DIVSD
+// DIVSS
+// DPPD
+// DPPS
+// EMMS
+// ENTER
+// EXTRACTPS
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct F2xm1;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Fabs;
