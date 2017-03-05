@@ -308,8 +308,7 @@ pub enum Cmpxchg {
     Rm64R64(Rm64, R64),
 }
 
-// CMPXCHG8B
-// CMPXCHG16B
+// CMPXCHG8B/CMPXCHG16B
 // COMISD
 // COMISS
 
@@ -325,3 +324,35 @@ pub enum Crc32 {
     R64Rm8(R64, Rm8),
     R64Rm64(R64, Rm64),
 }
+
+// CVTDQ2PD
+// CVTDQ2PS
+// CVTPD2DQ
+// CVTPD2PI
+// CVTPD2PS
+// CVTPI2PD
+// CVTPI2PS
+// CVTPS2DQ
+// CVTPS2PD
+// CVTPS2PI
+// CVTSD2SI
+// CVTSD2SS
+// CVTSI2SD
+// CVTSI2SS
+// CVTSS2SD
+// CVTSS2SI
+// CVTTPD2DQ
+// CVTTPD2PI
+// CVTTPS2DQ
+// CVTTPS2PI
+// CVTTSD2SI
+// CVTTSS2SI
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Cwd;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Cdq;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Cqo;

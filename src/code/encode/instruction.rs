@@ -311,3 +311,21 @@ impl Encode for Crc32 {
         }
     }
 }
+
+impl Encode for Cwd {
+    fn encode(&self) -> Instruction {
+        opcode1(0x99).oper16()
+    }
+}
+
+impl Encode for Cdq {
+    fn encode(&self) -> Instruction {
+        opcode1(0x99)
+    }
+}
+
+impl Encode for Cqo {
+    fn encode(&self) -> Instruction {
+        opcode1(0x99).rex_w()
+    }
+}

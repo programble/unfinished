@@ -453,3 +453,6 @@ impl_display_reg!(
 impl_display_binary!("cmpxchg", Cmpxchg { Rm8LR8L, Rm8R8, Rm16R16, Rm32R32, Rm64R64 });
 impl_display_str!("cpuid", Cpuid);
 impl_display_binary!("crc32", Crc32 { R32LRm8L, R32Rm8, R32Rm16, R32Rm32, R64Rm8, R64Rm64 });
+impl_display_str!("cwd", Cwd);
+impl_display_str!("cdq", Cdq);
+impl_display_str!("cqo", Cqo);
