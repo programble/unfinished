@@ -399,3 +399,22 @@ pub struct F2xm1;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct Fabs;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Fadd {
+    M32fp(Mem),
+    M64fp(Mem),
+    St0Sti(Sti),
+    StiSt0(Sti),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Faddp {
+    StiSt0(Sti),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Fiadd {
+    M32int(Mem),
+    M16int(Mem),
+}

@@ -83,6 +83,11 @@ pub enum R64 {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Sti {
+    St0, St1, St2, St3, St4, St5, St6, St7
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Index32L {
     Eax, Ebx, Ecx, Edx, Esi, Edi, Ebp
 }

@@ -389,3 +389,34 @@ impl Encode for Fabs {
         fopcode(0xe1)
     }
 }
+
+impl Encode for Fadd {
+    fn encode(&self) -> Instruction {
+        use self::Fadd::*;
+        match *self {
+            M32fp(m)  => opcode1(0xd8).reg(0).mem(m),
+            M64fp(m)  => opcode1(0xdc).reg(0).mem(m),
+            St0Sti(i) => opcode1(0xd8).reg(0).rm_reg(i),
+            StiSt0(i) => opcode1(0xdc).reg(0).rm_reg(i),
+        }
+    }
+}
+
+impl Encode for Faddp {
+    fn encode(&self) -> Instruction {
+        use self::Faddp::*;
+        match *self {
+            StiSt0(i) => opcode1(0xde).reg(0).rm_reg(i),
+        }
+    }
+}
+
+impl Encode for Fiadd {
+    fn encode(&self) -> Instruction {
+        use self::Fiadd::*;
+        match *self {
+            M32int(m) => opcode1(0xda).reg(0).mem(m),
+            M16int(m) => opcode1(0xde).reg(0).mem(m),
+        }
+    }
+}

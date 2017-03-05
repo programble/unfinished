@@ -8,6 +8,7 @@ pub use mnemonic::operand::R32L;
 pub use mnemonic::operand::R32::*;
 pub use mnemonic::operand::R64L;
 pub use mnemonic::operand::R64::*;
+pub use mnemonic::operand::Sti::*;
 pub use mnemonic::operand::{Index32L, Index32, Index64L, Index64};
 pub use mnemonic::operand::Scale::*;
 pub use mnemonic::operand::Disp::*;

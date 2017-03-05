@@ -268,6 +268,19 @@ impl_display_reg!(
 );
 
 impl_display_reg!(
+    Sti {
+        St0 => "st0",
+        St1 => "st1",
+        St2 => "st2",
+        St3 => "st3",
+        St4 => "st4",
+        St5 => "st5",
+        St6 => "st6",
+        St7 => "st7",
+    }
+);
+
+impl_display_reg!(
     Index32L {
         Eax => "eax",
         Ebx => "ebx",
@@ -462,3 +475,31 @@ impl_display_unary!("dec", Dec { Rm8L, Rm8, Rm16, Rm32, Rm64 });
 impl_display_unary!("div", Div { Rm8L, Rm8, Rm16, Rm32, Rm64 });
 impl_display_str!("f2xm1", F2xm1);
 impl_display_str!("fabs", Fabs);
+
+impl Display for Fadd {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Fadd::M32fp(m)  => write!(f, "fadd dword {}", m),
+            Fadd::M64fp(m)  => write!(f, "fadd qword {}", m),
+            Fadd::St0Sti(i) => write!(f, "fadd st0, {}", i),
+            Fadd::StiSt0(i) => write!(f, "fadd {}, st0", i),
+        }
+    }
+}
+
+impl Display for Faddp {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Faddp::StiSt0(i) => write!(f, "faddp {}, st0", i),
+        }
+    }
+}
+
+impl Display for Fiadd {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Fiadd::M32int(m) => write!(f, "fiadd dword {}", m),
+            Fiadd::M16int(m) => write!(f, "fiadd word {}", m),
+        }
+    }
+}
