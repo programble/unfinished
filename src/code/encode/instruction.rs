@@ -292,6 +292,24 @@ impl Encode for Cmpxchg {
     }
 }
 
+impl Encode for Cmpxchg8b {
+    fn encode(&self) -> Instruction {
+        use self::Cmpxchg8b::*;
+        match *self {
+            M64(m) => opcode2(0xc7).reg(1).mem(m),
+        }
+    }
+}
+
+impl Encode for Cmpxchg16b {
+    fn encode(&self) -> Instruction {
+        use self::Cmpxchg16b::*;
+        match *self {
+            M128(m) => opcode2(0xc7).reg(1).mem(m).rex_w(),
+        }
+    }
+}
+
 impl Encode for Cpuid {
     fn encode(&self) -> Instruction {
         opcode2(0xa2)

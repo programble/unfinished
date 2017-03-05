@@ -308,7 +308,16 @@ pub enum Cmpxchg {
     Rm64R64(Rm64, R64),
 }
 
-// CMPXCHG8B/CMPXCHG16B
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Cmpxchg8b {
+    M64(Mem),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Cmpxchg16b {
+    M128(Mem),
+}
+
 // COMISD
 // COMISS
 
