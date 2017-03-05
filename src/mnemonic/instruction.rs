@@ -365,3 +365,21 @@ pub struct Cdq;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct Cqo;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Dec {
+    Rm8L(Rm8L),
+    Rm8(Rm8),
+    Rm16(Rm16),
+    Rm32(Rm32),
+    Rm64(Rm64),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Div {
+    Rm8L(Rm8L),
+    Rm8(Rm8),
+    Rm16(Rm16),
+    Rm32(Rm32),
+    Rm64(Rm64),
+}

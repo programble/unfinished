@@ -458,3 +458,5 @@ impl_display_binary!("crc32", Crc32 { R32LRm8L, R32Rm8, R32Rm16, R32Rm32, R64Rm8
 impl_display_str!("cwd", Cwd);
 impl_display_str!("cdq", Cdq);
 impl_display_str!("cqo", Cqo);
+impl_display_unary!("dec", Dec { Rm8L, Rm8, Rm16, Rm32, Rm64 });
+impl_display_unary!("div", Div { Rm8L, Rm8, Rm16, Rm32, Rm64 });

@@ -347,3 +347,29 @@ impl Encode for Cqo {
         opcode1(0x99).rex_w()
     }
 }
+
+impl Encode for Dec {
+    fn encode(&self) -> Instruction {
+        use self::Dec::*;
+        match *self {
+            Rm8L(rm) => opcode1(0xfe).rm8l(rm),
+            Rm8(rm)  => opcode1(0xfe).rm8(rm),
+            Rm16(rm) => opcode1(0xff).rm16(rm).oper16(),
+            Rm32(rm) => opcode1(0xff).rm32(rm),
+            Rm64(rm) => opcode1(0xff).rm64(rm).rex_w(),
+        }
+    }
+}
+
+impl Encode for Div {
+    fn encode(&self) -> Instruction {
+        use self::Div::*;
+        match *self {
+            Rm8L(rm) => opcode1(0xf6).reg(6).rm8l(rm),
+            Rm8(rm)  => opcode1(0xf6).reg(6).rm8(rm),
+            Rm16(rm) => opcode1(0xf7).reg(6).rm16(rm).oper16(),
+            Rm32(rm) => opcode1(0xf7).reg(6).rm32(rm),
+            Rm64(rm) => opcode1(0xf7).reg(6).rm64(rm).rex_w(),
+        }
+    }
+}
