@@ -438,3 +438,15 @@ pub struct Fclex;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct Fnclex;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Fcmov {
+    BSt0Sti(Sti),
+    ESt0Sti(Sti),
+    BeSt0Sti(Sti),
+    USt0Sti(Sti),
+    NbSt0Sti(Sti),
+    NeSt0Sti(Sti),
+    NbeSt0Sti(Sti),
+    NuSt0Sti(Sti),
+}

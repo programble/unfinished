@@ -456,3 +456,19 @@ impl Encode for Fnclex {
         Instruction::opcode2(0xdb, 0xe2)
     }
 }
+
+impl Encode for Fcmov {
+    fn encode(&self) -> Instruction {
+        use self::Fcmov::*;
+        match *self {
+            BSt0Sti(i)   => opcode1(0xda).reg(0).rm_reg(i),
+            ESt0Sti(i)   => opcode1(0xda).reg(1).rm_reg(i),
+            BeSt0Sti(i)  => opcode1(0xda).reg(2).rm_reg(i),
+            USt0Sti(i)   => opcode1(0xda).reg(3).rm_reg(i),
+            NbSt0Sti(i)  => opcode1(0xdb).reg(0).rm_reg(i),
+            NeSt0Sti(i)  => opcode1(0xdb).reg(1).rm_reg(i),
+            NbeSt0Sti(i) => opcode1(0xdb).reg(2).rm_reg(i),
+            NuSt0Sti(i)  => opcode1(0xdb).reg(3).rm_reg(i),
+        }
+    }
+}

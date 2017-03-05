@@ -509,3 +509,18 @@ impl_display_unary!("fbstp", Fbstp { M80bcd });
 impl_display_str!("fchs", Fchs);
 impl_display_str!("fclex", Fclex);
 impl_display_str!("fnclex", Fnclex);
+
+impl Display for Fcmov {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Fcmov::BSt0Sti(i)   => write!(f, "fcmovb st0, {}", i),
+            Fcmov::ESt0Sti(i)   => write!(f, "fcmove st0, {}", i),
+            Fcmov::BeSt0Sti(i)  => write!(f, "fcmovbe st0, {}", i),
+            Fcmov::USt0Sti(i)   => write!(f, "fcmovu st0, {}", i),
+            Fcmov::NbSt0Sti(i)  => write!(f, "fcmovnb st0, {}", i),
+            Fcmov::NeSt0Sti(i)  => write!(f, "fcmovne st0, {}", i),
+            Fcmov::NbeSt0Sti(i) => write!(f, "fcmovnbe st0, {}", i),
+            Fcmov::NuSt0Sti(i)  => write!(f, "fcmovnu st0, {}", i),
+        }
+    }
+}
