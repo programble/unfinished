@@ -291,3 +291,9 @@ impl Encode for Cmpxchg {
         }
     }
 }
+
+impl Encode for Cpuid {
+    fn encode(&self) -> Instruction {
+        opcode2(0xa2)
+    }
+}

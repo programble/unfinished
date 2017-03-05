@@ -451,3 +451,4 @@ impl_display_reg!(
     }
 );
 impl_display_binary!("cmpxchg", Cmpxchg { Rm8LR8L, Rm8R8, Rm16R16, Rm32R32, Rm64R64 });
+impl_display_str!("cpuid", Cpuid);

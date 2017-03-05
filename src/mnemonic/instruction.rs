@@ -307,3 +307,11 @@ pub enum Cmpxchg {
     Rm32R32(Rm32, R32),
     Rm64R64(Rm64, R64),
 }
+
+// CMPXCHG8B
+// CMPXCHG16B
+// COMISD
+// COMISS
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Cpuid;
