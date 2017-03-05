@@ -503,3 +503,6 @@ impl Display for Fiadd {
         }
     }
 }
+
+impl_display_unary!("fbld", Fbld { M80dec });
+impl_display_unary!("fbstp", Fbstp { M80bcd });

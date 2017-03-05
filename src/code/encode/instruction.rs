@@ -420,3 +420,21 @@ impl Encode for Fiadd {
         }
     }
 }
+
+impl Encode for Fbld {
+    fn encode(&self) -> Instruction {
+        use self::Fbld::*;
+        match *self {
+            M80dec(m) => opcode1(0xdf).reg(4).mem(m),
+        }
+    }
+}
+
+impl Encode for Fbstp {
+    fn encode(&self) -> Instruction {
+        use self::Fbstp::*;
+        match *self {
+            M80bcd(m) => opcode1(0xdf).reg(6).mem(m),
+        }
+    }
+}

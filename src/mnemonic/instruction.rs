@@ -418,3 +418,13 @@ pub enum Fiadd {
     M32int(Mem),
     M16int(Mem),
 }
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Fbld {
+    M80dec(Mem),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Fbstp {
+    M80bcd(Mem),
+}
