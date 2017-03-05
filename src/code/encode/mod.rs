@@ -164,6 +164,11 @@ impl Instruction {
         self
     }
 
+    fn repne(mut self) -> Self {
+        self.prefix1 = Some(Prefix1::Repne);
+        self
+    }
+
     fn rep(mut self) -> Self {
         self.prefix1 = Some(Prefix1::Rep);
         self

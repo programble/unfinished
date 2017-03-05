@@ -315,3 +315,13 @@ pub enum Cmpxchg {
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct Cpuid;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Crc32 {
+    R32LRm8L(R32L, Rm8L),
+    R32Rm8(R32, Rm8),
+    R32Rm16(R32, Rm16),
+    R32Rm32(R32, Rm32),
+    R64Rm8(R64, Rm8),
+    R64Rm64(R64, Rm64),
+}

@@ -297,3 +297,17 @@ impl Encode for Cpuid {
         opcode2(0xa2)
     }
 }
+
+impl Encode for Crc32 {
+    fn encode(&self) -> Instruction {
+        use self::Crc32::*;
+        match *self {
+            R32LRm8L(r, rm) => opcode3(0x38, 0xf0).repne().reg(r).rm8l(rm),
+            R32Rm8(r, rm)   => opcode3(0x38, 0xf0).repne().reg(r).rm8(rm),
+            R32Rm16(r, rm)  => opcode3(0x38, 0xf1).repne().reg(r).rm16(rm).oper16(),
+            R32Rm32(r, rm)  => opcode3(0x38, 0xf1).repne().reg(r).rm32(rm),
+            R64Rm8(r, rm)   => opcode3(0x38, 0xf0).repne().reg(r).rm8(rm).rex_w(),
+            R64Rm64(r, rm)  => opcode3(0x38, 0xf1).repne().reg(r).rm64(rm).rex_w(),
+        }
+    }
+}
