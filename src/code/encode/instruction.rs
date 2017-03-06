@@ -500,3 +500,39 @@ impl Encode for Fcompp {
         opcode1(0xde).reg(3).rm_reg(1)
     }
 }
+
+impl Encode for Fcomi {
+    fn encode(&self) -> Instruction {
+        use self::Fcomi::*;
+        match *self {
+            St0Sti(i) => opcode1(0xdb).reg(6).rm_reg(i),
+        }
+    }
+}
+
+impl Encode for Fcomip {
+    fn encode(&self) -> Instruction {
+        use self::Fcomip::*;
+        match *self {
+            St0Sti(i) => opcode1(0xdf).reg(6).rm_reg(i),
+        }
+    }
+}
+
+impl Encode for Fucomi {
+    fn encode(&self) -> Instruction {
+        use self::Fucomi::*;
+        match *self {
+            St0Sti(i) => opcode1(0xdb).reg(5).rm_reg(i),
+        }
+    }
+}
+
+impl Encode for Fucomip {
+    fn encode(&self) -> Instruction {
+        use self::Fucomip::*;
+        match *self {
+            St0Sti(i) => opcode1(0xdf).reg(5).rm_reg(i),
+        }
+    }
+}

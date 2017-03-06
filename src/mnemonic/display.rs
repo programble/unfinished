@@ -546,3 +546,35 @@ impl Display for Fcomp {
 }
 
 impl_display_str!("fcompp", Fcompp);
+
+impl Display for Fcomi {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Fcomi::St0Sti(i) => write!(f, "fcomi st0, {}", i),
+        }
+    }
+}
+
+impl Display for Fcomip {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Fcomip::St0Sti(i) => write!(f, "fcomip st0, {}", i),
+        }
+    }
+}
+
+impl Display for Fucomi {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Fucomi::St0Sti(i) => write!(f, "fucomi st0, {}", i),
+        }
+    }
+}
+
+impl Display for Fucomip {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Fucomip::St0Sti(i) => write!(f, "fucomip st0, {}", i),
+        }
+    }
+}

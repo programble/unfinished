@@ -467,3 +467,23 @@ pub enum Fcomp {
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct Fcompp;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Fcomi {
+    St0Sti(Sti),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Fcomip {
+    St0Sti(Sti),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Fucomi {
+    St0Sti(Sti),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Fucomip {
+    St0Sti(Sti),
+}
