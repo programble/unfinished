@@ -536,3 +536,15 @@ impl Encode for Fucomip {
         }
     }
 }
+
+impl Encode for Fcos {
+    fn encode(&self) -> Instruction {
+        fopcode(0xff)
+    }
+}
+
+impl Encode for Fdecstp {
+    fn encode(&self) -> Instruction {
+        fopcode(0xf6)
+    }
+}

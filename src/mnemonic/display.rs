@@ -578,3 +578,6 @@ impl Display for Fucomip {
         }
     }
 }
+
+impl_display_str!("fcos", Fcos);
+impl_display_str!("fdecstp", Fdecstp);

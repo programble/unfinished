@@ -487,3 +487,9 @@ pub enum Fucomi {
 pub enum Fucomip {
     St0Sti(Sti),
 }
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Fcos;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Fdecstp;
