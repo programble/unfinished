@@ -472,3 +472,31 @@ impl Encode for Fcmov {
         }
     }
 }
+
+impl Encode for Fcom {
+    fn encode(&self) -> Instruction {
+        use self::Fcom::*;
+        match *self {
+            M32fp(m) => opcode1(0xd8).reg(2).mem(m),
+            M64fp(m) => opcode1(0xdc).reg(2).mem(m),
+            Sti(i)   => opcode1(0xd8).reg(2).rm_reg(i),
+        }
+    }
+}
+
+impl Encode for Fcomp {
+    fn encode(&self) -> Instruction {
+        use self::Fcomp::*;
+        match *self {
+            M32fp(m) => opcode1(0xd8).reg(3).mem(m),
+            M64fp(m) => opcode1(0xdc).reg(3).mem(m),
+            Sti(i)   => opcode1(0xd8).reg(3).rm_reg(i),
+        }
+    }
+}
+
+impl Encode for Fcompp {
+    fn encode(&self) -> Instruction {
+        opcode1(0xde).reg(3).rm_reg(1)
+    }
+}

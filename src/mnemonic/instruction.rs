@@ -450,3 +450,20 @@ pub enum Fcmov {
     NbeSt0Sti(Sti),
     NuSt0Sti(Sti),
 }
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Fcom {
+    M32fp(Mem),
+    M64fp(Mem),
+    Sti(Sti),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Fcomp {
+    M32fp(Mem),
+    M64fp(Mem),
+    Sti(Sti),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Fcompp;

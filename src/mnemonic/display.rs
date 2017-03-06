@@ -524,3 +524,25 @@ impl Display for Fcmov {
         }
     }
 }
+
+impl Display for Fcom {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Fcom::M32fp(m) => write!(f, "fcom dword {}", m),
+            Fcom::M64fp(m) => write!(f, "fcom qword {}", m),
+            Fcom::Sti(i)   => write!(f, "fcom {}", i),
+        }
+    }
+}
+
+impl Display for Fcomp {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Fcomp::M32fp(m) => write!(f, "fcom dword {}", m),
+            Fcomp::M64fp(m) => write!(f, "fcom qword {}", m),
+            Fcomp::Sti(i)   => write!(f, "fcom {}", i),
+        }
+    }
+}
+
+impl_display_str!("fcompp", Fcompp);
