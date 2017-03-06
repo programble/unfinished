@@ -581,3 +581,31 @@ impl Display for Fucomip {
 
 impl_display_str!("fcos", Fcos);
 impl_display_str!("fdecstp", Fdecstp);
+
+impl Display for Fdiv {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Fdiv::M32fp(m)  => write!(f, "fdiv dword {}", m),
+            Fdiv::M64fp(m)  => write!(f, "fdiv qword {}", m),
+            Fdiv::St0Sti(i) => write!(f, "fdiv st0, {}", i),
+            Fdiv::StiSt0(i) => write!(f, "fdiv {}, st0", i),
+        }
+    }
+}
+
+impl Display for Fdivp {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Fdivp::StiSt0(i) => write!(f, "fdivp {}, st0", i),
+        }
+    }
+}
+
+impl Display for Fidiv {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Fidiv::M32int(m) => write!(f, "fidiv dword {}", m),
+            Fidiv::M16int(m) => write!(f, "fidiv word {}", m),
+        }
+    }
+}

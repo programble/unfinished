@@ -493,3 +493,22 @@ pub struct Fcos;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct Fdecstp;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Fdiv {
+    M32fp(Mem),
+    M64fp(Mem),
+    St0Sti(Sti),
+    StiSt0(Sti),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Fdivp {
+    StiSt0(Sti),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Fidiv {
+    M32int(Mem),
+    M16int(Mem),
+}

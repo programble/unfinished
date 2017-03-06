@@ -548,3 +548,34 @@ impl Encode for Fdecstp {
         fopcode(0xf6)
     }
 }
+
+impl Encode for Fdiv {
+    fn encode(&self) -> Instruction {
+        use self::Fdiv::*;
+        match *self {
+            M32fp(m)  => opcode1(0xd8).reg(6).mem(m),
+            M64fp(m)  => opcode1(0xdc).reg(6).mem(m),
+            St0Sti(i) => opcode1(0xd8).reg(6).rm_reg(i),
+            StiSt0(i) => opcode1(0xdc).reg(7).rm_reg(i),
+        }
+    }
+}
+
+impl Encode for Fdivp {
+    fn encode(&self) -> Instruction {
+        use self::Fdivp::*;
+        match *self {
+            StiSt0(i) => opcode1(0xde).reg(7).rm_reg(i),
+        }
+    }
+}
+
+impl Encode for Fidiv {
+    fn encode(&self) -> Instruction {
+        use self::Fidiv::*;
+        match *self {
+            M32int(m) => opcode1(0xda).reg(6).mem(m),
+            M16int(m) => opcode1(0xde).reg(6).mem(m),
+        }
+    }
+}
