@@ -429,7 +429,6 @@ pub enum Fbstp {
     M80bcd(Mem),
 }
 
-
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct Fchs;
 
@@ -509,6 +508,25 @@ pub enum Fdivp {
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Fidiv {
+    M32int(Mem),
+    M16int(Mem),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Fdivr {
+    M32fp(Mem),
+    M64fp(Mem),
+    St0Sti(Sti),
+    StiSt0(Sti),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Fdivrp {
+    StiSt0(Sti),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Fidivr {
     M32int(Mem),
     M16int(Mem),
 }

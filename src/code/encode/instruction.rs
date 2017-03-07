@@ -579,3 +579,34 @@ impl Encode for Fidiv {
         }
     }
 }
+
+impl Encode for Fdivr {
+    fn encode(&self) -> Instruction {
+        use self::Fdivr::*;
+        match *self {
+            M32fp(m)  => opcode1(0xd8).reg(7).mem(m),
+            M64fp(m)  => opcode1(0xdc).reg(7).mem(m),
+            St0Sti(i) => opcode1(0xd8).reg(7).rm_reg(i),
+            StiSt0(i) => opcode1(0xdc).reg(6).rm_reg(i),
+        }
+    }
+}
+
+impl Encode for Fdivrp {
+    fn encode(&self) -> Instruction {
+        use self::Fdivrp::*;
+        match *self {
+            StiSt0(i) => opcode1(0xde).reg(6).rm_reg(i),
+        }
+    }
+}
+
+impl Encode for Fidivr {
+    fn encode(&self) -> Instruction {
+        use self::Fidivr::*;
+        match *self {
+            M32int(m) => opcode1(0xda).reg(7).mem(m),
+            M16int(m) => opcode1(0xde).reg(7).mem(m),
+        }
+    }
+}

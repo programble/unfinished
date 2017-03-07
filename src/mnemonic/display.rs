@@ -609,3 +609,31 @@ impl Display for Fidiv {
         }
     }
 }
+
+impl Display for Fdivr {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Fdivr::M32fp(m)  => write!(f, "fdivr dword {}", m),
+            Fdivr::M64fp(m)  => write!(f, "fdivr qword {}", m),
+            Fdivr::St0Sti(i) => write!(f, "fdivr st0, {}", i),
+            Fdivr::StiSt0(i) => write!(f, "fdivr {}, st0", i),
+        }
+    }
+}
+
+impl Display for Fdivrp {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Fdivrp::StiSt0(i) => write!(f, "fdivrp {}, st0", i),
+        }
+    }
+}
+
+impl Display for Fidivr {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Fidivr::M32int(m) => write!(f, "fidivr dword {}", m),
+            Fidivr::M16int(m) => write!(f, "fidivr word {}", m),
+        }
+    }
+}
