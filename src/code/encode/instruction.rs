@@ -610,3 +610,12 @@ impl Encode for Fidivr {
         }
     }
 }
+
+impl Encode for Ffree {
+    fn encode(&self) -> Instruction {
+        use self::Ffree::*;
+        match *self {
+            Sti(i) => opcode1(0xdd).reg(0).rm_reg(i),
+        }
+    }
+}

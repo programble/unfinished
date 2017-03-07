@@ -637,3 +637,5 @@ impl Display for Fidivr {
         }
     }
 }
+
+impl_display_unary!("ffree", Ffree { Sti });

@@ -530,3 +530,8 @@ pub enum Fidivr {
     M32int(Mem),
     M16int(Mem),
 }
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Ffree {
+    Sti(Sti),
+}
