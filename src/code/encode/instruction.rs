@@ -619,3 +619,23 @@ impl Encode for Ffree {
         }
     }
 }
+
+impl Encode for Ficom {
+    fn encode(&self) -> Instruction {
+        use self::Ficom::*;
+        match *self {
+            M16int(m) => opcode1(0xde).reg(2).mem(m),
+            M32int(m) => opcode1(0xda).reg(2).mem(m),
+        }
+    }
+}
+
+impl Encode for Ficomp {
+    fn encode(&self) -> Instruction {
+        use self::Ficomp::*;
+        match *self {
+            M16int(m) => opcode1(0xde).reg(3).mem(m),
+            M32int(m) => opcode1(0xda).reg(3).mem(m),
+        }
+    }
+}

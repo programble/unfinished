@@ -639,3 +639,21 @@ impl Display for Fidivr {
 }
 
 impl_display_unary!("ffree", Ffree { Sti });
+
+impl Display for Ficom {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Ficom::M16int(m) => write!(f, "ficom word {}", m),
+            Ficom::M32int(m) => write!(f, "ficom dword {}", m),
+        }
+    }
+}
+
+impl Display for Ficomp {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Ficomp::M16int(m) => write!(f, "ficomp word {}", m),
+            Ficomp::M32int(m) => write!(f, "ficomp dword {}", m),
+        }
+    }
+}
