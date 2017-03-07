@@ -8,7 +8,7 @@ use mnemonic::operand::{
     Imm8, Imm16, Imm32,
     Cc,
     Scale, Sreg, Offset, Mem,
-    Rm8L, Rm8, Rm16, Rm32, Rm64,
+    Rm8l, Rm8, Rm16, Rm32, Rm64,
 };
 
 pub trait Encode {
@@ -377,10 +377,10 @@ impl Instruction {
         }
     }
 
-    fn rm8l(self, rm: Rm8L) -> Self {
+    fn rm8l(self, rm: Rm8l) -> Self {
         match rm {
-            Rm8L::R8L(r) => self.rm_reg(r),
-            Rm8L::M8L(m) => self.mem(m),
+            Rm8l::R8l(r) => self.rm_reg(r),
+            Rm8l::M8l(m) => self.mem(m),
         }
     }
 

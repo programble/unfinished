@@ -48,7 +48,7 @@ pub enum Cc {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum R8L {
+pub enum R8l {
     Al, Bl, Cl, Dl, Ah, Bh, Ch, Dh
 }
 
@@ -63,7 +63,7 @@ pub enum R16 {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum R32L {
+pub enum R32l {
     Eax, Ebx, Ecx, Edx, Esi, Edi, Ebp, Esp
 }
 
@@ -73,7 +73,7 @@ pub enum R32 {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum R64L {
+pub enum R64l {
     Rax, Rbx, Rcx, Rdx, Rsi, Rdi, Rbp, Rsp
 }
 
@@ -88,7 +88,7 @@ pub enum Sti {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum Index32L {
+pub enum Index32l {
     Eax, Ebx, Ecx, Edx, Esi, Edi, Ebp
 }
 
@@ -98,7 +98,7 @@ pub enum Index32 {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum Index64L {
+pub enum Index64l {
     Rax, Rbx, Rcx, Rdx, Rsi, Rdi, Rbp
 }
 
@@ -142,9 +142,9 @@ pub enum Mem<B32 = R32, I32 = Index32, B64 = R64, I64 = Index64> {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum Rm8L {
-    R8L(R8L),
-    M8L(Mem<R32L, Index32L, R64L, Index64L>),
+pub enum Rm8l {
+    R8l(R8l),
+    M8l(Mem<R32l, Index32l, R64l, Index64l>),
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]

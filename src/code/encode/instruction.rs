@@ -23,13 +23,13 @@ macro_rules! impl_encode_arith {
             fn encode(&self) -> Instruction {
                 use self::$mnemonic::*;
                 match *self {
-                    Rm8LR8L(rm, r) => opcode1($opcode).rm8l(rm).reg(r),
+                    Rm8lR8l(rm, r) => opcode1($opcode).rm8l(rm).reg(r),
                     Rm8R8(rm, r)   => opcode1($opcode).rm8(rm).reg(r),
                     Rm16R16(rm, r) => opcode1($opcode + 1).rm16(rm).reg(r).oper16(),
                     Rm32R32(rm, r) => opcode1($opcode + 1).rm32(rm).reg(r),
                     Rm64R64(rm, r) => opcode1($opcode + 1).rm64(rm).reg(r).rex_w(),
 
-                    R8LRm8L(r, rm) => opcode1($opcode + 2).reg(r).rm8l(rm),
+                    R8lRm8l(r, rm) => opcode1($opcode + 2).reg(r).rm8l(rm),
                     R8Rm8(r, rm)   => opcode1($opcode + 2).reg(r).rm8(rm),
                     R16Rm16(r, rm) => opcode1($opcode + 3).reg(r).rm16(rm).oper16(),
                     R32Rm32(r, rm) => opcode1($opcode + 3).reg(r).rm32(rm),
@@ -40,7 +40,7 @@ macro_rules! impl_encode_arith {
                     EaxImm32(imm) => opcode1($opcode + 5).imm32(imm),
                     RaxImm32(imm) => opcode1($opcode + 5).imm32(imm).rex_w(),
 
-                    Rm8LImm8(rm, imm)  => opcode1(0x80).reg($reg).rm8l(rm).imm8(imm),
+                    Rm8lImm8(rm, imm)  => opcode1(0x80).reg($reg).rm8l(rm).imm8(imm),
                     Rm8Imm8(rm, imm)   => opcode1(0x80).reg($reg).rm8(rm).imm8(imm),
                     Rm16Imm16(rm, imm) => opcode1(0x81).reg($reg).rm16(rm).imm16(imm).oper16(),
                     Rm32Imm32(rm, imm) => opcode1(0x81).reg($reg).rm32(rm).imm32(imm),
@@ -287,7 +287,7 @@ impl Encode for Cmpxchg {
     fn encode(&self) -> Instruction {
         use self::Cmpxchg::*;
         match *self {
-            Rm8LR8L(rm, r) => opcode2(0xb0).rm8l(rm).reg(r),
+            Rm8lR8l(rm, r) => opcode2(0xb0).rm8l(rm).reg(r),
             Rm8R8(rm, r)   => opcode2(0xb0).rm8(rm).reg(r),
             Rm16R16(rm, r) => opcode2(0xb1).rm16(rm).reg(r).oper16(),
             Rm32R32(rm, r) => opcode2(0xb1).rm32(rm).reg(r),
@@ -324,7 +324,7 @@ impl Encode for Crc32 {
     fn encode(&self) -> Instruction {
         use self::Crc32::*;
         match *self {
-            R32LRm8L(r, rm) => opcode3(0x38, 0xf0).repne().reg(r).rm8l(rm),
+            R32lRm8l(r, rm) => opcode3(0x38, 0xf0).repne().reg(r).rm8l(rm),
             R32Rm8(r, rm)   => opcode3(0x38, 0xf0).repne().reg(r).rm8(rm),
             R32Rm16(r, rm)  => opcode3(0x38, 0xf1).repne().reg(r).rm16(rm).oper16(),
             R32Rm32(r, rm)  => opcode3(0x38, 0xf1).repne().reg(r).rm32(rm),
@@ -356,7 +356,7 @@ impl Encode for Dec {
     fn encode(&self) -> Instruction {
         use self::Dec::*;
         match *self {
-            Rm8L(rm) => opcode1(0xfe).rm8l(rm),
+            Rm8l(rm) => opcode1(0xfe).rm8l(rm),
             Rm8(rm)  => opcode1(0xfe).rm8(rm),
             Rm16(rm) => opcode1(0xff).rm16(rm).oper16(),
             Rm32(rm) => opcode1(0xff).rm32(rm),
@@ -369,7 +369,7 @@ impl Encode for Div {
     fn encode(&self) -> Instruction {
         use self::Div::*;
         match *self {
-            Rm8L(rm) => opcode1(0xf6).reg(6).rm8l(rm),
+            Rm8l(rm) => opcode1(0xf6).reg(6).rm8l(rm),
             Rm8(rm)  => opcode1(0xf6).reg(6).rm8(rm),
             Rm16(rm) => opcode1(0xf7).reg(6).rm16(rm).oper16(),
             Rm32(rm) => opcode1(0xf7).reg(6).rm32(rm),

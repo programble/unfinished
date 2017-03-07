@@ -79,7 +79,7 @@ macro_rules! impl_display_arith {
                     $ty::AxImm16(imm)       => write!(f, concat!($str, " ax, {}"), imm),
                     $ty::EaxImm32(imm)      => write!(f, concat!($str, " eax, {}"), imm),
                     $ty::RaxImm32(imm)      => write!(f, concat!($str, " rax, {}"), imm),
-                    $ty::Rm8LImm8(rm, imm)  => write!(f, concat!($str, " {}, {}"), rm, imm),
+                    $ty::Rm8lImm8(rm, imm)  => write!(f, concat!($str, " {}, {}"), rm, imm),
                     $ty::Rm8Imm8(rm, imm)   => write!(f, concat!($str, " {}, {}"), rm, imm),
                     $ty::Rm16Imm16(rm, imm) => write!(f, concat!($str, " {}, {}"), rm, imm),
                     $ty::Rm32Imm32(rm, imm) => write!(f, concat!($str, " {}, {}"), rm, imm),
@@ -87,12 +87,12 @@ macro_rules! impl_display_arith {
                     $ty::Rm16Imm8(rm, imm)  => write!(f, concat!($str, " {}, {}"), rm, imm),
                     $ty::Rm32Imm8(rm, imm)  => write!(f, concat!($str, " {}, {}"), rm, imm),
                     $ty::Rm64Imm8(rm, imm)  => write!(f, concat!($str, " {}, {}"), rm, imm),
-                    $ty::Rm8LR8L(rm, r)     => write!(f, concat!($str, " {}, {}"), rm, r),
+                    $ty::Rm8lR8l(rm, r)     => write!(f, concat!($str, " {}, {}"), rm, r),
                     $ty::Rm8R8(rm, r)       => write!(f, concat!($str, " {}, {}"), rm, r),
                     $ty::Rm16R16(rm, r)     => write!(f, concat!($str, " {}, {}"), rm, r),
                     $ty::Rm32R32(rm, r)     => write!(f, concat!($str, " {}, {}"), rm, r),
                     $ty::Rm64R64(rm, r)     => write!(f, concat!($str, " {}, {}"), rm, r),
-                    $ty::R8LRm8L(r, rm)     => write!(f, concat!($str, " {}, {}"), r, rm),
+                    $ty::R8lRm8l(r, rm)     => write!(f, concat!($str, " {}, {}"), r, rm),
                     $ty::R8Rm8(r, rm)       => write!(f, concat!($str, " {}, {}"), r, rm),
                     $ty::R16Rm16(r, rm)     => write!(f, concat!($str, " {}, {}"), r, rm),
                     $ty::R32Rm32(r, rm)     => write!(f, concat!($str, " {}, {}"), r, rm),
@@ -145,7 +145,7 @@ impl_display_reg!(
 );
 
 impl_display_reg!(
-    R8L {
+    R8l {
         Al => "al",
         Bl => "bl",
         Cl => "cl",
@@ -200,7 +200,7 @@ impl_display_reg!(
 );
 
 impl_display_reg!(
-    R32L {
+    R32l {
         Eax => "eax",
         Ebx => "ebx",
         Ecx => "ecx",
@@ -234,7 +234,7 @@ impl_display_reg!(
 );
 
 impl_display_reg!(
-    R64L {
+    R64l {
         Rax => "rax",
         Rbx => "rbx",
         Rcx => "rcx",
@@ -281,7 +281,7 @@ impl_display_reg!(
 );
 
 impl_display_reg!(
-    Index32L {
+    Index32l {
         Eax => "eax",
         Ebx => "ebx",
         Ecx => "ecx",
@@ -313,7 +313,7 @@ impl_display_reg!(
 );
 
 impl_display_reg!(
-    Index64L {
+    Index64l {
         Rax => "rax",
         Rbx => "rbx",
         Rcx => "rcx",
@@ -401,7 +401,7 @@ where Offset<B32, I32>: Display, Offset<B64, I64>: Display {
     }
 }
 
-impl_display_rm!(Rm8L, R8L, "byte", M8L);
+impl_display_rm!(Rm8l, R8l, "byte", M8l);
 impl_display_rm!(Rm8, R8, "byte", M8);
 impl_display_rm!(Rm16, R16, "word", M16);
 impl_display_rm!(Rm32, R32, "dword", M32);
@@ -463,16 +463,16 @@ impl_display_reg!(
         Q => "cmpsq",
     }
 );
-impl_display_binary!("cmpxchg", Cmpxchg { Rm8LR8L, Rm8R8, Rm16R16, Rm32R32, Rm64R64 });
+impl_display_binary!("cmpxchg", Cmpxchg { Rm8lR8l, Rm8R8, Rm16R16, Rm32R32, Rm64R64 });
 impl_display_unary!("cmpxchg8b", Cmpxchg8b { M64 });
 impl_display_unary!("cmpxchg16b", Cmpxchg16b { M128 });
 impl_display_str!("cpuid", Cpuid);
-impl_display_binary!("crc32", Crc32 { R32LRm8L, R32Rm8, R32Rm16, R32Rm32, R64Rm8, R64Rm64 });
+impl_display_binary!("crc32", Crc32 { R32lRm8l, R32Rm8, R32Rm16, R32Rm32, R64Rm8, R64Rm64 });
 impl_display_str!("cwd", Cwd);
 impl_display_str!("cdq", Cdq);
 impl_display_str!("cqo", Cqo);
-impl_display_unary!("dec", Dec { Rm8L, Rm8, Rm16, Rm32, Rm64 });
-impl_display_unary!("div", Div { Rm8L, Rm8, Rm16, Rm32, Rm64 });
+impl_display_unary!("dec", Dec { Rm8l, Rm8, Rm16, Rm32, Rm64 });
+impl_display_unary!("div", Div { Rm8l, Rm8, Rm16, Rm32, Rm64 });
 impl_display_str!("f2xm1", F2xm1);
 impl_display_str!("fabs", Fabs);
 

@@ -7,7 +7,7 @@ pub enum Adc {
     EaxImm32(Imm32),
     RaxImm32(Imm32),
 
-    Rm8LImm8(Rm8L, Imm8),
+    Rm8lImm8(Rm8l, Imm8),
     Rm8Imm8(Rm8, Imm8),
     Rm16Imm16(Rm16, Imm16),
     Rm32Imm32(Rm32, Imm32),
@@ -17,13 +17,13 @@ pub enum Adc {
     Rm32Imm8(Rm32, Imm8),
     Rm64Imm8(Rm64, Imm8),
 
-    Rm8LR8L(Rm8L, R8L),
+    Rm8lR8l(Rm8l, R8l),
     Rm8R8(Rm8, R8),
     Rm16R16(Rm16, R16),
     Rm32R32(Rm32, R32),
     Rm64R64(Rm64, R64),
 
-    R8LRm8L(R8L, Rm8L),
+    R8lRm8l(R8l, Rm8l),
     R8Rm8(R8, Rm8),
     R16Rm16(R16, Rm16),
     R32Rm32(R32, Rm32),
@@ -43,7 +43,7 @@ pub enum Add {
     EaxImm32(Imm32),
     RaxImm32(Imm32),
 
-    Rm8LImm8(Rm8L, Imm8),
+    Rm8lImm8(Rm8l, Imm8),
     Rm8Imm8(Rm8, Imm8),
     Rm16Imm16(Rm16, Imm16),
     Rm32Imm32(Rm32, Imm32),
@@ -53,13 +53,13 @@ pub enum Add {
     Rm32Imm8(Rm32, Imm8),
     Rm64Imm8(Rm64, Imm8),
 
-    Rm8LR8L(Rm8L, R8L),
+    Rm8lR8l(Rm8l, R8l),
     Rm8R8(Rm8, R8),
     Rm16R16(Rm16, R16),
     Rm32R32(Rm32, R32),
     Rm64R64(Rm64, R64),
 
-    R8LRm8L(R8L, Rm8L),
+    R8lRm8l(R8l, Rm8l),
     R8Rm8(R8, Rm8),
     R16Rm16(R16, Rm16),
     R32Rm32(R32, Rm32),
@@ -93,7 +93,7 @@ pub enum And {
     EaxImm32(Imm32),
     RaxImm32(Imm32),
 
-    Rm8LImm8(Rm8L, Imm8),
+    Rm8lImm8(Rm8l, Imm8),
     Rm8Imm8(Rm8, Imm8),
     Rm16Imm16(Rm16, Imm16),
     Rm32Imm32(Rm32, Imm32),
@@ -103,13 +103,13 @@ pub enum And {
     Rm32Imm8(Rm32, Imm8),
     Rm64Imm8(Rm64, Imm8),
 
-    Rm8LR8L(Rm8L, R8L),
+    Rm8lR8l(Rm8l, R8l),
     Rm8R8(Rm8, R8),
     Rm16R16(Rm16, R16),
     Rm32R32(Rm32, R32),
     Rm64R64(Rm64, R64),
 
-    R8LRm8L(R8L, Rm8L),
+    R8lRm8l(R8l, Rm8l),
     R8Rm8(R8, Rm8),
     R16Rm16(R16, Rm16),
     R32Rm32(R32, Rm32),
@@ -262,7 +262,7 @@ pub enum Cmp {
     EaxImm32(Imm32),
     RaxImm32(Imm32),
 
-    Rm8LImm8(Rm8L, Imm8),
+    Rm8lImm8(Rm8l, Imm8),
     Rm8Imm8(Rm8, Imm8),
     Rm16Imm16(Rm16, Imm16),
     Rm32Imm32(Rm32, Imm32),
@@ -272,13 +272,13 @@ pub enum Cmp {
     Rm32Imm8(Rm32, Imm8),
     Rm64Imm8(Rm64, Imm8),
 
-    Rm8LR8L(Rm8L, R8L),
+    Rm8lR8l(Rm8l, R8l),
     Rm8R8(Rm8, R8),
     Rm16R16(Rm16, R16),
     Rm32R32(Rm32, R32),
     Rm64R64(Rm64, R64),
 
-    R8LRm8L(R8L, Rm8L),
+    R8lRm8l(R8l, Rm8l),
     R8Rm8(R8, Rm8),
     R16Rm16(R16, Rm16),
     R32Rm32(R32, Rm32),
@@ -301,7 +301,7 @@ pub enum Cmps {
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Cmpxchg {
-    Rm8LR8L(Rm8L, R8L),
+    Rm8lR8l(Rm8l, R8l),
     Rm8R8(Rm8, R8),
     Rm16R16(Rm16, R16),
     Rm32R32(Rm32, R32),
@@ -326,7 +326,7 @@ pub struct Cpuid;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Crc32 {
-    R32LRm8L(R32L, Rm8L),
+    R32lRm8l(R32l, Rm8l),
     R32Rm8(R32, Rm8),
     R32Rm16(R32, Rm16),
     R32Rm32(R32, Rm32),
@@ -368,7 +368,7 @@ pub struct Cqo;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Dec {
-    Rm8L(Rm8L),
+    Rm8l(Rm8l),
     Rm8(Rm8),
     Rm16(Rm16),
     Rm32(Rm32),
@@ -377,7 +377,7 @@ pub enum Dec {
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Div {
-    Rm8L(Rm8L),
+    Rm8l(Rm8l),
     Rm8(Rm8),
     Rm16(Rm16),
     Rm32(Rm32),

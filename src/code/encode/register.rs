@@ -1,7 +1,7 @@
 use mnemonic::operand::{
     Cc,
-    R8L, R8, R16, R32L, R32, R64L, R64, Sti,
-    Index32L, Index32, Index64L, Index64,
+    R8l, R8, R16, R32l, R32, R64l, R64, Sti,
+    Index32l, Index32, Index64l, Index64,
 };
 
 pub trait Register: Copy {
@@ -63,17 +63,17 @@ impl Register for Cc {
     }
 }
 
-impl Register for R8L {
+impl Register for R8l {
     fn code(self) -> u8 {
         match self {
-            R8L::Al => 0,
-            R8L::Cl => 1,
-            R8L::Dl => 2,
-            R8L::Bl => 3,
-            R8L::Ah => 4,
-            R8L::Ch => 5,
-            R8L::Dh => 6,
-            R8L::Bh => 7,
+            R8l::Al => 0,
+            R8l::Cl => 1,
+            R8l::Dl => 2,
+            R8l::Bl => 3,
+            R8l::Ah => 4,
+            R8l::Ch => 5,
+            R8l::Dh => 6,
+            R8l::Bh => 7,
         }
     }
 }
@@ -131,17 +131,17 @@ impl Register for R16 {
     }
 }
 
-impl Register for R32L {
+impl Register for R32l {
     fn code(self) -> u8 {
         match self {
-            R32L::Eax => 0,
-            R32L::Ecx => 1,
-            R32L::Edx => 2,
-            R32L::Ebx => 3,
-            R32L::Esp => 4,
-            R32L::Ebp => 5,
-            R32L::Esi => 6,
-            R32L::Edi => 7,
+            R32l::Eax => 0,
+            R32l::Ecx => 1,
+            R32l::Edx => 2,
+            R32l::Ebx => 3,
+            R32l::Esp => 4,
+            R32l::Ebp => 5,
+            R32l::Esi => 6,
+            R32l::Edi => 7,
         }
     }
 }
@@ -169,17 +169,17 @@ impl Register for R32 {
     }
 }
 
-impl Register for R64L {
+impl Register for R64l {
     fn code(self) -> u8 {
         match self {
-            R64L::Rax => 0,
-            R64L::Rcx => 1,
-            R64L::Rdx => 2,
-            R64L::Rbx => 3,
-            R64L::Rsp => 4,
-            R64L::Rbp => 5,
-            R64L::Rsi => 6,
-            R64L::Rdi => 7,
+            R64l::Rax => 0,
+            R64l::Rcx => 1,
+            R64l::Rdx => 2,
+            R64l::Rbx => 3,
+            R64l::Rsp => 4,
+            R64l::Rbp => 5,
+            R64l::Rsi => 6,
+            R64l::Rdi => 7,
         }
     }
 }
@@ -222,16 +222,16 @@ impl Register for Sti {
     }
 }
 
-impl Register for Index32L {
+impl Register for Index32l {
     fn code(self) -> u8 {
         match self {
-            Index32L::Eax => 0,
-            Index32L::Ecx => 1,
-            Index32L::Edx => 2,
-            Index32L::Ebx => 3,
-            Index32L::Ebp => 5,
-            Index32L::Esi => 6,
-            Index32L::Edi => 7,
+            Index32l::Eax => 0,
+            Index32l::Ecx => 1,
+            Index32l::Edx => 2,
+            Index32l::Ebx => 3,
+            Index32l::Ebp => 5,
+            Index32l::Esi => 6,
+            Index32l::Edi => 7,
         }
     }
 }
@@ -258,16 +258,16 @@ impl Register for Index32 {
     }
 }
 
-impl Register for Index64L {
+impl Register for Index64l {
     fn code(self) -> u8 {
         match self {
-            Index64L::Rax => 0,
-            Index64L::Rcx => 1,
-            Index64L::Rdx => 2,
-            Index64L::Rbx => 3,
-            Index64L::Rbp => 5,
-            Index64L::Rsi => 6,
-            Index64L::Rdi => 7,
+            Index64l::Rax => 0,
+            Index64l::Rcx => 1,
+            Index64l::Rdx => 2,
+            Index64l::Rbx => 3,
+            Index64l::Rbp => 5,
+            Index64l::Rsi => 6,
+            Index64l::Rdi => 7,
         }
     }
 }
