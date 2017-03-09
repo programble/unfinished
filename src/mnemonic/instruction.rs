@@ -547,3 +547,280 @@ pub enum Ficomp {
     M16int(Mem),
     M32int(Mem),
 }
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Fild {
+    M16int(Mem),
+    M32int(Mem),
+    M64int(Mem),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Fincstp;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Finit;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Fninit;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Fist {
+    M16int(Mem),
+    M32int(Mem),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Fistp {
+    M16int(Mem),
+    M32int(Mem),
+    M64int(Mem),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Fisttp {
+    M16int(Mem),
+    M32int(Mem),
+    M64int(Mem),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Fld {
+    M32fp(Mem),
+    M64fp(Mem),
+    M80fp(Mem),
+    Sti(Sti),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Fld1;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Fldl2t;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Fldl2e;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Fldpi;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Fldlg2;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Fldln2;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Fldz;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Fldcw {
+    M2byte(Mem),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Fldenv {
+    M28byte(Mem),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Fmul {
+    M32fp(Mem),
+    M64fp(Mem),
+    St0Sti(Sti),
+    StiSt0(Sti),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Fmulp {
+    StiSt0(Sti),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Fimul {
+    M32int(Mem),
+    M16int(Mem),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Fnop;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Fpatan;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Fprem;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Fprem1;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Fptan;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Frndint;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Frstor {
+    M108byte(Mem),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Fsave {
+    M108byte(Mem),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Fnsave {
+    M108byte(Mem),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Fscale;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Fsin;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Fsincos;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Fsqrt;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Fst {
+    M32fp(Mem),
+    M64fp(Mem),
+    Sti(Sti),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Fstp {
+    M32fp(Mem),
+    M64fp(Mem),
+    M80fp(Mem),
+    Sti(Sti),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Fstcw {
+    M2byte(Mem),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Fnstcw {
+    M2byte(Mem),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Fstenv {
+    M28byte(Mem),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Fnstenv {
+    M28byte(Mem),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Fstsw {
+    M2byte(Mem),
+    Ax,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Fnstsw {
+    M2byte(Mem),
+    Ax,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Fsub {
+    M32fp(Mem),
+    M64fp(Mem),
+    St0Sti(Sti),
+    StiSt0(Sti),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Fsubp {
+    StiSt0(Sti),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Fisub {
+    M32int(Mem),
+    M16int(Mem),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Fsubr {
+    M32fp(Mem),
+    M64fp(Mem),
+    St0Sti(Sti),
+    StiSt0(Sti),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Fsubrp {
+    StiSt0(Sti),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Fisubr {
+    M32int(Mem),
+    M16int(Mem),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Ftst;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Fucom {
+    Sti(Sti),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Fucomp {
+    Sti(Sti),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Fucompp;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Fxam;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Fxch {
+    Sti(Sti),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Fxrstor {
+    M512byte(Mem),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Fxrstor64 {
+    M512byte(Mem),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Fxsave {
+    M512byte(Mem),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Fxsave64 {
+    M512byte(Mem),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Fxtract;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Fyl2x;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Fyl2xp1;

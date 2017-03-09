@@ -17,625 +17,535 @@ fn fopcode(b: u8) -> Instruction {
     Instruction::opcode2(0xd9, b)
 }
 
-macro_rules! impl_encode_arith {
-    ($mnemonic:ident, $opcode:expr, $reg:expr) => {
-        impl Encode for $mnemonic {
+macro_rules! impl_encode {
+    ($($ty:ident $tt:tt,)+) => {
+        $(impl_encode!($ty $tt);)+
+    };
+
+    ($ty:ident { $($pat:pat => $enc:expr,)+ }) => {
+        impl Encode for $ty {
             fn encode(&self) -> Instruction {
-                use self::$mnemonic::*;
+                use self::$ty::*;
                 match *self {
-                    Rm8lR8l(rm, r) => opcode1($opcode).rm8l(rm).reg(r),
-                    Rm8R8(rm, r)   => opcode1($opcode).rm8(rm).reg(r),
-                    Rm16R16(rm, r) => opcode1($opcode + 1).rm16(rm).reg(r).oper16(),
-                    Rm32R32(rm, r) => opcode1($opcode + 1).rm32(rm).reg(r),
-                    Rm64R64(rm, r) => opcode1($opcode + 1).rm64(rm).reg(r).rex_w(),
-
-                    R8lRm8l(r, rm) => opcode1($opcode + 2).reg(r).rm8l(rm),
-                    R8Rm8(r, rm)   => opcode1($opcode + 2).reg(r).rm8(rm),
-                    R16Rm16(r, rm) => opcode1($opcode + 3).reg(r).rm16(rm).oper16(),
-                    R32Rm32(r, rm) => opcode1($opcode + 3).reg(r).rm32(rm),
-                    R64Rm64(r, rm) => opcode1($opcode + 3).reg(r).rm64(rm).rex_w(),
-
-                    AlImm8(imm)   => opcode1($opcode + 4).imm8(imm),
-                    AxImm16(imm)  => opcode1($opcode + 5).imm16(imm).oper16(),
-                    EaxImm32(imm) => opcode1($opcode + 5).imm32(imm),
-                    RaxImm32(imm) => opcode1($opcode + 5).imm32(imm).rex_w(),
-
-                    Rm8lImm8(rm, imm)  => opcode1(0x80).reg($reg).rm8l(rm).imm8(imm),
-                    Rm8Imm8(rm, imm)   => opcode1(0x80).reg($reg).rm8(rm).imm8(imm),
-                    Rm16Imm16(rm, imm) => opcode1(0x81).reg($reg).rm16(rm).imm16(imm).oper16(),
-                    Rm32Imm32(rm, imm) => opcode1(0x81).reg($reg).rm32(rm).imm32(imm),
-                    Rm64Imm32(rm, imm) => opcode1(0x81).reg($reg).rm64(rm).imm32(imm).rex_w(),
-
-                    Rm16Imm8(rm, imm) => opcode1(0x83).reg($reg).rm16(rm).imm8(imm).oper16(),
-                    Rm32Imm8(rm, imm) => opcode1(0x83).reg($reg).rm32(rm).imm8(imm),
-                    Rm64Imm8(rm, imm) => opcode1(0x83).reg($reg).rm64(rm).imm8(imm).rex_w(),
+                    $($pat => $enc,)+
                 }
             }
         }
-    }
-}
+    };
 
-impl_encode_arith!(Adc, 0x10, 2);
+    ($ty:ident($opcode:expr, $reg:expr)) => {
+        impl_encode! {
+            $ty {
+                Rm8lR8l(rm, r) => opcode1($opcode).rm8l(rm).reg(r),
+                Rm8R8(rm, r)   => opcode1($opcode).rm8(rm).reg(r),
+                Rm16R16(rm, r) => opcode1($opcode + 1).rm16(rm).reg(r).oper16(),
+                Rm32R32(rm, r) => opcode1($opcode + 1).rm32(rm).reg(r),
+                Rm64R64(rm, r) => opcode1($opcode + 1).rm64(rm).reg(r).rex_w(),
 
-impl Encode for Adcx {
-    fn encode(&self) -> Instruction {
-        use self::Adcx::*;
-        match *self {
-            R32Rm32(r, rm) => opcode3(0x38, 0xf6).oper16().reg(r).rm32(rm),
-            R64Rm64(r, rm) => opcode3(0x38, 0xf6).oper16().reg(r).rm64(rm).rex_w(),
+                R8lRm8l(r, rm) => opcode1($opcode + 2).reg(r).rm8l(rm),
+                R8Rm8(r, rm)   => opcode1($opcode + 2).reg(r).rm8(rm),
+                R16Rm16(r, rm) => opcode1($opcode + 3).reg(r).rm16(rm).oper16(),
+                R32Rm32(r, rm) => opcode1($opcode + 3).reg(r).rm32(rm),
+                R64Rm64(r, rm) => opcode1($opcode + 3).reg(r).rm64(rm).rex_w(),
+
+                AlImm8(imm)   => opcode1($opcode + 4).imm8(imm),
+                AxImm16(imm)  => opcode1($opcode + 5).imm16(imm).oper16(),
+                EaxImm32(imm) => opcode1($opcode + 5).imm32(imm),
+                RaxImm32(imm) => opcode1($opcode + 5).imm32(imm).rex_w(),
+
+                Rm8lImm8(rm, imm)  => opcode1(0x80).reg($reg).rm8l(rm).imm8(imm),
+                Rm8Imm8(rm, imm)   => opcode1(0x80).reg($reg).rm8(rm).imm8(imm),
+                Rm16Imm16(rm, imm) => opcode1(0x81).reg($reg).rm16(rm).imm16(imm).oper16(),
+                Rm32Imm32(rm, imm) => opcode1(0x81).reg($reg).rm32(rm).imm32(imm),
+                Rm64Imm32(rm, imm) => opcode1(0x81).reg($reg).rm64(rm).imm32(imm).rex_w(),
+
+                Rm16Imm8(rm, imm) => opcode1(0x83).reg($reg).rm16(rm).imm8(imm).oper16(),
+                Rm32Imm8(rm, imm) => opcode1(0x83).reg($reg).rm32(rm).imm8(imm),
+                Rm64Imm8(rm, imm) => opcode1(0x83).reg($reg).rm64(rm).imm8(imm).rex_w(),
+            }
         }
-    }
-}
+    };
 
-impl_encode_arith!(Add, 0x00, 0);
-
-impl Encode for Adox {
-    fn encode(&self) -> Instruction {
-        use self::Adox::*;
-        match *self {
-            R32Rm32(r, rm) => opcode3(0x38, 0xf6).rep().reg(r).rm32(rm),
-            R64Rm64(r, rm) => opcode3(0x38, 0xf6).rep().reg(r).rm64(rm).rex_w(),
+    ($ty:ident $enc:expr) => {
+        impl Encode for $ty {
+            fn encode(&self) -> Instruction {
+                $enc
+            }
         }
-    }
+    };
 }
 
-impl_encode_arith!(And, 0x20, 4);
-
-impl Encode for Bsf {
-    fn encode(&self) -> Instruction {
-        use self::Bsf::*;
-        match *self {
-            R16Rm16(r, rm) => opcode2(0xbc).reg(r).rm16(rm).oper16(),
-            R32Rm32(r, rm) => opcode2(0xbc).reg(r).rm32(rm),
-            R64Rm64(r, rm) => opcode2(0xbc).reg(r).rm64(rm).rex_w(),
-        }
-    }
-}
-
-impl Encode for Bsr {
-    fn encode(&self) -> Instruction {
-        use self::Bsr::*;
-        match *self {
-            R16Rm16(r, rm) => opcode2(0xbd).reg(r).rm16(rm).oper16(),
-            R32Rm32(r, rm) => opcode2(0xbd).reg(r).rm32(rm),
-            R64Rm64(r, rm) => opcode2(0xbd).reg(r).rm64(rm).rex_w(),
-        }
-    }
-}
-
-impl Encode for Bswap {
-    fn encode(&self) -> Instruction {
-        use self::Bswap::*;
-        match *self {
-            R32(r) => opcode2(0xc8).plus(r),
-            R64(r) => opcode2(0xc8).plus(r).rex_w(),
-        }
-    }
-}
-
-impl Encode for Bt {
-    fn encode(&self) -> Instruction {
-        use self::Bt::*;
-        match *self {
-            Rm16R16(rm, r) => opcode2(0xa3).rm16(rm).reg(r).oper16(),
-            Rm32R32(rm, r) => opcode2(0xa3).rm32(rm).reg(r),
-            Rm64R64(rm, r) => opcode2(0xa3).rm64(rm).reg(r).rex_w(),
-
-            Rm16Imm8(rm, imm) => opcode2(0xba).reg(4).rm16(rm).imm8(imm).oper16(),
-            Rm32Imm8(rm, imm) => opcode2(0xba).reg(4).rm32(rm).imm8(imm),
-            Rm64Imm8(rm, imm) => opcode2(0xba).reg(4).rm64(rm).imm8(imm).rex_w(),
-        }
-    }
-}
-
-impl Encode for Btc {
-    fn encode(&self) -> Instruction {
-        use self::Btc::*;
-        match *self {
-            Rm16R16(rm, r) => opcode2(0xbb).rm16(rm).reg(r).oper16(),
-            Rm32R32(rm, r) => opcode2(0xbb).rm32(rm).reg(r),
-            Rm64R64(rm, r) => opcode2(0xbb).rm64(rm).reg(r).rex_w(),
-
-            Rm16Imm8(rm, imm) => opcode2(0xba).reg(7).rm16(rm).imm8(imm).oper16(),
-            Rm32Imm8(rm, imm) => opcode2(0xba).reg(7).rm32(rm).imm8(imm),
-            Rm64Imm8(rm, imm) => opcode2(0xba).reg(7).rm64(rm).imm8(imm).rex_w(),
-        }
-    }
-}
-
-impl Encode for Btr {
-    fn encode(&self) -> Instruction {
-        use self::Btr::*;
-        match *self {
-            Rm16R16(rm, r) => opcode2(0xb3).rm16(rm).reg(r).oper16(),
-            Rm32R32(rm, r) => opcode2(0xb3).rm32(rm).reg(r),
-            Rm64R64(rm, r) => opcode2(0xb3).rm64(rm).reg(r).rex_w(),
-
-            Rm16Imm8(rm, imm) => opcode2(0xba).reg(6).rm16(rm).imm8(imm).oper16(),
-            Rm32Imm8(rm, imm) => opcode2(0xba).reg(6).rm32(rm).imm8(imm),
-            Rm64Imm8(rm, imm) => opcode2(0xba).reg(6).rm64(rm).imm8(imm).rex_w(),
-        }
-    }
-}
-
-impl Encode for Bts {
-    fn encode(&self) -> Instruction {
-        use self::Bts::*;
-        match *self {
-            Rm16R16(rm, r) => opcode2(0xab).rm16(rm).reg(r).oper16(),
-            Rm32R32(rm, r) => opcode2(0xab).rm32(rm).reg(r),
-            Rm64R64(rm, r) => opcode2(0xab).rm64(rm).reg(r).rex_w(),
-
-            Rm16Imm8(rm, imm) => opcode2(0xba).reg(5).rm16(rm).imm8(imm).oper16(),
-            Rm32Imm8(rm, imm) => opcode2(0xba).reg(5).rm32(rm).imm8(imm),
-            Rm64Imm8(rm, imm) => opcode2(0xba).reg(5).rm64(rm).imm8(imm).rex_w(),
-        }
-    }
-}
-
-impl Encode for Call {
-    fn encode(&self) -> Instruction {
-        use self::Call::*;
-        match *self {
-            Rel32(rel) => opcode1(0xe8).disp32(rel.0),
-            Rm64(rm)   => opcode1(0xff).reg(2).rm64(rm),
-            M1616(m)   => opcode1(0xff).reg(3).mem(m).oper16(),
-            M1632(m)   => opcode1(0xff).reg(3).mem(m),
-            M1664(m)   => opcode1(0xff).reg(3).mem(m).rex_w(),
-        }
-    }
-}
-
-impl Encode for Cbw {
-    fn encode(&self) -> Instruction {
-        opcode1(0x98).oper16()
-    }
-}
-
-impl Encode for Cwde {
-    fn encode(&self) -> Instruction {
-        opcode1(0x98)
-    }
-}
-
-impl Encode for Cdqe {
-    fn encode(&self) -> Instruction {
-        opcode1(0x98).rex_w()
-    }
-}
-
-impl Encode for Clac {
-    fn encode(&self) -> Instruction {
-        opcode3(0x01, 0xca)
-    }
-}
-
-impl Encode for Clc {
-    fn encode(&self) -> Instruction {
-        opcode1(0xf8)
-    }
-}
-
-impl Encode for Cld {
-    fn encode(&self) -> Instruction {
-        opcode1(0xfc)
-    }
-}
-
-impl Encode for Clflush {
-    fn encode(&self) -> Instruction {
-        use self::Clflush::*;
-        match *self {
-            M8(m) => opcode2(0xae).reg(7).mem(m),
-        }
-    }
-}
-
-impl Encode for Clflushopt {
-    fn encode(&self) -> Instruction {
-        use self::Clflushopt::*;
-        match *self {
-            M8(m) => opcode2(0xae).reg(7).mem(m).oper16(),
-        }
-    }
-}
-
-impl Encode for Cli {
-    fn encode(&self) -> Instruction {
-        opcode1(0xfa)
-    }
-}
-
-impl Encode for Clts {
-    fn encode(&self) -> Instruction {
-        opcode2(0x06)
-    }
-}
-
-impl Encode for Cmc {
-    fn encode(&self) -> Instruction {
-        opcode1(0xf5)
-    }
-}
-
-impl Encode for Cmov {
-    fn encode(&self) -> Instruction {
-        use self::Cmov::*;
-        match *self {
-            CcR16Rm16(cc, r, rm) => opcode2(0x40).cc(cc).reg(r).rm16(rm).oper16(),
-            CcR32Rm32(cc, r, rm) => opcode2(0x40).cc(cc).reg(r).rm32(rm),
-            CcR64Rm64(cc, r, rm) => opcode2(0x40).cc(cc).reg(r).rm64(rm).rex_w(),
-        }
-    }
-}
-
-impl_encode_arith!(Cmp, 0x38, 7);
-
-impl Encode for Cmps {
-    fn encode(&self) -> Instruction {
-        use self::Cmps::*;
-        match *self {
-            B => opcode1(0xa6),
-            W => opcode1(0xa7).oper16(),
-            D => opcode1(0xa7),
-            Q => opcode1(0xa7).rex_w(),
-        }
-    }
-}
-
-impl Encode for Cmpxchg {
-    fn encode(&self) -> Instruction {
-        use self::Cmpxchg::*;
-        match *self {
-            Rm8lR8l(rm, r) => opcode2(0xb0).rm8l(rm).reg(r),
-            Rm8R8(rm, r)   => opcode2(0xb0).rm8(rm).reg(r),
-            Rm16R16(rm, r) => opcode2(0xb1).rm16(rm).reg(r).oper16(),
-            Rm32R32(rm, r) => opcode2(0xb1).rm32(rm).reg(r),
-            Rm64R64(rm, r) => opcode2(0xb1).rm64(rm).reg(r).rex_w(),
-        }
-    }
-}
-
-impl Encode for Cmpxchg8b {
-    fn encode(&self) -> Instruction {
-        use self::Cmpxchg8b::*;
-        match *self {
-            M64(m) => opcode2(0xc7).reg(1).mem(m),
-        }
-    }
-}
-
-impl Encode for Cmpxchg16b {
-    fn encode(&self) -> Instruction {
-        use self::Cmpxchg16b::*;
-        match *self {
-            M128(m) => opcode2(0xc7).reg(1).mem(m).rex_w(),
-        }
-    }
-}
-
-impl Encode for Cpuid {
-    fn encode(&self) -> Instruction {
-        opcode2(0xa2)
-    }
-}
-
-impl Encode for Crc32 {
-    fn encode(&self) -> Instruction {
-        use self::Crc32::*;
-        match *self {
-            R32lRm8l(r, rm) => opcode3(0x38, 0xf0).repne().reg(r).rm8l(rm),
-            R32Rm8(r, rm)   => opcode3(0x38, 0xf0).repne().reg(r).rm8(rm),
-            R32Rm16(r, rm)  => opcode3(0x38, 0xf1).repne().reg(r).rm16(rm).oper16(),
-            R32Rm32(r, rm)  => opcode3(0x38, 0xf1).repne().reg(r).rm32(rm),
-            R64Rm8(r, rm)   => opcode3(0x38, 0xf0).repne().reg(r).rm8(rm).rex_w(),
-            R64Rm64(r, rm)  => opcode3(0x38, 0xf1).repne().reg(r).rm64(rm).rex_w(),
-        }
-    }
-}
-
-impl Encode for Cwd {
-    fn encode(&self) -> Instruction {
-        opcode1(0x99).oper16()
-    }
-}
-
-impl Encode for Cdq {
-    fn encode(&self) -> Instruction {
-        opcode1(0x99)
-    }
-}
-
-impl Encode for Cqo {
-    fn encode(&self) -> Instruction {
-        opcode1(0x99).rex_w()
-    }
-}
-
-impl Encode for Dec {
-    fn encode(&self) -> Instruction {
-        use self::Dec::*;
-        match *self {
-            Rm8l(rm) => opcode1(0xfe).rm8l(rm),
-            Rm8(rm)  => opcode1(0xfe).rm8(rm),
-            Rm16(rm) => opcode1(0xff).rm16(rm).oper16(),
-            Rm32(rm) => opcode1(0xff).rm32(rm),
-            Rm64(rm) => opcode1(0xff).rm64(rm).rex_w(),
-        }
-    }
-}
-
-impl Encode for Div {
-    fn encode(&self) -> Instruction {
-        use self::Div::*;
-        match *self {
-            Rm8l(rm) => opcode1(0xf6).reg(6).rm8l(rm),
-            Rm8(rm)  => opcode1(0xf6).reg(6).rm8(rm),
-            Rm16(rm) => opcode1(0xf7).reg(6).rm16(rm).oper16(),
-            Rm32(rm) => opcode1(0xf7).reg(6).rm32(rm),
-            Rm64(rm) => opcode1(0xf7).reg(6).rm64(rm).rex_w(),
-        }
-    }
-}
-
-impl Encode for F2xm1 {
-    fn encode(&self) -> Instruction {
-        fopcode(0xf0)
-    }
-}
-
-impl Encode for Fabs {
-    fn encode(&self) -> Instruction {
-        fopcode(0xe1)
-    }
-}
-
-impl Encode for Fadd {
-    fn encode(&self) -> Instruction {
-        use self::Fadd::*;
-        match *self {
-            M32fp(m)  => opcode1(0xd8).reg(0).mem(m),
-            M64fp(m)  => opcode1(0xdc).reg(0).mem(m),
-            St0Sti(i) => opcode1(0xd8).reg(0).rm_reg(i),
-            StiSt0(i) => opcode1(0xdc).reg(0).rm_reg(i),
-        }
-    }
-}
-
-impl Encode for Faddp {
-    fn encode(&self) -> Instruction {
-        use self::Faddp::*;
-        match *self {
-            StiSt0(i) => opcode1(0xde).reg(0).rm_reg(i),
-        }
-    }
-}
-
-impl Encode for Fiadd {
-    fn encode(&self) -> Instruction {
-        use self::Fiadd::*;
-        match *self {
-            M32int(m) => opcode1(0xda).reg(0).mem(m),
-            M16int(m) => opcode1(0xde).reg(0).mem(m),
-        }
-    }
-}
-
-impl Encode for Fbld {
-    fn encode(&self) -> Instruction {
-        use self::Fbld::*;
-        match *self {
-            M80dec(m) => opcode1(0xdf).reg(4).mem(m),
-        }
-    }
-}
-
-impl Encode for Fbstp {
-    fn encode(&self) -> Instruction {
-        use self::Fbstp::*;
-        match *self {
-            M80bcd(m) => opcode1(0xdf).reg(6).mem(m),
-        }
-    }
-}
-
-impl Encode for Fchs {
-    fn encode(&self) -> Instruction {
-        fopcode(0xe0)
-    }
-}
-
-impl Encode for Fclex {
-    fn encode(&self) -> Instruction {
-        Instruction::opcode3(0x9b, 0xdb, 0xe2)
-    }
-}
-
-impl Encode for Fnclex {
-    fn encode(&self) -> Instruction {
-        Instruction::opcode2(0xdb, 0xe2)
-    }
-}
-
-impl Encode for Fcmov {
-    fn encode(&self) -> Instruction {
-        use self::Fcmov::*;
-        match *self {
-            BSt0Sti(i)   => opcode1(0xda).reg(0).rm_reg(i),
-            ESt0Sti(i)   => opcode1(0xda).reg(1).rm_reg(i),
-            BeSt0Sti(i)  => opcode1(0xda).reg(2).rm_reg(i),
-            USt0Sti(i)   => opcode1(0xda).reg(3).rm_reg(i),
-            NbSt0Sti(i)  => opcode1(0xdb).reg(0).rm_reg(i),
-            NeSt0Sti(i)  => opcode1(0xdb).reg(1).rm_reg(i),
-            NbeSt0Sti(i) => opcode1(0xdb).reg(2).rm_reg(i),
-            NuSt0Sti(i)  => opcode1(0xdb).reg(3).rm_reg(i),
-        }
-    }
-}
-
-impl Encode for Fcom {
-    fn encode(&self) -> Instruction {
-        use self::Fcom::*;
-        match *self {
-            M32fp(m) => opcode1(0xd8).reg(2).mem(m),
-            M64fp(m) => opcode1(0xdc).reg(2).mem(m),
-            Sti(i)   => opcode1(0xd8).reg(2).rm_reg(i),
-        }
-    }
-}
-
-impl Encode for Fcomp {
-    fn encode(&self) -> Instruction {
-        use self::Fcomp::*;
-        match *self {
-            M32fp(m) => opcode1(0xd8).reg(3).mem(m),
-            M64fp(m) => opcode1(0xdc).reg(3).mem(m),
-            Sti(i)   => opcode1(0xd8).reg(3).rm_reg(i),
-        }
-    }
-}
-
-impl Encode for Fcompp {
-    fn encode(&self) -> Instruction {
-        opcode1(0xde).reg(3).rm_reg(1)
-    }
-}
-
-impl Encode for Fcomi {
-    fn encode(&self) -> Instruction {
-        use self::Fcomi::*;
-        match *self {
-            St0Sti(i) => opcode1(0xdb).reg(6).rm_reg(i),
-        }
-    }
-}
-
-impl Encode for Fcomip {
-    fn encode(&self) -> Instruction {
-        use self::Fcomip::*;
-        match *self {
-            St0Sti(i) => opcode1(0xdf).reg(6).rm_reg(i),
-        }
-    }
-}
-
-impl Encode for Fucomi {
-    fn encode(&self) -> Instruction {
-        use self::Fucomi::*;
-        match *self {
-            St0Sti(i) => opcode1(0xdb).reg(5).rm_reg(i),
-        }
-    }
-}
-
-impl Encode for Fucomip {
-    fn encode(&self) -> Instruction {
-        use self::Fucomip::*;
-        match *self {
-            St0Sti(i) => opcode1(0xdf).reg(5).rm_reg(i),
-        }
-    }
-}
-
-impl Encode for Fcos {
-    fn encode(&self) -> Instruction {
-        fopcode(0xff)
-    }
-}
-
-impl Encode for Fdecstp {
-    fn encode(&self) -> Instruction {
-        fopcode(0xf6)
-    }
-}
-
-impl Encode for Fdiv {
-    fn encode(&self) -> Instruction {
-        use self::Fdiv::*;
-        match *self {
-            M32fp(m)  => opcode1(0xd8).reg(6).mem(m),
-            M64fp(m)  => opcode1(0xdc).reg(6).mem(m),
-            St0Sti(i) => opcode1(0xd8).reg(6).rm_reg(i),
-            StiSt0(i) => opcode1(0xdc).reg(7).rm_reg(i),
-        }
-    }
-}
-
-impl Encode for Fdivp {
-    fn encode(&self) -> Instruction {
-        use self::Fdivp::*;
-        match *self {
-            StiSt0(i) => opcode1(0xde).reg(7).rm_reg(i),
-        }
-    }
-}
-
-impl Encode for Fidiv {
-    fn encode(&self) -> Instruction {
-        use self::Fidiv::*;
-        match *self {
-            M32int(m) => opcode1(0xda).reg(6).mem(m),
-            M16int(m) => opcode1(0xde).reg(6).mem(m),
-        }
-    }
-}
-
-impl Encode for Fdivr {
-    fn encode(&self) -> Instruction {
-        use self::Fdivr::*;
-        match *self {
-            M32fp(m)  => opcode1(0xd8).reg(7).mem(m),
-            M64fp(m)  => opcode1(0xdc).reg(7).mem(m),
-            St0Sti(i) => opcode1(0xd8).reg(7).rm_reg(i),
-            StiSt0(i) => opcode1(0xdc).reg(6).rm_reg(i),
-        }
-    }
-}
-
-impl Encode for Fdivrp {
-    fn encode(&self) -> Instruction {
-        use self::Fdivrp::*;
-        match *self {
-            StiSt0(i) => opcode1(0xde).reg(6).rm_reg(i),
-        }
-    }
-}
-
-impl Encode for Fidivr {
-    fn encode(&self) -> Instruction {
-        use self::Fidivr::*;
-        match *self {
-            M32int(m) => opcode1(0xda).reg(7).mem(m),
-            M16int(m) => opcode1(0xde).reg(7).mem(m),
-        }
-    }
-}
-
-impl Encode for Ffree {
-    fn encode(&self) -> Instruction {
-        use self::Ffree::*;
-        match *self {
-            Sti(i) => opcode1(0xdd).reg(0).rm_reg(i),
-        }
-    }
-}
-
-impl Encode for Ficom {
-    fn encode(&self) -> Instruction {
-        use self::Ficom::*;
-        match *self {
-            M16int(m) => opcode1(0xde).reg(2).mem(m),
-            M32int(m) => opcode1(0xda).reg(2).mem(m),
-        }
-    }
-}
-
-impl Encode for Ficomp {
-    fn encode(&self) -> Instruction {
-        use self::Ficomp::*;
-        match *self {
-            M16int(m) => opcode1(0xde).reg(3).mem(m),
-            M32int(m) => opcode1(0xda).reg(3).mem(m),
-        }
-    }
+impl_encode! {
+    Adc(0x10, 2),
+
+    Adcx {
+        R32Rm32(r, rm) => opcode3(0x38, 0xf6).oper16().reg(r).rm32(rm),
+        R64Rm64(r, rm) => opcode3(0x38, 0xf6).oper16().reg(r).rm64(rm).rex_w(),
+    },
+
+    Add(0x00, 0),
+
+    Adox {
+        R32Rm32(r, rm) => opcode3(0x38, 0xf6).rep().reg(r).rm32(rm),
+        R64Rm64(r, rm) => opcode3(0x38, 0xf6).rep().reg(r).rm64(rm).rex_w(),
+    },
+
+    And(0x20, 4),
+
+    Bsf {
+        R16Rm16(r, rm) => opcode2(0xbc).reg(r).rm16(rm).oper16(),
+        R32Rm32(r, rm) => opcode2(0xbc).reg(r).rm32(rm),
+        R64Rm64(r, rm) => opcode2(0xbc).reg(r).rm64(rm).rex_w(),
+    },
+
+    Bsr {
+        R16Rm16(r, rm) => opcode2(0xbd).reg(r).rm16(rm).oper16(),
+        R32Rm32(r, rm) => opcode2(0xbd).reg(r).rm32(rm),
+        R64Rm64(r, rm) => opcode2(0xbd).reg(r).rm64(rm).rex_w(),
+    },
+
+    Bswap {
+        R32(r) => opcode2(0xc8).plus(r),
+        R64(r) => opcode2(0xc8).plus(r).rex_w(),
+    },
+
+    Bt {
+        Rm16R16(rm, r) => opcode2(0xa3).rm16(rm).reg(r).oper16(),
+        Rm32R32(rm, r) => opcode2(0xa3).rm32(rm).reg(r),
+        Rm64R64(rm, r) => opcode2(0xa3).rm64(rm).reg(r).rex_w(),
+
+        Rm16Imm8(rm, imm) => opcode2(0xba).reg(4).rm16(rm).imm8(imm).oper16(),
+        Rm32Imm8(rm, imm) => opcode2(0xba).reg(4).rm32(rm).imm8(imm),
+        Rm64Imm8(rm, imm) => opcode2(0xba).reg(4).rm64(rm).imm8(imm).rex_w(),
+    },
+
+    Btc {
+        Rm16R16(rm, r) => opcode2(0xbb).rm16(rm).reg(r).oper16(),
+        Rm32R32(rm, r) => opcode2(0xbb).rm32(rm).reg(r),
+        Rm64R64(rm, r) => opcode2(0xbb).rm64(rm).reg(r).rex_w(),
+
+        Rm16Imm8(rm, imm) => opcode2(0xba).reg(7).rm16(rm).imm8(imm).oper16(),
+        Rm32Imm8(rm, imm) => opcode2(0xba).reg(7).rm32(rm).imm8(imm),
+        Rm64Imm8(rm, imm) => opcode2(0xba).reg(7).rm64(rm).imm8(imm).rex_w(),
+    },
+
+    Btr {
+        Rm16R16(rm, r) => opcode2(0xb3).rm16(rm).reg(r).oper16(),
+        Rm32R32(rm, r) => opcode2(0xb3).rm32(rm).reg(r),
+        Rm64R64(rm, r) => opcode2(0xb3).rm64(rm).reg(r).rex_w(),
+
+        Rm16Imm8(rm, imm) => opcode2(0xba).reg(6).rm16(rm).imm8(imm).oper16(),
+        Rm32Imm8(rm, imm) => opcode2(0xba).reg(6).rm32(rm).imm8(imm),
+        Rm64Imm8(rm, imm) => opcode2(0xba).reg(6).rm64(rm).imm8(imm).rex_w(),
+    },
+
+    Bts {
+        Rm16R16(rm, r) => opcode2(0xab).rm16(rm).reg(r).oper16(),
+        Rm32R32(rm, r) => opcode2(0xab).rm32(rm).reg(r),
+        Rm64R64(rm, r) => opcode2(0xab).rm64(rm).reg(r).rex_w(),
+
+        Rm16Imm8(rm, imm) => opcode2(0xba).reg(5).rm16(rm).imm8(imm).oper16(),
+        Rm32Imm8(rm, imm) => opcode2(0xba).reg(5).rm32(rm).imm8(imm),
+        Rm64Imm8(rm, imm) => opcode2(0xba).reg(5).rm64(rm).imm8(imm).rex_w(),
+    },
+
+    Call {
+        Rel32(rel) => opcode1(0xe8).disp32(rel.0),
+        Rm64(rm)   => opcode1(0xff).reg(2).rm64(rm),
+        M1616(m)   => opcode1(0xff).reg(3).mem(m).oper16(),
+        M1632(m)   => opcode1(0xff).reg(3).mem(m),
+        M1664(m)   => opcode1(0xff).reg(3).mem(m).rex_w(),
+    },
+
+    Cbw  { opcode1(0x98).oper16() },
+    Cwde { opcode1(0x98) },
+    Cdqe { opcode1(0x98).rex_w() },
+
+    Clac { opcode3(0x01, 0xca) },
+
+    Clc { opcode1(0xf8) },
+
+    Cld { opcode1(0xfc) },
+
+    Clflush {
+        M8(m) => opcode2(0xae).reg(7).mem(m),
+    },
+
+    Clflushopt {
+        M8(m) => opcode2(0xae).reg(7).mem(m).oper16(),
+    },
+
+    Cli { opcode1(0xfa) },
+
+    Clts { opcode1(0x06) },
+
+    Cmc { opcode1(0xf5) },
+
+    Cmov {
+        CcR16Rm16(cc, r, rm) => opcode2(0x40).cc(cc).reg(r).rm16(rm).oper16(),
+        CcR32Rm32(cc, r, rm) => opcode2(0x40).cc(cc).reg(r).rm32(rm),
+        CcR64Rm64(cc, r, rm) => opcode2(0x40).cc(cc).reg(r).rm64(rm).rex_w(),
+    },
+
+    Cmp(0x38, 7),
+
+    Cmps {
+        B => opcode1(0xa6),
+        W => opcode1(0xa7).oper16(),
+        D => opcode1(0xa7),
+        Q => opcode1(0xa7).rex_w(),
+    },
+
+    Cmpxchg {
+        Rm8lR8l(rm, r) => opcode2(0xb0).rm8l(rm).reg(r),
+        Rm8R8(rm, r)   => opcode2(0xb0).rm8(rm).reg(r),
+        Rm16R16(rm, r) => opcode2(0xb1).rm16(rm).reg(r).oper16(),
+        Rm32R32(rm, r) => opcode2(0xb1).rm32(rm).reg(r),
+        Rm64R64(rm, r) => opcode2(0xb1).rm64(rm).reg(r).rex_w(),
+    },
+
+    Cmpxchg8b {
+        M64(m) => opcode2(0xc7).reg(1).mem(m),
+    },
+
+    Cmpxchg16b {
+        M128(m) => opcode2(0xc7).reg(1).mem(m).rex_w(),
+    },
+
+    Cpuid { opcode2(0xa2) },
+
+    Crc32 {
+        R32lRm8l(r, rm) => opcode3(0x38, 0xf0).repne().reg(r).rm8l(rm),
+        R32Rm8(r, rm)   => opcode3(0x38, 0xf0).repne().reg(r).rm8(rm),
+        R32Rm16(r, rm)  => opcode3(0x38, 0xf1).repne().reg(r).rm16(rm).oper16(),
+        R32Rm32(r, rm)  => opcode3(0x38, 0xf1).repne().reg(r).rm32(rm),
+        R64Rm8(r, rm)   => opcode3(0x38, 0xf0).repne().reg(r).rm8(rm).rex_w(),
+        R64Rm64(r, rm)  => opcode3(0x38, 0xf1).repne().reg(r).rm64(rm).rex_w(),
+    },
+
+    Cwd { opcode1(0x99).oper16() },
+    Cdq { opcode1(0x99) },
+    Cqo { opcode1(0x99).rex_w() },
+
+    Dec {
+        Rm8l(rm) => opcode1(0xfe).rm8l(rm),
+        Rm8(rm)  => opcode1(0xfe).rm8(rm),
+        Rm16(rm) => opcode1(0xff).rm16(rm).oper16(),
+        Rm32(rm) => opcode1(0xff).rm32(rm),
+        Rm64(rm) => opcode1(0xff).rm64(rm).rex_w(),
+    },
+
+    Div {
+        Rm8l(rm) => opcode1(0xf6).reg(6).rm8l(rm),
+        Rm8(rm)  => opcode1(0xf6).reg(6).rm8(rm),
+        Rm16(rm) => opcode1(0xf7).reg(6).rm16(rm).oper16(),
+        Rm32(rm) => opcode1(0xf7).reg(6).rm32(rm),
+        Rm64(rm) => opcode1(0xf7).reg(6).rm64(rm).rex_w(),
+    },
+
+    F2xm1 { fopcode(0xf0) },
+
+    Fabs { fopcode(0xe1) },
+
+    Fadd {
+        M32fp(m)  => opcode1(0xd8).reg(0).mem(m),
+        M64fp(m)  => opcode1(0xdc).reg(0).mem(m),
+        St0Sti(i) => opcode1(0xd8).reg(0).rm_reg(i),
+        StiSt0(i) => opcode1(0xdc).reg(0).rm_reg(i),
+    },
+    Faddp {
+        StiSt0(i) => opcode1(0xde).reg(0).rm_reg(i),
+    },
+    Fiadd {
+        M32int(m) => opcode1(0xda).reg(0).mem(m),
+        M16int(m) => opcode1(0xde).reg(0).mem(m),
+    },
+
+    Fbld {
+        M80dec(m) => opcode1(0xdf).reg(4).mem(m),
+    },
+
+    Fbstp {
+        M80bcd(m) => opcode1(0xdf).reg(6).mem(m),
+    },
+
+    Fchs { fopcode(0xe0) },
+
+    Fclex { Instruction::opcode3(0x9b, 0xdb, 0xe2) },
+    Fnclex { Instruction::opcode2(0xdb, 0xe2) },
+
+    Fcmov {
+        BSt0Sti(i)   => opcode1(0xda).reg(0).rm_reg(i),
+        ESt0Sti(i)   => opcode1(0xda).reg(1).rm_reg(i),
+        BeSt0Sti(i)  => opcode1(0xda).reg(2).rm_reg(i),
+        USt0Sti(i)   => opcode1(0xda).reg(3).rm_reg(i),
+        NbSt0Sti(i)  => opcode1(0xdb).reg(0).rm_reg(i),
+        NeSt0Sti(i)  => opcode1(0xdb).reg(1).rm_reg(i),
+        NbeSt0Sti(i) => opcode1(0xdb).reg(2).rm_reg(i),
+        NuSt0Sti(i)  => opcode1(0xdb).reg(3).rm_reg(i),
+    },
+
+    Fcom {
+        M32fp(m) => opcode1(0xd8).reg(2).mem(m),
+        M64fp(m) => opcode1(0xdc).reg(2).mem(m),
+        Sti(i)   => opcode1(0xd8).reg(2).rm_reg(i),
+    },
+    Fcomp {
+        M32fp(m) => opcode1(0xd8).reg(3).mem(m),
+        M64fp(m) => opcode1(0xdc).reg(3).mem(m),
+        Sti(i)   => opcode1(0xd8).reg(3).rm_reg(i),
+    },
+    Fcompp { Instruction::opcode2(0xde, 0xd9) },
+
+    Fcomi {
+        St0Sti(i) => opcode1(0xdb).reg(6).rm_reg(i),
+    },
+    Fcomip {
+        St0Sti(i) => opcode1(0xdf).reg(6).rm_reg(i),
+    },
+    Fucomi {
+        St0Sti(i) => opcode1(0xdb).reg(5).rm_reg(i),
+    },
+    Fucomip {
+        St0Sti(i) => opcode1(0xdf).reg(5).rm_reg(i),
+    },
+
+    Fcos { fopcode(0xff) },
+
+    Fdecstp { fopcode(0xf6) },
+
+    Fdiv {
+        M32fp(m)  => opcode1(0xd8).reg(6).mem(m),
+        M64fp(m)  => opcode1(0xdc).reg(6).mem(m),
+        St0Sti(i) => opcode1(0xd8).reg(6).rm_reg(i),
+        StiSt0(i) => opcode1(0xdc).reg(7).rm_reg(i),
+    },
+    Fdivp {
+        StiSt0(i) => opcode1(0xde).reg(7).rm_reg(i),
+    },
+    Fidiv {
+        M32int(m) => opcode1(0xda).reg(6).mem(m),
+        M16int(m) => opcode1(0xde).reg(6).mem(m),
+    },
+
+    Fdivr {
+        M32fp(m)  => opcode1(0xd8).reg(7).mem(m),
+        M64fp(m)  => opcode1(0xdc).reg(7).mem(m),
+        St0Sti(i) => opcode1(0xd8).reg(7).rm_reg(i),
+        StiSt0(i) => opcode1(0xdc).reg(6).rm_reg(i),
+    },
+    Fdivrp {
+        StiSt0(i) => opcode1(0xde).reg(6).rm_reg(i),
+    },
+    Fidivr {
+        M32int(m) => opcode1(0xda).reg(7).mem(m),
+        M16int(m) => opcode1(0xde).reg(7).mem(m),
+    },
+
+    Ffree {
+        Sti(i) => opcode1(0xdd).reg(0).rm_reg(i),
+    },
+
+    Ficom {
+        M16int(m) => opcode1(0xde).reg(2).mem(m),
+        M32int(m) => opcode1(0xda).reg(2).mem(m),
+    },
+    Ficomp {
+        M16int(m) => opcode1(0xde).reg(3).mem(m),
+        M32int(m) => opcode1(0xda).reg(3).mem(m),
+    },
+
+    Fild {
+        M16int(m) => opcode1(0xdf).reg(0).mem(m),
+        M32int(m) => opcode1(0xdb).reg(0).mem(m),
+        M64int(m) => opcode1(0xdf).reg(5).mem(m),
+    },
+
+    Fincstp { fopcode(0xf7) },
+
+    Finit { Instruction::opcode3(0x9b, 0xdb, 0xe3) },
+    Fninit { Instruction::opcode2(0xdb, 0xe3) },
+
+    Fist {
+        M16int(m) => opcode1(0xdf).reg(2).mem(m),
+        M32int(m) => opcode1(0xdb).reg(2).mem(m),
+    },
+    Fistp {
+        M16int(m) => opcode1(0xdf).reg(3).mem(m),
+        M32int(m) => opcode1(0xdb).reg(3).mem(m),
+        M64int(m) => opcode1(0xdf).reg(7).mem(m),
+    },
+
+    Fisttp {
+        M16int(m) => opcode1(0xdf).reg(1).mem(m),
+        M32int(m) => opcode1(0xdb).reg(1).mem(m),
+        M64int(m) => opcode1(0xdd).reg(1).mem(m),
+    },
+
+    Fld {
+        M32fp(m) => opcode1(0xd9).reg(0).mem(m),
+        M64fp(m) => opcode1(0xdd).reg(0).mem(m),
+        M80fp(m) => opcode1(0xdb).reg(5).mem(m),
+        Sti(i)   => opcode1(0xd9).reg(0).rm_reg(i),
+    },
+
+    Fld1   { fopcode(0xe8) },
+    Fldl2t { fopcode(0xe9) },
+    Fldl2e { fopcode(0xea) },
+    Fldpi  { fopcode(0xeb) },
+    Fldlg2 { fopcode(0xec) },
+    Fldln2 { fopcode(0xed) },
+    Fldz   { fopcode(0xee) },
+
+    Fldcw {
+        M2byte(m) => opcode1(0xd9).reg(5).mem(m),
+    },
+
+    Fldenv {
+        M28byte(m) => opcode1(0xd9).reg(4).mem(m),
+    },
+
+    Fmul {
+        M32fp(m)  => opcode1(0xd8).reg(1).mem(m),
+        M64fp(m)  => opcode1(0xdc).reg(1).mem(m),
+        St0Sti(i) => opcode1(0xd8).reg(1).rm_reg(i),
+        StiSt0(i) => opcode1(0xdc).reg(1).rm_reg(i),
+    },
+    Fmulp {
+        StiSt0(i) => opcode1(0xde).reg(1).rm_reg(i),
+    },
+    Fimul {
+        M32int(m) => opcode1(0xda).reg(1).mem(m),
+        M16int(m) => opcode1(0xde).reg(1).mem(m),
+    },
+
+    Fnop { fopcode(0xd0) },
+
+    Fpatan { fopcode(0xf3) },
+
+    Fprem { fopcode(0xf8) },
+
+    Fprem1 { fopcode(0xf5) },
+
+    Fptan { fopcode(0xf2) },
+
+    Frndint { fopcode(0xfc) },
+
+    Frstor {
+        M108byte(m) => opcode1(0xdd).reg(4).mem(m),
+    },
+
+    Fsave {
+        M108byte(m) => Instruction::opcode2(0x9b, 0xdd).reg(6).mem(m),
+    },
+    Fnsave {
+        M108byte(m) => opcode1(0xdd).reg(6).mem(m),
+    },
+
+    Fscale { fopcode(0xfd) },
+
+    Fsin { fopcode(0xfe) },
+
+    Fsincos { fopcode(0xfb) },
+
+    Fsqrt { fopcode(0xfa) },
+
+    Fst {
+        M32fp(m) => opcode1(0xd9).reg(2).mem(m),
+        M64fp(m) => opcode1(0xdd).reg(2).mem(m),
+        Sti(i)   => opcode1(0xdd).reg(2).rm_reg(i),
+    },
+    Fstp {
+        M32fp(m) => opcode1(0xd9).reg(3).mem(m),
+        M64fp(m) => opcode1(0xdd).reg(3).mem(m),
+        M80fp(m) => opcode1(0xdb).reg(7).mem(m),
+        Sti(i)   => opcode1(0xdd).reg(3).rm_reg(i),
+    },
+
+    Fstcw {
+        M2byte(m) => Instruction::opcode2(0x9b, 0xd9).reg(7).mem(m),
+    },
+    Fnstcw {
+        M2byte(m) => opcode1(0xd9).reg(7).mem(m),
+    },
+
+    Fstenv {
+        M28byte(m) => Instruction::opcode2(0x9b, 0xd9).reg(6).mem(m),
+    },
+    Fnstenv {
+        M28byte(m) => opcode1(0xd9).reg(6).mem(m),
+    },
+
+    Fstsw {
+        M2byte(m) => Instruction::opcode2(0x9b, 0xdd).reg(7).mem(m),
+        Ax        => Instruction::opcode3(0x9b, 0xdf, 0xe0),
+    },
+    Fnstsw {
+        M2byte(m) => opcode1(0xdd).reg(7).mem(m),
+        Ax        => Instruction::opcode2(0xdf, 0xe0),
+    },
+
+    Fsub {
+        M32fp(m)  => opcode1(0xd8).reg(4).mem(m),
+        M64fp(m)  => opcode1(0xdc).reg(4).mem(m),
+        St0Sti(i) => opcode1(0xd8).reg(4).rm_reg(i),
+        StiSt0(i) => opcode1(0xdc).reg(5).rm_reg(i),
+    },
+    Fsubp {
+        StiSt0(i) => opcode1(0xde).reg(5).rm_reg(i),
+    },
+    Fisub {
+        M32int(m) => opcode1(0xda).reg(4).mem(m),
+        M16int(m) => opcode1(0xde).reg(4).mem(m),
+    },
+
+    Fsubr {
+        M32fp(m)  => opcode1(0xd8).reg(5).mem(m),
+        M64fp(m)  => opcode1(0xdc).reg(5).mem(m),
+        St0Sti(i) => opcode1(0xd8).reg(5).rm_reg(i),
+        StiSt0(i) => opcode1(0xdc).reg(4).rm_reg(i),
+    },
+    Fsubrp {
+        StiSt0(i) => opcode1(0xde).reg(4).rm_reg(i),
+    },
+    Fisubr {
+        M32int(m) => opcode1(0xda).reg(5).mem(m),
+        M16int(m) => opcode1(0xde).reg(5).mem(m),
+    },
+
+    Ftst { fopcode(0xe4) },
+
+    Fucom {
+        Sti(i) => opcode1(0xdd).reg(4).rm_reg(i),
+    },
+    Fucomp {
+        Sti(i) => opcode1(0xdd).reg(5).rm_reg(i),
+    },
+    Fucompp { opcode1(0xda).reg(5).rm_reg(1) },
+
+    Fxam { fopcode(0xe5) },
+
+    Fxch {
+        Sti(i) => opcode1(0xd9).reg(1).rm_reg(i),
+    },
+
+    Fxrstor {
+        M512byte(m) => opcode2(0xae).reg(1).mem(m),
+    },
+    Fxrstor64 {
+        M512byte(m) => opcode2(0xae).reg(1).mem(m).rex_w(),
+    },
+
+    Fxsave {
+        M512byte(m) => opcode2(0xae).reg(0).mem(m),
+    },
+    Fxsave64 {
+        M512byte(m) => opcode2(0xae).reg(0).mem(m),
+    },
+
+    Fxtract { fopcode(0xf4) },
+
+    Fyl2x { fopcode(0xf1) },
+
+    Fyl2xp1 { fopcode(0xf9) },
 }

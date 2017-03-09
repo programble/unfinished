@@ -103,6 +103,38 @@ macro_rules! impl_display_arith {
     }
 }
 
+macro_rules! impl_display_farith {
+    ($fstr:expr, $fpstr:expr, $fistr:expr, $fty:ident, $fpty:ident, $fity:ident) => {
+        impl Display for $fty {
+            fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+                match *self {
+                    $fty::M32fp(m)  => write!(f, concat!($fstr, " dword {}"), m),
+                    $fty::M64fp(m)  => write!(f, concat!($fstr, " qword {}"), m),
+                    $fty::St0Sti(i) => write!(f, concat!($fstr, " st0, {}"), i),
+                    $fty::StiSt0(i) => write!(f, concat!($fstr, " {}, st0"), i),
+                }
+            }
+        }
+
+        impl Display for $fpty {
+            fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+                match *self {
+                    $fpty::StiSt0(i) => write!(f, concat!($fpstr, " {}, st0"), i),
+                }
+            }
+        }
+
+        impl Display for $fity {
+            fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+                match *self {
+                    $fity::M32int(m) => write!(f, concat!($fistr, " dword {}"), m),
+                    $fity::M16int(m) => write!(f, concat!($fistr, " word {}"), m),
+                }
+            }
+        }
+    }
+}
+
 impl_display_int!(Imm8, "{:#04x}");
 impl_display_int!(Imm16, "{:#06x}");
 impl_display_int!(Imm32, "{:#010x}");
@@ -475,35 +507,7 @@ impl_display_unary!("dec", Dec { Rm8l, Rm8, Rm16, Rm32, Rm64 });
 impl_display_unary!("div", Div { Rm8l, Rm8, Rm16, Rm32, Rm64 });
 impl_display_str!("f2xm1", F2xm1);
 impl_display_str!("fabs", Fabs);
-
-impl Display for Fadd {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-        match *self {
-            Fadd::M32fp(m)  => write!(f, "fadd dword {}", m),
-            Fadd::M64fp(m)  => write!(f, "fadd qword {}", m),
-            Fadd::St0Sti(i) => write!(f, "fadd st0, {}", i),
-            Fadd::StiSt0(i) => write!(f, "fadd {}, st0", i),
-        }
-    }
-}
-
-impl Display for Faddp {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-        match *self {
-            Faddp::StiSt0(i) => write!(f, "faddp {}, st0", i),
-        }
-    }
-}
-
-impl Display for Fiadd {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-        match *self {
-            Fiadd::M32int(m) => write!(f, "fiadd dword {}", m),
-            Fiadd::M16int(m) => write!(f, "fiadd word {}", m),
-        }
-    }
-}
-
+impl_display_farith!("fadd", "faddp", "fiadd", Fadd, Faddp, Fiadd);
 impl_display_unary!("fbld", Fbld { M80dec });
 impl_display_unary!("fbstp", Fbstp { M80bcd });
 impl_display_str!("fchs", Fchs);
@@ -538,106 +542,22 @@ impl Display for Fcom {
 impl Display for Fcomp {
     fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
         match *self {
-            Fcomp::M32fp(m) => write!(f, "fcom dword {}", m),
-            Fcomp::M64fp(m) => write!(f, "fcom qword {}", m),
-            Fcomp::Sti(i)   => write!(f, "fcom {}", i),
+            Fcomp::M32fp(m) => write!(f, "fcomp dword {}", m),
+            Fcomp::M64fp(m) => write!(f, "fcomp qword {}", m),
+            Fcomp::Sti(i)   => write!(f, "fcomp {}", i),
         }
     }
 }
 
 impl_display_str!("fcompp", Fcompp);
-
-impl Display for Fcomi {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-        match *self {
-            Fcomi::St0Sti(i) => write!(f, "fcomi st0, {}", i),
-        }
-    }
-}
-
-impl Display for Fcomip {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-        match *self {
-            Fcomip::St0Sti(i) => write!(f, "fcomip st0, {}", i),
-        }
-    }
-}
-
-impl Display for Fucomi {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-        match *self {
-            Fucomi::St0Sti(i) => write!(f, "fucomi st0, {}", i),
-        }
-    }
-}
-
-impl Display for Fucomip {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-        match *self {
-            Fucomip::St0Sti(i) => write!(f, "fucomip st0, {}", i),
-        }
-    }
-}
-
+impl_display_unary!("fcomi st0,", Fcomi { St0Sti });
+impl_display_unary!("fcomip st0,", Fcomip { St0Sti });
+impl_display_unary!("fucomi st0,", Fucomi { St0Sti });
+impl_display_unary!("fucomip st0,", Fucomip { St0Sti });
 impl_display_str!("fcos", Fcos);
 impl_display_str!("fdecstp", Fdecstp);
-
-impl Display for Fdiv {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-        match *self {
-            Fdiv::M32fp(m)  => write!(f, "fdiv dword {}", m),
-            Fdiv::M64fp(m)  => write!(f, "fdiv qword {}", m),
-            Fdiv::St0Sti(i) => write!(f, "fdiv st0, {}", i),
-            Fdiv::StiSt0(i) => write!(f, "fdiv {}, st0", i),
-        }
-    }
-}
-
-impl Display for Fdivp {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-        match *self {
-            Fdivp::StiSt0(i) => write!(f, "fdivp {}, st0", i),
-        }
-    }
-}
-
-impl Display for Fidiv {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-        match *self {
-            Fidiv::M32int(m) => write!(f, "fidiv dword {}", m),
-            Fidiv::M16int(m) => write!(f, "fidiv word {}", m),
-        }
-    }
-}
-
-impl Display for Fdivr {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-        match *self {
-            Fdivr::M32fp(m)  => write!(f, "fdivr dword {}", m),
-            Fdivr::M64fp(m)  => write!(f, "fdivr qword {}", m),
-            Fdivr::St0Sti(i) => write!(f, "fdivr st0, {}", i),
-            Fdivr::StiSt0(i) => write!(f, "fdivr {}, st0", i),
-        }
-    }
-}
-
-impl Display for Fdivrp {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-        match *self {
-            Fdivrp::StiSt0(i) => write!(f, "fdivrp {}, st0", i),
-        }
-    }
-}
-
-impl Display for Fidivr {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-        match *self {
-            Fidivr::M32int(m) => write!(f, "fidivr dword {}", m),
-            Fidivr::M16int(m) => write!(f, "fidivr word {}", m),
-        }
-    }
-}
-
+impl_display_farith!("fdiv", "fdivp", "fidiv", Fdiv, Fdivp, Fidiv);
+impl_display_farith!("fdivr", "fdivrp", "fidivr", Fdivr, Fdivrp, Fidivr);
 impl_display_unary!("ffree", Ffree { Sti });
 
 impl Display for Ficom {
@@ -657,3 +577,141 @@ impl Display for Ficomp {
         }
     }
 }
+
+impl Display for Fild {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Fild::M16int(m) => write!(f, "fild word {}", m),
+            Fild::M32int(m) => write!(f, "fild dword {}", m),
+            Fild::M64int(m) => write!(f, "fild qword {}", m),
+        }
+    }
+}
+
+impl_display_str!("fincstp", Fincstp);
+impl_display_str!("finit", Finit);
+impl_display_str!("fninit", Fninit);
+
+impl Display for Fist {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Fist::M16int(m) => write!(f, "fist word {}", m),
+            Fist::M32int(m) => write!(f, "fist dword {}", m),
+        }
+    }
+}
+
+impl Display for Fistp {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Fistp::M16int(m) => write!(f, "fistp word {}", m),
+            Fistp::M32int(m) => write!(f, "fistp dword {}", m),
+            Fistp::M64int(m) => write!(f, "fistp qword {}", m),
+        }
+    }
+}
+
+impl Display for Fisttp {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Fisttp::M16int(m) => write!(f, "fisttp word {}", m),
+            Fisttp::M32int(m) => write!(f, "fisttp dword {}", m),
+            Fisttp::M64int(m) => write!(f, "fisttp qword {}", m),
+        }
+    }
+}
+
+impl Display for Fld {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Fld::M32fp(m) => write!(f, "fld dword {}", m),
+            Fld::M64fp(m) => write!(f, "fld qword {}", m),
+            Fld::M80fp(m) => write!(f, "fld tword {}", m),
+            Fld::Sti(i)   => write!(f, "fld {}", i),
+        }
+    }
+}
+
+impl_display_str!("fld1", Fld1);
+impl_display_str!("fldl2t", Fldl2t);
+impl_display_str!("fldl2e", Fldl2e);
+impl_display_str!("fldpi", Fldpi);
+impl_display_str!("fldlg2", Fldlg2);
+impl_display_str!("fldln2", Fldln2);
+impl_display_str!("fldz", Fldz);
+impl_display_unary!("fldcw", Fldcw { M2byte });
+impl_display_unary!("fldenv", Fldenv { M28byte });
+impl_display_farith!("fmul", "fmulp", "fimul", Fmul, Fmulp, Fimul);
+impl_display_str!("fnop", Fnop);
+impl_display_str!("fpatan", Fpatan);
+impl_display_str!("fprem", Fprem);
+impl_display_str!("fprem1", Fprem1);
+impl_display_str!("fptan", Fptan);
+impl_display_str!("frndint", Frndint);
+impl_display_unary!("frstor", Frstor { M108byte });
+impl_display_unary!("fsave", Fsave { M108byte });
+impl_display_unary!("fnsave", Fnsave { M108byte });
+impl_display_str!("fscale", Fscale);
+impl_display_str!("fsin", Fsin);
+impl_display_str!("fsincos", Fsincos);
+impl_display_str!("fsqrt", Fsqrt);
+
+impl Display for Fst {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Fst::M32fp(m) => write!(f, "fst dword {}", m),
+            Fst::M64fp(m) => write!(f, "fst qword {}", m),
+            Fst::Sti(i)   => write!(f, "fst {}", i),
+        }
+    }
+}
+
+impl Display for Fstp {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Fstp::M32fp(m) => write!(f, "fstp dword {}", m),
+            Fstp::M64fp(m) => write!(f, "fstp qword {}", m),
+            Fstp::M80fp(m) => write!(f, "fstp tword {}", m),
+            Fstp::Sti(i)   => write!(f, "fstp {}", i),
+        }
+    }
+}
+
+impl_display_unary!("fstcw", Fstcw { M2byte });
+impl_display_unary!("fnstcw", Fnstcw { M2byte });
+impl_display_unary!("fstenv", Fstenv { M28byte });
+impl_display_unary!("fnstenv", Fnstenv { M28byte });
+
+impl Display for Fstsw {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Fstsw::M2byte(m) => write!(f, "fstsw {}", m),
+            Fstsw::Ax        => write!(f, "fstsw ax"),
+        }
+    }
+}
+
+impl Display for Fnstsw {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Fnstsw::M2byte(m) => write!(f, "fnstsw {}", m),
+            Fnstsw::Ax        => write!(f, "fnstsw ax"),
+        }
+    }
+}
+
+impl_display_farith!("fsub", "fsubp", "fisub", Fsub, Fsubp, Fisub);
+impl_display_farith!("fsubr", "fsubrp", "fisubr", Fsubr, Fsubrp, Fisubr);
+impl_display_str!("ftst", Ftst);
+impl_display_unary!("fucom", Fucom { Sti });
+impl_display_unary!("fucomp", Fucomp { Sti });
+impl_display_str!("fucompp", Fucompp);
+impl_display_str!("fxam", Fxam);
+impl_display_unary!("fxch", Fxch { Sti });
+impl_display_unary!("fxrstor", Fxrstor { M512byte });
+impl_display_unary!("fxrstor64", Fxrstor64 { M512byte });
+impl_display_unary!("fxsave", Fxsave { M512byte });
+impl_display_unary!("fxsave64", Fxsave64 { M512byte });
+impl_display_str!("fxtract", Fxtract);
+impl_display_str!("fyl2x", Fyl2x);
+impl_display_str!("fyl2xp1", Fyl2xp1);
