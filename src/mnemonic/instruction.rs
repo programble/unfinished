@@ -911,3 +911,8 @@ pub struct Invd;
 pub enum Invlpg {
     M(Mem),
 }
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Invpcid {
+    R64M128(R64, Mem),
+}

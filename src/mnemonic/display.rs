@@ -769,3 +769,4 @@ impl_display_unary!("int", Int { Imm8 });
 impl_display_str!("into", Into);
 impl_display_str!("invd", Invd);
 impl_display_unary!("invlpg", Invlpg { M });
+impl_display_binary!("invpcid", Invpcid { R64M128 });

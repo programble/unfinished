@@ -614,4 +614,8 @@ impl_encode! {
     Invlpg {
         M(m) => opcode2(0x01).reg(7).mem(m),
     },
+
+    Invpcid {
+        R64M128(r, m) => opcode3(0x38, 0x82).oper16().reg(r).mem(m),
+    },
 }
