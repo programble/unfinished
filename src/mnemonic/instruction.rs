@@ -916,3 +916,9 @@ pub enum Invlpg {
 pub enum Invpcid {
     R64M128(R64, Mem),
 }
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Iret {
+    D,
+    Q,
+}

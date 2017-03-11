@@ -618,4 +618,9 @@ impl_encode! {
     Invpcid {
         R64M128(r, m) => opcode3(0x38, 0x82).oper16().reg(r).mem(m),
     },
+
+    Iret {
+        D => opcode1(0xcf),
+        Q => opcode1(0xcf).rex_w(),
+    },
 }
