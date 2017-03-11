@@ -228,11 +228,11 @@ impl_encode! {
     Cqo { opcode1(0x99).rex_w() },
 
     Dec {
-        Rm8l(rm) => opcode1(0xfe).rm8l(rm),
-        Rm8(rm)  => opcode1(0xfe).rm8(rm),
-        Rm16(rm) => opcode1(0xff).rm16(rm).oper16(),
-        Rm32(rm) => opcode1(0xff).rm32(rm),
-        Rm64(rm) => opcode1(0xff).rm64(rm).rex_w(),
+        Rm8l(rm) => opcode1(0xfe).reg(1).rm8l(rm),
+        Rm8(rm)  => opcode1(0xfe).reg(1).rm8(rm),
+        Rm16(rm) => opcode1(0xff).reg(1).rm16(rm).oper16(),
+        Rm32(rm) => opcode1(0xff).reg(1).rm32(rm),
+        Rm64(rm) => opcode1(0xff).reg(1).rm64(rm).rex_w(),
     },
 
     Div {
@@ -587,5 +587,13 @@ impl_encode! {
         AlDx  => opcode1(0xec),
         AxDx  => opcode1(0xed).oper16(),
         EaxDx => opcode1(0xed),
+    },
+
+    Inc {
+        Rm8l(rm) => opcode1(0xfe).reg(0).rm8l(rm),
+        Rm8(rm)  => opcode1(0xfe).reg(0).rm8(rm),
+        Rm16(rm) => opcode1(0xff).reg(0).rm16(rm).oper16(),
+        Rm32(rm) => opcode1(0xff).reg(0).rm32(rm),
+        Rm64(rm) => opcode1(0xff).reg(0).rm64(rm).rex_w(),
     },
 }

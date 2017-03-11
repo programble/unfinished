@@ -755,3 +755,5 @@ impl Display for In {
         }
     }
 }
+
+impl_display_unary!("inc", Inc { Rm8l, Rm8, Rm16, Rm32, Rm64 });

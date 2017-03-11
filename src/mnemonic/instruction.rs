@@ -874,3 +874,12 @@ pub enum In {
     AxDx,
     EaxDx,
 }
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Inc {
+    Rm8l(Rm8l),
+    Rm8(Rm8),
+    Rm16(Rm16),
+    Rm32(Rm32),
+    Rm64(Rm64),
+}
