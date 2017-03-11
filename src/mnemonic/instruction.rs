@@ -903,3 +903,11 @@ pub enum Int {
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct Into;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Invd;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Invlpg {
+    M(Mem),
+}

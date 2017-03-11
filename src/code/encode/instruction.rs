@@ -608,4 +608,10 @@ impl_encode! {
         Imm8(imm) => { opcode1(0xcd).imm8(imm) },
     },
     Into { opcode1(0xce) },
+
+    Invd { opcode2(0x08) },
+
+    Invlpg {
+        M(m) => opcode2(0x01).reg(7).mem(m),
+    },
 }
