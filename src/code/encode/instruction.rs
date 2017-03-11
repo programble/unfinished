@@ -602,4 +602,10 @@ impl_encode! {
         W => opcode1(0x6d).oper16(),
         D => opcode1(0x6d),
     },
+
+    Int3 { opcode1(0xcc) },
+    Int {
+        Imm8(imm) => { opcode1(0xcd).imm8(imm) },
+    },
+    Into { opcode1(0xce) },
 }

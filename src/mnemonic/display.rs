@@ -764,3 +764,6 @@ impl_display_reg!(
         D => "insd",
     }
 );
+impl_display_str!("int 3", Int3);
+impl_display_unary!("int", Int { Imm8 });
+impl_display_str!("into", Into);

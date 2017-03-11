@@ -890,3 +890,16 @@ pub enum Ins {
     W,
     D,
 }
+
+// INSERTPS
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Int3;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Int {
+    Imm8(Imm8),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Into;
