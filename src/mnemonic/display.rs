@@ -757,3 +757,10 @@ impl Display for In {
 }
 
 impl_display_unary!("inc", Inc { Rm8l, Rm8, Rm16, Rm32, Rm64 });
+impl_display_reg!(
+    Ins {
+        B => "insb",
+        W => "insw",
+        D => "insd",
+    }
+);

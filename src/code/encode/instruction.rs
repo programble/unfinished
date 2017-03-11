@@ -596,4 +596,10 @@ impl_encode! {
         Rm32(rm) => opcode1(0xff).reg(0).rm32(rm),
         Rm64(rm) => opcode1(0xff).reg(0).rm64(rm).rex_w(),
     },
+
+    Ins {
+        B => opcode1(0x6c),
+        W => opcode1(0x6d).oper16(),
+        D => opcode1(0x6d),
+    },
 }

@@ -883,3 +883,10 @@ pub enum Inc {
     Rm32(Rm32),
     Rm64(Rm64),
 }
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Ins {
+    B,
+    W,
+    D,
+}
