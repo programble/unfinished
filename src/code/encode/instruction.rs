@@ -578,4 +578,14 @@ impl_encode! {
         R32Rm32Imm32(r, rm, imm) => opcode1(0x69).reg(r).rm32(rm).imm32(imm),
         R64Rm64Imm32(r, rm, imm) => opcode1(0x69).reg(r).rm64(rm).imm32(imm).rex_w(),
     },
+
+    In {
+        AlImm8(imm)  => opcode1(0xe4).imm8(imm),
+        AxImm8(imm)  => opcode1(0xe5).imm8(imm).oper16(),
+        EaxImm8(imm) => opcode1(0xe5).imm8(imm),
+
+        AlDx  => opcode1(0xec),
+        AxDx  => opcode1(0xed).oper16(),
+        EaxDx => opcode1(0xed),
+    },
 }

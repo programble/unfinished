@@ -741,3 +741,17 @@ impl Display for Imul {
         }
     }
 }
+
+impl Display for In {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            In::AlImm8(imm)  => write!(f, "in al, {}", imm),
+            In::AxImm8(imm)  => write!(f, "in ax, {}", imm),
+            In::EaxImm8(imm) => write!(f, "in eax, {}", imm),
+
+            In::AlDx  => write!(f, "in al, dx"),
+            In::AxDx  => write!(f, "in ax, dx"),
+            In::EaxDx => write!(f, "in eax, dx"),
+        }
+    }
+}

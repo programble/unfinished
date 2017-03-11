@@ -863,3 +863,14 @@ pub enum Imul {
     R32Rm32Imm32(R32, Rm32, Imm32),
     R64Rm64Imm32(R64, Rm64, Imm32),
 }
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum In {
+    AlImm8(Imm8),
+    AxImm8(Imm8),
+    EaxImm8(Imm8),
+
+    AlDx,
+    AxDx,
+    EaxDx,
+}
