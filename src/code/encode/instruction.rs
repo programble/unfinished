@@ -548,4 +548,34 @@ impl_encode! {
     Fyl2x { fopcode(0xf1) },
 
     Fyl2xp1 { fopcode(0xf9) },
+
+    Hlt { opcode1(0xf4) },
+
+    Idiv {
+        Rm8l(rm) => opcode1(0xf6).reg(7).rm8l(rm),
+        Rm8(rm)  => opcode1(0xf6).reg(7).rm8(rm),
+        Rm16(rm) => opcode1(0xf7).reg(7).rm16(rm).oper16(),
+        Rm32(rm) => opcode1(0xf7).reg(7).rm32(rm),
+        Rm64(rm) => opcode1(0xf7).reg(7).rm64(rm).rex_w(),
+    },
+
+    Imul {
+        Rm8l(rm) => opcode1(0xf6).reg(5).rm8l(rm),
+        Rm8(rm)  => opcode1(0xf6).reg(5).rm8(rm),
+        Rm16(rm) => opcode1(0xf7).reg(5).rm16(rm).oper16(),
+        Rm32(rm) => opcode1(0xf7).reg(5).rm32(rm),
+        Rm64(rm) => opcode1(0xf7).reg(5).rm64(rm).rex_w(),
+
+        R16Rm16(r, rm) => opcode2(0xaf).reg(r).rm16(rm).oper16(),
+        R32Rm32(r, rm) => opcode2(0xaf).reg(r).rm32(rm),
+        R64Rm64(r, rm) => opcode2(0xaf).reg(r).rm64(rm).rex_w(),
+
+        R16Rm16Imm8(r, rm, imm) => opcode1(0x6b).reg(r).rm16(rm).imm8(imm).oper16(),
+        R32Rm32Imm8(r, rm, imm) => opcode1(0x6b).reg(r).rm32(rm).imm8(imm),
+        R64Rm64Imm8(r, rm, imm) => opcode1(0x6b).reg(r).rm64(rm).imm8(imm).rex_w(),
+
+        R16Rm16Imm16(r, rm, imm) => opcode1(0x69).reg(r).rm16(rm).imm16(imm).oper16(),
+        R32Rm32Imm32(r, rm, imm) => opcode1(0x69).reg(r).rm32(rm).imm32(imm),
+        R64Rm64Imm32(r, rm, imm) => opcode1(0x69).reg(r).rm64(rm).imm32(imm).rex_w(),
+    },
 }

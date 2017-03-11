@@ -715,3 +715,29 @@ impl_display_unary!("fxsave64", Fxsave64 { M512byte });
 impl_display_str!("fxtract", Fxtract);
 impl_display_str!("fyl2x", Fyl2x);
 impl_display_str!("fyl2xp1", Fyl2xp1);
+impl_display_str!("hlt", Hlt);
+impl_display_unary!("idiv", Idiv { Rm8l, Rm8, Rm16, Rm32, Rm64 });
+
+impl Display for Imul {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Imul::Rm8l(rm) => write!(f, "imul {}", rm),
+            Imul::Rm8(rm)  => write!(f, "imul {}", rm),
+            Imul::Rm16(rm) => write!(f, "imul {}", rm),
+            Imul::Rm32(rm) => write!(f, "imul {}", rm),
+            Imul::Rm64(rm) => write!(f, "imul {}", rm),
+
+            Imul::R16Rm16(r, rm) => write!(f, "imul {}, {}", r, rm),
+            Imul::R32Rm32(r, rm) => write!(f, "imul {}, {}", r, rm),
+            Imul::R64Rm64(r, rm) => write!(f, "imul {}, {}", r, rm),
+
+            Imul::R16Rm16Imm8(r, rm, imm) => write!(f, "imul {}, {}, {}", r, rm, imm),
+            Imul::R32Rm32Imm8(r, rm, imm) => write!(f, "imul {}, {}, {}", r, rm, imm),
+            Imul::R64Rm64Imm8(r, rm, imm) => write!(f, "imul {}, {}, {}", r, rm, imm),
+
+            Imul::R16Rm16Imm16(r, rm, imm) => write!(f, "imul {}, {}, {}", r, rm, imm),
+            Imul::R32Rm32Imm32(r, rm, imm) => write!(f, "imul {}, {}, {}", r, rm, imm),
+            Imul::R64Rm64Imm32(r, rm, imm) => write!(f, "imul {}, {}, {}", r, rm, imm),
+        }
+    }
+}

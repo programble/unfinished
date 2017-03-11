@@ -824,3 +824,42 @@ pub struct Fyl2x;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct Fyl2xp1;
+
+// HADDPD
+// HADDPS
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Hlt;
+
+// HSUBPD
+// HSUBPS
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Idiv {
+    Rm8l(Rm8l),
+    Rm8(Rm8),
+    Rm16(Rm16),
+    Rm32(Rm32),
+    Rm64(Rm64),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Imul {
+    Rm8l(Rm8l),
+    Rm8(Rm8),
+    Rm16(Rm16),
+    Rm32(Rm32),
+    Rm64(Rm64),
+
+    R16Rm16(R16, Rm16),
+    R32Rm32(R32, Rm32),
+    R64Rm64(R64, Rm64),
+
+    R16Rm16Imm8(R16, Rm16, Imm8),
+    R32Rm32Imm8(R32, Rm32, Imm8),
+    R64Rm64Imm8(R64, Rm64, Imm8),
+
+    R16Rm16Imm16(R16, Rm16, Imm16),
+    R32Rm32Imm32(R32, Rm32, Imm32),
+    R64Rm64Imm32(R64, Rm64, Imm32),
+}
