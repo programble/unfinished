@@ -984,3 +984,9 @@ pub enum Lea {
     R32M(R32, Mem),
     R64M(R64, Mem),
 }
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Leave;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Lfence;

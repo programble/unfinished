@@ -660,4 +660,8 @@ impl_encode! {
         R32M(r, m) => opcode1(0x8d).reg(r).mem(m),
         R64M(r, m) => opcode1(0x8d).reg(r).mem(m).rex_w(),
     },
+
+    Leave { opcode1(0xc9) },
+
+    Lfence { opcode3(0xae, 0xe8) },
 }
