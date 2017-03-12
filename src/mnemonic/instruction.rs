@@ -922,3 +922,10 @@ pub enum Iret {
     D,
     Q,
 }
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum J {
+    CcRel8(Cc, Rel8),
+    RcxzRel8(Rel8),
+    CcRel32(Cc, Rel32),
+}

@@ -139,6 +139,7 @@ impl_display_int!(Imm8, "{:#04x}");
 impl_display_int!(Imm16, "{:#06x}");
 impl_display_int!(Imm32, "{:#010x}");
 impl_display_int!(Imm64, "{:#018x}");
+impl_display_int!(Rel8, "{:#04x}");
 impl_display_int!(Rel32, "{:#010x}");
 
 impl_display_reg!(
@@ -776,3 +777,13 @@ impl_display_reg!(
         Q => "iretq",
     }
 );
+
+impl Display for J {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            J::CcRel8(cc, rel)  => write!(f, "j{} short {}", cc, rel),
+            J::RcxzRel8(rel)    => write!(f, "jrcxz short {}", rel),
+            J::CcRel32(cc, rel) => write!(f, "j{} near {}", cc, rel),
+        }
+    }
+}

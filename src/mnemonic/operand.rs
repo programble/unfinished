@@ -11,6 +11,9 @@ pub struct Imm32(pub u32);
 pub struct Imm64(pub u64);
 
 #[derive(Debug, Default, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
+pub struct Rel8(pub i8);
+
+#[derive(Debug, Default, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Rel32(pub i32);
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]

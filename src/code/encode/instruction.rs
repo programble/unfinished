@@ -623,4 +623,10 @@ impl_encode! {
         D => opcode1(0xcf),
         Q => opcode1(0xcf).rex_w(),
     },
+
+    J {
+        CcRel8(cc, rel)  => opcode1(0x70).cc(cc).disp8(rel.0),
+        RcxzRel8(rel)    => opcode1(0xe3).disp8(rel.0),
+        CcRel32(cc, rel) => opcode2(0x80).cc(cc).disp32(rel.0),
+    },
 }
