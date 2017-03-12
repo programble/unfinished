@@ -654,4 +654,10 @@ impl_encode! {
         R32M1632(r, m) => opcode2(0xb5).reg(r).mem(m),
         R64M1664(r, m) => opcode2(0xb5).reg(r).mem(m).rex_w(),
     },
+
+    Lea {
+        R16M(r, m) => opcode1(0x8d).reg(r).mem(m).oper16(),
+        R32M(r, m) => opcode1(0x8d).reg(r).mem(m),
+        R64M(r, m) => opcode1(0x8d).reg(r).mem(m).rex_w(),
+    },
 }

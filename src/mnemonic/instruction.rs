@@ -977,3 +977,10 @@ pub enum Lgs {
     R32M1632(R32, Mem),
     R64M1664(R64, Mem),
 }
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Lea {
+    R16M(R16, Mem),
+    R32M(R32, Mem),
+    R64M(R64, Mem),
+}

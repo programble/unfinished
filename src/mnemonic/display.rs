@@ -804,3 +804,4 @@ impl Display for Jmp {
 impl_display_binary!("lss", Lss { R16M1616, R32M1632, R64M1664 });
 impl_display_binary!("lfs", Lfs { R16M1616, R32M1632, R64M1664 });
 impl_display_binary!("lgs", Lgs { R16M1616, R32M1632, R64M1664 });
+impl_display_binary!("lea", Lea { R16M, R32M, R64M });
