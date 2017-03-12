@@ -939,3 +939,41 @@ pub enum Jmp {
     M1632(Mem),
     M1664(Mem),
 }
+
+// KADD
+// KAND
+// KANDN
+// KMOV
+// KNOT
+// KOR
+// KORTEST
+// KSHIFTL
+// KSHIFTR
+// KTEST
+// KUNPCK
+// KXNOR
+// KXOR
+// LAR
+// LDDQU
+// LDMXCSR
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Lss {
+    R16M1616(R16, Mem),
+    R32M1632(R32, Mem),
+    R64M1664(R64, Mem),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Lfs {
+    R16M1616(R16, Mem),
+    R32M1632(R32, Mem),
+    R64M1664(R64, Mem),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Lgs {
+    R16M1616(R16, Mem),
+    R32M1632(R32, Mem),
+    R64M1664(R64, Mem),
+}

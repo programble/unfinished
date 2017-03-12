@@ -638,4 +638,20 @@ impl_encode! {
         M1632(m)   => opcode1(0xff).reg(5).mem(m),
         M1664(m)   => opcode1(0xff).reg(5).mem(m).rex_w(),
     },
+
+    Lss {
+        R16M1616(r, m) => opcode2(0xb2).reg(r).mem(m).oper16(),
+        R32M1632(r, m) => opcode2(0xb2).reg(r).mem(m),
+        R64M1664(r, m) => opcode2(0xb2).reg(r).mem(m).rex_w(),
+    },
+    Lfs {
+        R16M1616(r, m) => opcode2(0xb4).reg(r).mem(m).oper16(),
+        R32M1632(r, m) => opcode2(0xb4).reg(r).mem(m),
+        R64M1664(r, m) => opcode2(0xb4).reg(r).mem(m).rex_w(),
+    },
+    Lgs {
+        R16M1616(r, m) => opcode2(0xb5).reg(r).mem(m).oper16(),
+        R32M1632(r, m) => opcode2(0xb5).reg(r).mem(m),
+        R64M1664(r, m) => opcode2(0xb5).reg(r).mem(m).rex_w(),
+    },
 }
