@@ -809,3 +809,4 @@ impl_display_str!("leave", Leave);
 impl_display_str!("lfence", Lfence);
 impl_display_unary!("lgdt", Lgdt { M1664 });
 impl_display_unary!("lidt", Lidt { M1664 });
+impl_display_unary!("lldt", Lldt { Rm16 });

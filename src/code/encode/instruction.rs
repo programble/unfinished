@@ -671,4 +671,8 @@ impl_encode! {
     Lidt {
         M1664(m) => opcode2(0x01).reg(3).mem(m),
     },
+
+    Lldt {
+        Rm16(rm) => opcode2(0x00).reg(2).rm16(rm),
+    },
 }

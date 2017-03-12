@@ -1000,3 +1000,8 @@ pub enum Lgdt {
 pub enum Lidt {
     M1664(Mem),
 }
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Lldt {
+    Rm16(Rm16),
+}
