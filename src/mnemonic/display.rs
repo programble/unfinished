@@ -787,3 +787,16 @@ impl Display for J {
         }
     }
 }
+
+impl Display for Jmp {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Jmp::Rel8(rel)  => write!(f, "jmp short {}", rel),
+            Jmp::Rel32(rel) => write!(f, "jmp rel {}", rel),
+            Jmp::Rm64(rm)   => write!(f, "jmp near {}", rm),
+            Jmp::M1616(m)   => write!(f, "jmp far {}", m),
+            Jmp::M1632(m)   => write!(f, "jmp far {}", m),
+            Jmp::M1664(m)   => write!(f, "jmp far {}", m),
+        }
+    }
+}

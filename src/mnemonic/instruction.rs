@@ -929,3 +929,13 @@ pub enum J {
     RcxzRel8(Rel8),
     CcRel32(Cc, Rel32),
 }
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Jmp {
+    Rel8(Rel8),
+    Rel32(Rel32),
+    Rm64(Rm64),
+    M1616(Mem),
+    M1632(Mem),
+    M1664(Mem),
+}

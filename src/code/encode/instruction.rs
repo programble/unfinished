@@ -629,4 +629,13 @@ impl_encode! {
         RcxzRel8(rel)    => opcode1(0xe3).disp8(rel.0),
         CcRel32(cc, rel) => opcode2(0x80).cc(cc).disp32(rel.0),
     },
+
+    Jmp {
+        Rel8(rel)  => opcode1(0xeb).disp8(rel.0),
+        Rel32(rel) => opcode1(0xe9).disp32(rel.0),
+        Rm64(rm)   => opcode1(0xff).reg(4).rm64(rm),
+        M1616(m)   => opcode1(0xff).reg(5).mem(m).oper16(),
+        M1632(m)   => opcode1(0xff).reg(5).mem(m),
+        M1664(m)   => opcode1(0xff).reg(5).mem(m).rex_w(),
+    },
 }
