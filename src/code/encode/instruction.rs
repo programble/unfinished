@@ -664,4 +664,11 @@ impl_encode! {
     Leave { opcode1(0xc9) },
 
     Lfence { opcode3(0xae, 0xe8) },
+
+    Lgdt {
+        M1664(m) => opcode2(0x01).reg(2).mem(m),
+    },
+    Lidt {
+        M1664(m) => opcode2(0x01).reg(3).mem(m),
+    },
 }

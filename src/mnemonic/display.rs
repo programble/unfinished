@@ -807,3 +807,5 @@ impl_display_binary!("lgs", Lgs { R16M1616, R32M1632, R64M1664 });
 impl_display_binary!("lea", Lea { R16M, R32M, R64M });
 impl_display_str!("leave", Leave);
 impl_display_str!("lfence", Lfence);
+impl_display_unary!("lgdt", Lgdt { M1664 });
+impl_display_unary!("lidt", Lidt { M1664 });

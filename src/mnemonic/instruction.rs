@@ -990,3 +990,13 @@ pub struct Leave;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct Lfence;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Lgdt {
+    M1664(Mem),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Lidt {
+    M1664(Mem),
+}
