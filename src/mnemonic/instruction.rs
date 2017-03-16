@@ -212,9 +212,9 @@ declare! {
     Call {
         Rel32(Rel32),
         Rm64(Rm64),
-        M1616(Mem),
-        M1632(Mem),
-        M1664(Mem),
+        M16x16(Mem),
+        M16x32(Mem),
+        M16x64(Mem),
     },
 
     Cbw(),
@@ -771,9 +771,9 @@ declare! {
         Rel8(Rel8),
         Rel32(Rel32),
         Rm64(Rm64),
-        M1616(Mem),
-        M1632(Mem),
-        M1664(Mem),
+        M16x16(Mem),
+        M16x32(Mem),
+        M16x64(Mem),
     },
 
     // KADD
@@ -794,19 +794,19 @@ declare! {
     // LDMXCSR
 
     Lss {
-        R16M1616(R16, Mem),
-        R32M1632(R32, Mem),
-        R64M1664(R64, Mem),
+        R16M16x16(R16, Mem),
+        R32M16x32(R32, Mem),
+        R64M16x64(R64, Mem),
     },
     Lfs {
-        R16M1616(R16, Mem),
-        R32M1632(R32, Mem),
-        R64M1664(R64, Mem),
+        R16M16x16(R16, Mem),
+        R32M16x32(R32, Mem),
+        R64M16x64(R64, Mem),
     },
     Lgs {
-        R16M1616(R16, Mem),
-        R32M1632(R32, Mem),
-        R64M1664(R64, Mem),
+        R16M16x16(R16, Mem),
+        R32M16x32(R32, Mem),
+        R64M16x64(R64, Mem),
     },
 
     Lea {
@@ -820,10 +820,10 @@ declare! {
     Lfence(),
 
     Lgdt {
-        M1664(Mem),
+        M16x64(Mem),
     },
     Lidt {
-        M1664(Mem),
+        M16x64(Mem),
     },
 
     Lldt {

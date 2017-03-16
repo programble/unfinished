@@ -458,9 +458,9 @@ impl Display for Call {
         match *self {
             Call::Rel32(rel) => write!(f, "call rel {}", rel),
             Call::Rm64(rm)   => write!(f, "call near {}", rm),
-            Call::M1616(m)   => write!(f, "call far {}", m),
-            Call::M1632(m)   => write!(f, "call far {}", m),
-            Call::M1664(m)   => write!(f, "call far {}", m),
+            Call::M16x16(m)  => write!(f, "call far word {}", m),
+            Call::M16x32(m)  => write!(f, "call far dword {}", m),
+            Call::M16x64(m)  => write!(f, "call far qword {}", m),
         }
     }
 }
@@ -794,19 +794,19 @@ impl Display for Jmp {
             Jmp::Rel8(rel)  => write!(f, "jmp short {}", rel),
             Jmp::Rel32(rel) => write!(f, "jmp rel {}", rel),
             Jmp::Rm64(rm)   => write!(f, "jmp near {}", rm),
-            Jmp::M1616(m)   => write!(f, "jmp far {}", m),
-            Jmp::M1632(m)   => write!(f, "jmp far {}", m),
-            Jmp::M1664(m)   => write!(f, "jmp far {}", m),
+            Jmp::M16x16(m)  => write!(f, "jmp far word {}", m),
+            Jmp::M16x32(m)  => write!(f, "jmp far dword {}", m),
+            Jmp::M16x64(m)  => write!(f, "jmp far qword {}", m),
         }
     }
 }
 
-impl_display_binary!("lss", Lss { R16M1616, R32M1632, R64M1664 });
-impl_display_binary!("lfs", Lfs { R16M1616, R32M1632, R64M1664 });
-impl_display_binary!("lgs", Lgs { R16M1616, R32M1632, R64M1664 });
+impl_display_binary!("lss", Lss { R16M16x16, R32M16x32, R64M16x64 });
+impl_display_binary!("lfs", Lfs { R16M16x16, R32M16x32, R64M16x64 });
+impl_display_binary!("lgs", Lgs { R16M16x16, R32M16x32, R64M16x64 });
 impl_display_binary!("lea", Lea { R16M, R32M, R64M });
 impl_display_str!("leave", Leave);
 impl_display_str!("lfence", Lfence);
-impl_display_unary!("lgdt", Lgdt { M1664 });
-impl_display_unary!("lidt", Lidt { M1664 });
+impl_display_unary!("lgdt", Lgdt { M16x64 });
+impl_display_unary!("lidt", Lidt { M16x64 });
 impl_display_unary!("lldt", Lldt { Rm16 });

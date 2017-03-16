@@ -152,9 +152,9 @@ impl_encode! {
     Call {
         Rel32(rel) => opcode1(0xe8).disp32(rel.0),
         Rm64(rm)   => opcode1(0xff).reg(2).rm64(rm),
-        M1616(m)   => opcode1(0xff).reg(3).mem(m).oper16(),
-        M1632(m)   => opcode1(0xff).reg(3).mem(m),
-        M1664(m)   => opcode1(0xff).reg(3).mem(m).rex_w(),
+        M16x16(m)  => opcode1(0xff).reg(3).mem(m).oper16(),
+        M16x32(m)  => opcode1(0xff).reg(3).mem(m),
+        M16x64(m)  => opcode1(0xff).reg(3).mem(m).rex_w(),
     },
 
     Cbw  { opcode1(0x98).oper16() },
@@ -634,25 +634,25 @@ impl_encode! {
         Rel8(rel)  => opcode1(0xeb).disp8(rel.0),
         Rel32(rel) => opcode1(0xe9).disp32(rel.0),
         Rm64(rm)   => opcode1(0xff).reg(4).rm64(rm),
-        M1616(m)   => opcode1(0xff).reg(5).mem(m).oper16(),
-        M1632(m)   => opcode1(0xff).reg(5).mem(m),
-        M1664(m)   => opcode1(0xff).reg(5).mem(m).rex_w(),
+        M16x16(m)  => opcode1(0xff).reg(5).mem(m).oper16(),
+        M16x32(m)  => opcode1(0xff).reg(5).mem(m),
+        M16x64(m)  => opcode1(0xff).reg(5).mem(m).rex_w(),
     },
 
     Lss {
-        R16M1616(r, m) => opcode2(0xb2).reg(r).mem(m).oper16(),
-        R32M1632(r, m) => opcode2(0xb2).reg(r).mem(m),
-        R64M1664(r, m) => opcode2(0xb2).reg(r).mem(m).rex_w(),
+        R16M16x16(r, m) => opcode2(0xb2).reg(r).mem(m).oper16(),
+        R32M16x32(r, m) => opcode2(0xb2).reg(r).mem(m),
+        R64M16x64(r, m) => opcode2(0xb2).reg(r).mem(m).rex_w(),
     },
     Lfs {
-        R16M1616(r, m) => opcode2(0xb4).reg(r).mem(m).oper16(),
-        R32M1632(r, m) => opcode2(0xb4).reg(r).mem(m),
-        R64M1664(r, m) => opcode2(0xb4).reg(r).mem(m).rex_w(),
+        R16M16x16(r, m) => opcode2(0xb4).reg(r).mem(m).oper16(),
+        R32M16x32(r, m) => opcode2(0xb4).reg(r).mem(m),
+        R64M16x64(r, m) => opcode2(0xb4).reg(r).mem(m).rex_w(),
     },
     Lgs {
-        R16M1616(r, m) => opcode2(0xb5).reg(r).mem(m).oper16(),
-        R32M1632(r, m) => opcode2(0xb5).reg(r).mem(m),
-        R64M1664(r, m) => opcode2(0xb5).reg(r).mem(m).rex_w(),
+        R16M16x16(r, m) => opcode2(0xb5).reg(r).mem(m).oper16(),
+        R32M16x32(r, m) => opcode2(0xb5).reg(r).mem(m),
+        R64M16x64(r, m) => opcode2(0xb5).reg(r).mem(m).rex_w(),
     },
 
     Lea {
@@ -666,10 +666,10 @@ impl_encode! {
     Lfence { opcode3(0xae, 0xe8) },
 
     Lgdt {
-        M1664(m) => opcode2(0x01).reg(2).mem(m),
+        M16x64(m) => opcode2(0x01).reg(2).mem(m),
     },
     Lidt {
-        M1664(m) => opcode2(0x01).reg(3).mem(m),
+        M16x64(m) => opcode2(0x01).reg(3).mem(m),
     },
 
     Lldt {
