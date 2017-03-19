@@ -277,6 +277,21 @@ impl Instruction {
         self
     }
 
+    fn disp64(mut self, disp: i64) -> Self {
+        let bytes = [
+            disp as u8,
+            (disp >> 8) as u8,
+            (disp >> 16) as u8,
+            (disp >> 24) as u8,
+            (disp >> 32) as u8,
+            (disp >> 40) as u8,
+            (disp >> 48) as u8,
+            (disp >> 56) as u8,
+        ];
+        self.disp = Some(Disp::B8(bytes));
+        self
+    }
+
     fn offset_index_disp<Index>(self, index: Index, scale: Scale, disp: i32) -> Self
     where Index: Register {
         self.modrm_mode(0b00)

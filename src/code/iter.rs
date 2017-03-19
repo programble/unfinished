@@ -57,7 +57,7 @@ impl_into_iterator_once_tuple!(Modrm);
 impl_into_iterator_once_tuple!(Sib);
 
 impl_into_iterator_cloned_slice!(Opcode { B1, B2, B3 });
-impl_into_iterator_cloned_slice!(Disp { B1, B4 });
+impl_into_iterator_cloned_slice!(Disp { B1, B4, B8 });
 impl_into_iterator_cloned_slice!(Imm { B1, B2, B4, B8 });
 
 pub struct Iter<'a> {
