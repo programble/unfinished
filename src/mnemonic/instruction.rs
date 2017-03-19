@@ -876,4 +876,46 @@ declare! {
     // MINSS
 
     Monitor(),
+
+    Mov {
+        Rm8lR8l(Rm8l, R8l),
+        Rm8R8(Rm8, R8),
+        Rm16R16(Rm16, R16),
+        Rm32R32(Rm32, R32),
+        Rm64R64(Rm64, R64),
+
+        R8lRm8l(R8l, Rm8l),
+        R8Rm8(R8, Rm8),
+        R16Rm16(R16, Rm16),
+        R32Rm32(R32, Rm32),
+        R64Rm64(R64, Rm64),
+
+        Rm16Sreg(Rm16, Sreg),
+        Rm64Sreg(Rm64, Sreg),
+
+        SregRm16(Sreg, Rm16),
+        SregRm64(Sreg, Rm64),
+
+        AlMoffs8(Moffs),
+        AxMoffs16(Moffs),
+        EaxMoffs32(Moffs),
+        RaxMoffs64(Moffs),
+
+        Moffs8Al(Moffs),
+        Moffs16Ax(Moffs),
+        Moffs32Eax(Moffs),
+        Moffs64Rax(Moffs),
+
+        R8lImm8(R8l, Imm8),
+        R8Imm8(R8, Imm8),
+        R16Imm16(R16, Imm16),
+        R32Imm32(R32, Imm32),
+        R64Imm64(R64, Imm64),
+
+        Rm8lImm8(Rm8l, Imm8),
+        Rm8Imm8(Rm8, Imm8),
+        Rm16Imm16(Rm16, Imm16),
+        Rm32Imm32(Rm32, Imm32),
+        Rm64Imm32(Rm64, Imm32),
+    },
 }

@@ -845,3 +845,49 @@ impl_display_unary!("ltr", Ltr { Rm16 });
 impl_display_binary!("lzcnt", Lzcnt { R16Rm16, R32Rm32, R64Rm64 });
 impl_display_str!("mfence", Mfence);
 impl_display_str!("monitor", Monitor);
+
+impl Display for Mov {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Mov::Rm8lR8l(rm, r) => write!(f, "mov {}, {}", rm, r),
+            Mov::Rm8R8(rm, r)   => write!(f, "mov {}, {}", rm, r),
+            Mov::Rm16R16(rm, r) => write!(f, "mov {}, {}", rm, r),
+            Mov::Rm32R32(rm, r) => write!(f, "mov {}, {}", rm, r),
+            Mov::Rm64R64(rm, r) => write!(f, "mov {}, {}", rm, r),
+
+            Mov::R8lRm8l(r, rm) => write!(f, "mov {}, {}", r, rm),
+            Mov::R8Rm8(r, rm)   => write!(f, "mov {}, {}", r, rm),
+            Mov::R16Rm16(r, rm) => write!(f, "mov {}, {}", r, rm),
+            Mov::R32Rm32(r, rm) => write!(f, "mov {}, {}", r, rm),
+            Mov::R64Rm64(r, rm) => write!(f, "mov {}, {}", r, rm),
+
+            Mov::Rm16Sreg(rm, sreg) => write!(f, "mov {}, {}", rm, sreg),
+            Mov::Rm64Sreg(rm, sreg) => write!(f, "mov {}, {}", rm, sreg),
+
+            Mov::SregRm16(sreg, rm) => write!(f, "mov {}, {}", sreg, rm),
+            Mov::SregRm64(sreg, rm) => write!(f, "mov {}, {}", sreg, rm),
+
+            Mov::AlMoffs8(moffs)   => write!(f, "mov al, {}", moffs),
+            Mov::AxMoffs16(moffs)  => write!(f, "mov ax, {}", moffs),
+            Mov::EaxMoffs32(moffs) => write!(f, "mov eax, {}", moffs),
+            Mov::RaxMoffs64(moffs) => write!(f, "mov rax, {}", moffs),
+
+            Mov::Moffs8Al(moffs)   => write!(f, "mov {}, al", moffs),
+            Mov::Moffs16Ax(moffs)  => write!(f, "mov {}, ax", moffs),
+            Mov::Moffs32Eax(moffs) => write!(f, "mov {}, eax", moffs),
+            Mov::Moffs64Rax(moffs) => write!(f, "mov {}, rax", moffs),
+
+            Mov::R8lImm8(r, imm)  => write!(f, "mov {}, {}", r, imm),
+            Mov::R8Imm8(r, imm)   => write!(f, "mov {}, {}", r, imm),
+            Mov::R16Imm16(r, imm) => write!(f, "mov {}, {}", r, imm),
+            Mov::R32Imm32(r, imm) => write!(f, "mov {}, {}", r, imm),
+            Mov::R64Imm64(r, imm) => write!(f, "mov {}, {}", r, imm),
+
+            Mov::Rm8lImm8(rm, imm)  => write!(f, "mov {}, {}", rm, imm),
+            Mov::Rm8Imm8(rm, imm)   => write!(f, "mov {}, {}", rm, imm),
+            Mov::Rm16Imm16(rm, imm) => write!(f, "mov {}, {}", rm, imm),
+            Mov::Rm32Imm32(rm, imm) => write!(f, "mov {}, {}", rm, imm),
+            Mov::Rm64Imm32(rm, imm) => write!(f, "mov {}, {}", rm, imm),
+        }
+    }
+}

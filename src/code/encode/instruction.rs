@@ -706,4 +706,46 @@ impl_encode! {
     Mfence { opcode3(0xae, 0xf0) },
 
     Monitor { opcode3(0x01, 0xc8) },
+
+    Mov {
+        Rm8lR8l(rm, r) => opcode1(0x88).rm8l(rm).reg(r),
+        Rm8R8(rm, r)   => opcode1(0x88).rm8(rm).reg(r),
+        Rm16R16(rm, r) => opcode1(0x89).rm16(rm).reg(r).oper16(),
+        Rm32R32(rm, r) => opcode1(0x89).rm32(rm).reg(r),
+        Rm64R64(rm, r) => opcode1(0x89).rm64(rm).reg(r).rex_w(),
+
+        R8lRm8l(r, rm) => opcode1(0x8a).reg(r).rm8l(rm),
+        R8Rm8(r, rm)   => opcode1(0x8a).reg(r).rm8(rm),
+        R16Rm16(r, rm) => opcode1(0x8b).reg(r).rm16(rm).oper16(),
+        R32Rm32(r, rm) => opcode1(0x8b).reg(r).rm32(rm),
+        R64Rm64(r, rm) => opcode1(0x8b).reg(r).rm64(rm).rex_w(),
+
+        Rm16Sreg(rm, sreg) => opcode1(0x8c).rm16(rm).reg(sreg),
+        Rm64Sreg(rm, sreg) => opcode1(0x8c).rm64(rm).reg(sreg).rex_w(),
+
+        SregRm16(sreg, rm) => opcode1(0x8e).rm16(rm).reg(sreg),
+        SregRm64(sreg, rm) => opcode1(0x8e).rm64(rm).reg(sreg).rex_w(),
+
+        AlMoffs8(moffs)   => opcode1(0xa0).moffs(moffs),
+        AxMoffs16(moffs)  => opcode1(0xa1).moffs(moffs).oper16(),
+        EaxMoffs32(moffs) => opcode1(0xa1).moffs(moffs),
+        RaxMoffs64(moffs) => opcode1(0xa1).moffs(moffs).rex_w(),
+
+        Moffs8Al(moffs)   => opcode1(0xa2).moffs(moffs),
+        Moffs16Ax(moffs)  => opcode1(0xa3).moffs(moffs).oper16(),
+        Moffs32Eax(moffs) => opcode1(0xa3).moffs(moffs),
+        Moffs64Rax(moffs) => opcode1(0xa3).moffs(moffs).rex_w(),
+
+        R8lImm8(r, imm)  => opcode1(0xb0).plus(r).imm8(imm),
+        R8Imm8(r, imm)   => opcode1(0xb0).plus(r).imm8(imm),
+        R16Imm16(r, imm) => opcode1(0xb8).plus(r).imm16(imm).oper16(),
+        R32Imm32(r, imm) => opcode1(0xb8).plus(r).imm32(imm),
+        R64Imm64(r, imm) => opcode1(0xb8).plus(r).imm64(imm).rex_w(),
+
+        Rm8lImm8(rm, imm)  => opcode1(0xc6).reg(0).rm8l(rm).imm8(imm),
+        Rm8Imm8(rm, imm)   => opcode1(0xc6).reg(0).rm8(rm).imm8(imm),
+        Rm16Imm16(rm, imm) => opcode1(0xc7).reg(0).rm16(rm).imm16(imm).oper16(),
+        Rm32Imm32(rm, imm) => opcode1(0xc7).reg(0).rm32(rm).imm32(imm),
+        Rm64Imm32(rm, imm) => opcode1(0xc7).reg(0).rm64(rm).imm32(imm).rex_w(),
+    },
 }
