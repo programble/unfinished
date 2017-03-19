@@ -833,4 +833,13 @@ declare! {
     Lmsw {
         Rm16(Rm16),
     },
+
+    // LOCK
+
+    Lods {
+        B,
+        W,
+        D,
+        Q,
+    },
 }

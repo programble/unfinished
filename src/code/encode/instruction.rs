@@ -679,4 +679,11 @@ impl_encode! {
     Lmsw {
         Rm16(rm) => opcode2(0x01).reg(6).rm16(rm),
     },
+
+    Lods {
+        B => opcode1(0xac),
+        W => opcode1(0xad).oper16(),
+        D => opcode1(0xad),
+        Q => opcode1(0xad).rex_w(),
+    },
 }
