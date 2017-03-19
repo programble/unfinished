@@ -7,7 +7,7 @@ use mnemonic::operand::{
     self,
     Imm8, Imm16, Imm32, Imm64,
     Cc,
-    Scale, Sreg, Offset, Mem,
+    Scale, Sreg, Offset, Mem, Moffs,
     Rm8l, Rm8, Rm16, Rm32, Rm64,
 };
 
@@ -388,6 +388,27 @@ impl Instruction {
             Mem::Offset64(Some(sreg), offset) => {
                 self.sreg(sreg)
                     .offset(offset)
+            },
+        }
+    }
+
+    fn moffs(self, moffs: Moffs) -> Self {
+        match moffs {
+            Moffs::Moffset32(None, offset) => {
+                self.addr32()
+                    .disp32(offset as i32)
+            },
+            Moffs::Moffset32(Some(sreg), offset) => {
+                self.addr32()
+                    .sreg(sreg)
+                    .disp32(offset as i32)
+            },
+            Moffs::Moffset64(None, offset) => {
+                self.disp64(offset as i64)
+            },
+            Moffs::Moffset64(Some(sreg), offset) => {
+                self.sreg(sreg)
+                    .disp64(offset as i64)
             },
         }
     }

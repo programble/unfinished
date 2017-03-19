@@ -434,6 +434,17 @@ where Offset<B32, I32>: Display, Offset<B64, I64>: Display {
     }
 }
 
+impl Display for Moffs {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Moffs::Moffset32(None, offset)       => write!(f, "[dword {:#010x}]", offset),
+            Moffs::Moffset32(Some(sreg), offset) => write!(f, "[{}:dword {:#010x}]", sreg, offset),
+            Moffs::Moffset64(None, offset)       => write!(f, "[qword {:#018x}]", offset),
+            Moffs::Moffset64(Some(sreg), offset) => write!(f, "[{}:qword {:#018x}]", sreg, offset),
+        }
+    }
+}
+
 impl_display_rm!(Rm8l, R8l, "byte", M8l);
 impl_display_rm!(Rm8, R8, "byte", M8);
 impl_display_rm!(Rm16, R16, "word", M16);

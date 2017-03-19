@@ -145,6 +145,12 @@ pub enum Mem<B32 = R32, I32 = Index32, B64 = R64, I64 = Index64> {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Moffs {
+    Moffset32(Option<Sreg>, u32),
+    Moffset64(Option<Sreg>, u64),
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Rm8l {
     R8l(R8l),
     M8l(Mem<R32l, Index32l, R64l, Index64l>),

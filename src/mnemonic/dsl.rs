@@ -15,6 +15,7 @@ pub use mnemonic::operand::Disp::*;
 pub use mnemonic::operand::Offset::*;
 pub use mnemonic::operand::Sreg::*;
 pub use mnemonic::operand::Mem::*;
+pub use mnemonic::operand::Moffs::*;
 pub use mnemonic::operand::Rm8l;
 pub use mnemonic::operand::Rm8l::M8l;
 pub use mnemonic::operand::Rm8;
