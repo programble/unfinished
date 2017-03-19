@@ -831,3 +831,4 @@ impl Display for Loop {
 }
 
 impl_display_unary!("ltr", Ltr { Rm16 });
+impl_display_binary!("lzcnt", Lzcnt { R16Rm16, R32Rm32, R64Rm64 });

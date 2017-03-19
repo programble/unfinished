@@ -696,4 +696,10 @@ impl_encode! {
     Ltr {
         Rm16(rm) => opcode2(0x00).reg(3).rm16(rm),
     },
+
+    Lzcnt {
+        R16Rm16(r, rm) => opcode2(0xbd).rep().reg(r).rm16(rm).oper16(),
+        R32Rm32(r, rm) => opcode2(0xbd).rep().reg(r).rm32(rm),
+        R64Rm64(r, rm) => opcode2(0xbd).rep().reg(r).rm64(rm).rex_w(),
+    },
 }
