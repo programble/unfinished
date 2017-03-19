@@ -2,6 +2,7 @@ use mnemonic::operand::{
     Cc,
     R8l, R8, R16, R32l, R32, R64l, R64, Sti,
     Index32l, Index32, Index64l, Index64,
+    Sreg,
 };
 
 pub trait Register: Copy {
@@ -290,6 +291,19 @@ impl Register for Index64 {
             Index64::R13 => 13,
             Index64::R14 => 14,
             Index64::R15 => 15,
+        }
+    }
+}
+
+impl Register for Sreg {
+    fn code(self) -> u8 {
+        match self {
+            Sreg::Es => 0,
+            Sreg::Cs => 1,
+            Sreg::Ss => 2,
+            Sreg::Ds => 3,
+            Sreg::Fs => 4,
+            Sreg::Gs => 5,
         }
     }
 }
