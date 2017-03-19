@@ -692,4 +692,8 @@ impl_encode! {
         ERel8(rel)  => opcode1(0xe1).disp8(rel.0),
         NeRel8(rel) => opcode1(0xe0).disp8(rel.0),
     },
+
+    Ltr {
+        Rm16(rm) => opcode2(0x00).reg(3).rm16(rm),
+    },
 }

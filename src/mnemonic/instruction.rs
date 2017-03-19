@@ -848,4 +848,10 @@ declare! {
         ERel8(Rel8),
         NeRel8(Rel8),
     },
+
+    // LSL
+
+    Ltr {
+        Rm16(Rm16),
+    },
 }

@@ -829,3 +829,5 @@ impl Display for Loop {
         }
     }
 }
+
+impl_display_unary!("ltr", Ltr { Rm16 });
