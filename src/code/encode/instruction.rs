@@ -675,4 +675,8 @@ impl_encode! {
     Lldt {
         Rm16(rm) => opcode2(0x00).reg(2).rm16(rm),
     },
+
+    Lmsw {
+        Rm16(rm) => opcode2(0x01).reg(6).rm16(rm),
+    },
 }

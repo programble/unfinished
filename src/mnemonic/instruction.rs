@@ -829,4 +829,8 @@ declare! {
     Lldt {
         Rm16(Rm16),
     },
+
+    Lmsw {
+        Rm16(Rm16),
+    },
 }

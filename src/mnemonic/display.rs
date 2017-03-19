@@ -810,3 +810,4 @@ impl_display_str!("lfence", Lfence);
 impl_display_unary!("lgdt", Lgdt { M16x64 });
 impl_display_unary!("lidt", Lidt { M16x64 });
 impl_display_unary!("lldt", Lldt { Rm16 });
+impl_display_unary!("lmsw", Lmsw { Rm16 });
