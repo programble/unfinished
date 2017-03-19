@@ -5,7 +5,7 @@ use code::{Prefix1, Prefix2, Prefix3, Prefix4, Rex, Opcode, Modrm, Sib, Disp, Im
 use code::encode::register::Register;
 use mnemonic::operand::{
     self,
-    Imm8, Imm16, Imm32,
+    Imm8, Imm16, Imm32, Imm64,
     Cc,
     Scale, Sreg, Offset, Mem,
     Rm8l, Rm8, Rm16, Rm32, Rm64,
@@ -434,6 +434,21 @@ impl Instruction {
             (imm.0 >> 24) as u8,
         ];
         self.imm = Some(Imm::B4(bytes));
+        self
+    }
+
+    fn imm64(mut self, imm: Imm64) -> Self {
+        let bytes = [
+            imm.0 as u8,
+            (imm.0 >> 8) as u8,
+            (imm.0 >> 16) as u8,
+            (imm.0 >> 24) as u8,
+            (imm.0 >> 32) as u8,
+            (imm.0 >> 40) as u8,
+            (imm.0 >> 48) as u8,
+            (imm.0 >> 56) as u8,
+        ];
+        self.imm = Some(Imm::B8(bytes));
         self
     }
 }

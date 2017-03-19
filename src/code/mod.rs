@@ -64,6 +64,7 @@ pub enum Imm {
     B1([u8; 1]),
     B2([u8; 2]),
     B4([u8; 4]),
+    B8([u8; 8]),
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
