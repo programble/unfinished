@@ -842,4 +842,10 @@ declare! {
         D,
         Q,
     },
+
+    Loop {
+        Rel8(Rel8),
+        ERel8(Rel8),
+        NeRel8(Rel8),
+    },
 }

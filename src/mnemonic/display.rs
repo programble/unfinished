@@ -819,3 +819,13 @@ impl_display_reg!(
         Q => "lodsq",
     }
 );
+
+impl Display for Loop {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Loop::Rel8(rel)   => write!(f, "loop {}", rel),
+            Loop::ERel8(rel)  => write!(f, "loope {}", rel),
+            Loop::NeRel8(rel) => write!(f, "loopne {}", rel),
+        }
+    }
+}

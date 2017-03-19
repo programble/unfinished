@@ -686,4 +686,10 @@ impl_encode! {
         D => opcode1(0xad),
         Q => opcode1(0xad).rex_w(),
     },
+
+    Loop {
+        Rel8(rel)   => opcode1(0xe2).disp8(rel.0),
+        ERel8(rel)  => opcode1(0xe1).disp8(rel.0),
+        NeRel8(rel) => opcode1(0xe0).disp8(rel.0),
+    },
 }
