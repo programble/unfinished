@@ -702,4 +702,8 @@ impl_encode! {
         R32Rm32(r, rm) => opcode2(0xbd).rep().reg(r).rm32(rm),
         R64Rm64(r, rm) => opcode2(0xbd).rep().reg(r).rm64(rm).rex_w(),
     },
+
+    Mfence { opcode3(0xae, 0xf0) },
+
+    Monitor { opcode3(0x01, 0xc8) },
 }

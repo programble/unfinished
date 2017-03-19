@@ -860,4 +860,20 @@ declare! {
         R32Rm32(R32, Rm32),
         R64Rm64(R64, Rm64),
     },
+
+    // MASKMOVDQU
+    // MASKMOVQ
+    // MAXPD
+    // MAXPS
+    // MAXSD
+    // MAXSS
+
+    Mfence(),
+
+    // MINPD
+    // MINPS
+    // MINSD
+    // MINSS
+
+    Monitor(),
 }

@@ -832,3 +832,5 @@ impl Display for Loop {
 
 impl_display_unary!("ltr", Ltr { Rm16 });
 impl_display_binary!("lzcnt", Lzcnt { R16Rm16, R32Rm32, R64Rm64 });
+impl_display_str!("mfence", Mfence);
+impl_display_str!("monitor", Monitor);
