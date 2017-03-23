@@ -747,5 +747,8 @@ impl_encode! {
         Rm16Imm16(rm, imm) => opcode1(0xc7).reg(0).rm16(rm).imm16(imm).oper16(),
         Rm32Imm32(rm, imm) => opcode1(0xc7).reg(0).rm32(rm).imm32(imm),
         Rm64Imm32(rm, imm) => opcode1(0xc7).reg(0).rm64(rm).imm32(imm).rex_w(),
+
+        R64Cr(r, cr) => opcode2(0x20).rm_reg(r).reg(cr),
+        CrR64(cr, r) => opcode2(0x22).reg(cr).rm_reg(r),
     },
 }

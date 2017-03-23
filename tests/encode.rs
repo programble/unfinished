@@ -383,4 +383,16 @@ test_encode! {
         Mov::Rm32Imm32(M32(Offset64(None, Base(Rax))), Imm32(0x01020304)) => "c7 00 04 03 02 01",
         Mov::Rm64Imm32(M64(Offset64(None, Base(Rax))), Imm32(0x01020304)) => "48 c7 00 04 03 02 01",
     },
+
+    mov_r64_cr {
+        Mov::R64Cr(Rax, Cr0) => "0f 20 c0",
+        Mov::R64Cr(Rax, Cr2) => "0f 20 d0",
+        Mov::R64Cr(Rax, Cr3) => "0f 20 d8",
+        Mov::R64Cr(Rax, Cr4) => "0f 20 e0",
+        Mov::R64Cr(Rax, Cr8) => "44 0f 20 c0",
+    },
+
+    mov_cr_r64 {
+        Mov::CrR64(Cr0, Rax) => "0f 22 c0",
+    },
 }

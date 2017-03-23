@@ -91,6 +91,11 @@ pub enum Sti {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Cr {
+    Cr0, Cr2, Cr3, Cr4, Cr8
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Index32l {
     Eax, Ebx, Ecx, Edx, Esi, Edi, Ebp
 }

@@ -917,5 +917,8 @@ declare! {
         Rm16Imm16(Rm16, Imm16),
         Rm32Imm32(Rm32, Imm32),
         Rm64Imm32(Rm64, Imm32),
+
+        R64Cr(R64, Cr),
+        CrR64(Cr, R64),
     },
 }

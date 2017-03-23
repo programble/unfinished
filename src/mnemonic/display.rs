@@ -314,6 +314,16 @@ impl_display_reg!(
 );
 
 impl_display_reg!(
+    Cr {
+        Cr0 => "cr0",
+        Cr2 => "cr2",
+        Cr3 => "cr3",
+        Cr4 => "cr4",
+        Cr8 => "cr8",
+    }
+);
+
+impl_display_reg!(
     Index32l {
         Eax => "eax",
         Ebx => "ebx",
@@ -887,6 +897,9 @@ impl Display for Mov {
             Mov::Rm16Imm16(rm, imm) => write!(f, "mov {}, {}", rm, imm),
             Mov::Rm32Imm32(rm, imm) => write!(f, "mov {}, {}", rm, imm),
             Mov::Rm64Imm32(rm, imm) => write!(f, "mov {}, {}", rm, imm),
+
+            Mov::R64Cr(r, cr) => write!(f, "mov {}, {}", r, cr),
+            Mov::CrR64(cr, r) => write!(f, "mov {}, {}", cr, r),
         }
     }
 }
