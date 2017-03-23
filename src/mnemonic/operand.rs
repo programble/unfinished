@@ -127,7 +127,6 @@ pub enum Offset<Base, Index> {
     BaseDisp(Base, Disp),
     BaseIndex(Base, Index, Scale),
     BaseIndexDisp(Base, Index, Scale, Disp),
-    Index(Index, Scale),
     IndexDisp(Index, Scale, i32),
     Disp(i32),
     RipDisp(i32),

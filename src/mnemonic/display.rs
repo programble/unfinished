@@ -403,7 +403,6 @@ where Base: Display + Copy, Index: Display + Copy {
             Offset::BaseDisp(b, d)            => write!(f, "{} + {}", b, d),
             Offset::BaseIndex(b, i, s)        => write!(f, "{} + {} * {}", b, i, s),
             Offset::BaseIndexDisp(b, i, s, d) => write!(f, "{} + {} * {} + {}", b, i, s, d),
-            Offset::Index(i, s)               => write!(f, "{} * {}", i, s),
             Offset::IndexDisp(i, s, d)        => write!(f, "{} * {} + {:#010x}", i, s, d),
             Offset::Disp(d)                   => write!(f, "{:#010x}", d),
             Offset::RipDisp(d)                => write!(f, "rip + {:#010x}", d),

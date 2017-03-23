@@ -236,11 +236,6 @@ test_encode! {
         ) => "80 84 00 04 03 02 01 05",
     },
 
-    add_rm8_imm8_m8_index {
-        Add::Rm8Imm8(M8(Offset64(None, Index(Index64::Rax, X1))), Imm8(0x01)) =>
-            "80 04 05 00 00 00 00 01",
-    },
-
     add_rm8_imm8_m8_index_disp {
         Add::Rm8Imm8(M8(Offset64(None, IndexDisp(Index64::Rax, X1, 0x01020304))), Imm8(0x05)) =>
             "80 04 05 04 03 02 01 05",

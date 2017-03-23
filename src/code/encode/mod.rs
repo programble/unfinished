@@ -355,9 +355,6 @@ impl Instruction {
                 self.offset_base_index(base, index, scale)
                     .offset_disp(disp)
             },
-            Offset::Index(index, scale) => {
-                self.offset_index_disp(index, scale, 0)
-            },
             Offset::IndexDisp(index, scale, disp) => {
                 self.offset_index_disp(index, scale, disp)
             },
