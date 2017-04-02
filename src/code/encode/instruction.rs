@@ -1,20 +1,20 @@
-use code::{Encode, Instruction};
+use code::{Encode, Instruction, Opcode};
 use mnemonic::instruction::*;
 
 fn opcode1(a: u8) -> Instruction {
-    Instruction::opcode1(a)
+    Instruction::new(Opcode::B1([a]))
 }
 
 fn opcode2(b: u8) -> Instruction {
-    Instruction::opcode2(0x0f, b)
+    Instruction::new(Opcode::B2([0x0f, b]))
 }
 
 fn opcode3(b: u8, c: u8) -> Instruction {
-    Instruction::opcode3(0x0f, b, c)
+    Instruction::new(Opcode::B3([0x0f, b, c]))
 }
 
 fn fopcode(b: u8) -> Instruction {
-    Instruction::opcode2(0xd9, b)
+    Instruction::new(Opcode::B2([0xd9, b]))
 }
 
 macro_rules! impl_encode {
@@ -271,8 +271,8 @@ impl_encode! {
 
     Fchs { fopcode(0xe0) },
 
-    Fclex { Instruction::opcode3(0x9b, 0xdb, 0xe2) },
-    Fnclex { Instruction::opcode2(0xdb, 0xe2) },
+    Fclex { Instruction::new(Opcode::B3([0x9b, 0xdb, 0xe2])) },
+    Fnclex { Instruction::new(Opcode::B2([0xdb, 0xe2])) },
 
     Fcmov {
         BSt0Sti(i)   => opcode1(0xda).reg(0).rm_reg(i),
@@ -295,7 +295,7 @@ impl_encode! {
         M64fp(m) => opcode1(0xdc).reg(3).mem(m),
         Sti(i)   => opcode1(0xd8).reg(3).rm_reg(i),
     },
-    Fcompp { Instruction::opcode2(0xde, 0xd9) },
+    Fcompp { Instruction::new(Opcode::B2([0xde, 0xd9])) },
 
     Fcomi {
         St0Sti(i) => opcode1(0xdb).reg(6).rm_reg(i),
@@ -363,8 +363,8 @@ impl_encode! {
 
     Fincstp { fopcode(0xf7) },
 
-    Finit { Instruction::opcode3(0x9b, 0xdb, 0xe3) },
-    Fninit { Instruction::opcode2(0xdb, 0xe3) },
+    Finit { Instruction::new(Opcode::B3([0x9b, 0xdb, 0xe3])) },
+    Fninit { Instruction::new(Opcode::B2([0xdb, 0xe3])) },
 
     Fist {
         M16int(m) => opcode1(0xdf).reg(2).mem(m),
@@ -436,7 +436,7 @@ impl_encode! {
     },
 
     Fsave {
-        M108byte(m) => Instruction::opcode2(0x9b, 0xdd).reg(6).mem(m),
+        M108byte(m) => Instruction::new(Opcode::B2([0x9b, 0xdd])).reg(6).mem(m),
     },
     Fnsave {
         M108byte(m) => opcode1(0xdd).reg(6).mem(m),
@@ -463,26 +463,26 @@ impl_encode! {
     },
 
     Fstcw {
-        M2byte(m) => Instruction::opcode2(0x9b, 0xd9).reg(7).mem(m),
+        M2byte(m) => Instruction::new(Opcode::B2([0x9b, 0xd9])).reg(7).mem(m),
     },
     Fnstcw {
         M2byte(m) => opcode1(0xd9).reg(7).mem(m),
     },
 
     Fstenv {
-        M28byte(m) => Instruction::opcode2(0x9b, 0xd9).reg(6).mem(m),
+        M28byte(m) => Instruction::new(Opcode::B2([0x9b, 0xd9])).reg(6).mem(m),
     },
     Fnstenv {
         M28byte(m) => opcode1(0xd9).reg(6).mem(m),
     },
 
     Fstsw {
-        M2byte(m) => Instruction::opcode2(0x9b, 0xdd).reg(7).mem(m),
-        Ax        => Instruction::opcode3(0x9b, 0xdf, 0xe0),
+        M2byte(m) => Instruction::new(Opcode::B2([0x9b, 0xdd])).reg(7).mem(m),
+        Ax        => Instruction::new(Opcode::B3([0x9b, 0xdf, 0xe0])),
     },
     Fnstsw {
         M2byte(m) => opcode1(0xdd).reg(7).mem(m),
-        Ax        => Instruction::opcode2(0xdf, 0xe0),
+        Ax        => Instruction::new(Opcode::B2([0xdf, 0xe0])),
     },
 
     Fsub {
