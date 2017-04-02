@@ -38,28 +38,28 @@ macro_rules! impl_encode {
             $ty {
                 Rm8lR8l(rm, r) => opcode1($opcode).rm8l(rm).reg(r),
                 Rm8R8(rm, r)   => opcode1($opcode).rm8(rm).reg(r),
-                Rm16R16(rm, r) => opcode1($opcode + 1).rm16(rm).reg(r).oper16(),
+                Rm16R16(rm, r) => opcode1($opcode + 1).rm16(rm).reg(r).osz(),
                 Rm32R32(rm, r) => opcode1($opcode + 1).rm32(rm).reg(r),
                 Rm64R64(rm, r) => opcode1($opcode + 1).rm64(rm).reg(r).rex_w(),
 
                 R8lRm8l(r, rm) => opcode1($opcode + 2).reg(r).rm8l(rm),
                 R8Rm8(r, rm)   => opcode1($opcode + 2).reg(r).rm8(rm),
-                R16Rm16(r, rm) => opcode1($opcode + 3).reg(r).rm16(rm).oper16(),
+                R16Rm16(r, rm) => opcode1($opcode + 3).reg(r).rm16(rm).osz(),
                 R32Rm32(r, rm) => opcode1($opcode + 3).reg(r).rm32(rm),
                 R64Rm64(r, rm) => opcode1($opcode + 3).reg(r).rm64(rm).rex_w(),
 
                 AlImm8(imm)   => opcode1($opcode + 4).imm8(imm),
-                AxImm16(imm)  => opcode1($opcode + 5).imm16(imm).oper16(),
+                AxImm16(imm)  => opcode1($opcode + 5).imm16(imm).osz(),
                 EaxImm32(imm) => opcode1($opcode + 5).imm32(imm),
                 RaxImm32(imm) => opcode1($opcode + 5).imm32(imm).rex_w(),
 
                 Rm8lImm8(rm, imm)  => opcode1(0x80).reg($reg).rm8l(rm).imm8(imm),
                 Rm8Imm8(rm, imm)   => opcode1(0x80).reg($reg).rm8(rm).imm8(imm),
-                Rm16Imm16(rm, imm) => opcode1(0x81).reg($reg).rm16(rm).imm16(imm).oper16(),
+                Rm16Imm16(rm, imm) => opcode1(0x81).reg($reg).rm16(rm).imm16(imm).osz(),
                 Rm32Imm32(rm, imm) => opcode1(0x81).reg($reg).rm32(rm).imm32(imm),
                 Rm64Imm32(rm, imm) => opcode1(0x81).reg($reg).rm64(rm).imm32(imm).rex_w(),
 
-                Rm16Imm8(rm, imm) => opcode1(0x83).reg($reg).rm16(rm).imm8(imm).oper16(),
+                Rm16Imm8(rm, imm) => opcode1(0x83).reg($reg).rm16(rm).imm8(imm).osz(),
                 Rm32Imm8(rm, imm) => opcode1(0x83).reg($reg).rm32(rm).imm8(imm),
                 Rm64Imm8(rm, imm) => opcode1(0x83).reg($reg).rm64(rm).imm8(imm).rex_w(),
             }
@@ -79,8 +79,8 @@ impl_encode! {
     Adc(0x10, 2),
 
     Adcx {
-        R32Rm32(r, rm) => opcode3(0x38, 0xf6).oper16().reg(r).rm32(rm),
-        R64Rm64(r, rm) => opcode3(0x38, 0xf6).oper16().reg(r).rm64(rm).rex_w(),
+        R32Rm32(r, rm) => opcode3(0x38, 0xf6).osz().reg(r).rm32(rm),
+        R64Rm64(r, rm) => opcode3(0x38, 0xf6).osz().reg(r).rm64(rm).rex_w(),
     },
 
     Add(0x00, 0),
@@ -93,13 +93,13 @@ impl_encode! {
     And(0x20, 4),
 
     Bsf {
-        R16Rm16(r, rm) => opcode2(0xbc).reg(r).rm16(rm).oper16(),
+        R16Rm16(r, rm) => opcode2(0xbc).reg(r).rm16(rm).osz(),
         R32Rm32(r, rm) => opcode2(0xbc).reg(r).rm32(rm),
         R64Rm64(r, rm) => opcode2(0xbc).reg(r).rm64(rm).rex_w(),
     },
 
     Bsr {
-        R16Rm16(r, rm) => opcode2(0xbd).reg(r).rm16(rm).oper16(),
+        R16Rm16(r, rm) => opcode2(0xbd).reg(r).rm16(rm).osz(),
         R32Rm32(r, rm) => opcode2(0xbd).reg(r).rm32(rm),
         R64Rm64(r, rm) => opcode2(0xbd).reg(r).rm64(rm).rex_w(),
     },
@@ -110,41 +110,41 @@ impl_encode! {
     },
 
     Bt {
-        Rm16R16(rm, r) => opcode2(0xa3).rm16(rm).reg(r).oper16(),
+        Rm16R16(rm, r) => opcode2(0xa3).rm16(rm).reg(r).osz(),
         Rm32R32(rm, r) => opcode2(0xa3).rm32(rm).reg(r),
         Rm64R64(rm, r) => opcode2(0xa3).rm64(rm).reg(r).rex_w(),
 
-        Rm16Imm8(rm, imm) => opcode2(0xba).reg(4).rm16(rm).imm8(imm).oper16(),
+        Rm16Imm8(rm, imm) => opcode2(0xba).reg(4).rm16(rm).imm8(imm).osz(),
         Rm32Imm8(rm, imm) => opcode2(0xba).reg(4).rm32(rm).imm8(imm),
         Rm64Imm8(rm, imm) => opcode2(0xba).reg(4).rm64(rm).imm8(imm).rex_w(),
     },
 
     Btc {
-        Rm16R16(rm, r) => opcode2(0xbb).rm16(rm).reg(r).oper16(),
+        Rm16R16(rm, r) => opcode2(0xbb).rm16(rm).reg(r).osz(),
         Rm32R32(rm, r) => opcode2(0xbb).rm32(rm).reg(r),
         Rm64R64(rm, r) => opcode2(0xbb).rm64(rm).reg(r).rex_w(),
 
-        Rm16Imm8(rm, imm) => opcode2(0xba).reg(7).rm16(rm).imm8(imm).oper16(),
+        Rm16Imm8(rm, imm) => opcode2(0xba).reg(7).rm16(rm).imm8(imm).osz(),
         Rm32Imm8(rm, imm) => opcode2(0xba).reg(7).rm32(rm).imm8(imm),
         Rm64Imm8(rm, imm) => opcode2(0xba).reg(7).rm64(rm).imm8(imm).rex_w(),
     },
 
     Btr {
-        Rm16R16(rm, r) => opcode2(0xb3).rm16(rm).reg(r).oper16(),
+        Rm16R16(rm, r) => opcode2(0xb3).rm16(rm).reg(r).osz(),
         Rm32R32(rm, r) => opcode2(0xb3).rm32(rm).reg(r),
         Rm64R64(rm, r) => opcode2(0xb3).rm64(rm).reg(r).rex_w(),
 
-        Rm16Imm8(rm, imm) => opcode2(0xba).reg(6).rm16(rm).imm8(imm).oper16(),
+        Rm16Imm8(rm, imm) => opcode2(0xba).reg(6).rm16(rm).imm8(imm).osz(),
         Rm32Imm8(rm, imm) => opcode2(0xba).reg(6).rm32(rm).imm8(imm),
         Rm64Imm8(rm, imm) => opcode2(0xba).reg(6).rm64(rm).imm8(imm).rex_w(),
     },
 
     Bts {
-        Rm16R16(rm, r) => opcode2(0xab).rm16(rm).reg(r).oper16(),
+        Rm16R16(rm, r) => opcode2(0xab).rm16(rm).reg(r).osz(),
         Rm32R32(rm, r) => opcode2(0xab).rm32(rm).reg(r),
         Rm64R64(rm, r) => opcode2(0xab).rm64(rm).reg(r).rex_w(),
 
-        Rm16Imm8(rm, imm) => opcode2(0xba).reg(5).rm16(rm).imm8(imm).oper16(),
+        Rm16Imm8(rm, imm) => opcode2(0xba).reg(5).rm16(rm).imm8(imm).osz(),
         Rm32Imm8(rm, imm) => opcode2(0xba).reg(5).rm32(rm).imm8(imm),
         Rm64Imm8(rm, imm) => opcode2(0xba).reg(5).rm64(rm).imm8(imm).rex_w(),
     },
@@ -152,12 +152,12 @@ impl_encode! {
     Call {
         Rel32(rel) => opcode1(0xe8).disp32(rel.0),
         Rm64(rm)   => opcode1(0xff).reg(2).rm64(rm),
-        M16x16(m)  => opcode1(0xff).reg(3).mem(m).oper16(),
+        M16x16(m)  => opcode1(0xff).reg(3).mem(m).osz(),
         M16x32(m)  => opcode1(0xff).reg(3).mem(m),
         M16x64(m)  => opcode1(0xff).reg(3).mem(m).rex_w(),
     },
 
-    Cbw  { opcode1(0x98).oper16() },
+    Cbw  { opcode1(0x98).osz() },
     Cwde { opcode1(0x98) },
     Cdqe { opcode1(0x98).rex_w() },
 
@@ -172,7 +172,7 @@ impl_encode! {
     },
 
     Clflushopt {
-        M8(m) => opcode2(0xae).reg(7).mem(m).oper16(),
+        M8(m) => opcode2(0xae).reg(7).mem(m).osz(),
     },
 
     Cli { opcode1(0xfa) },
@@ -182,7 +182,7 @@ impl_encode! {
     Cmc { opcode1(0xf5) },
 
     Cmov {
-        CcR16Rm16(cc, r, rm) => opcode2(0x40).cc(cc).reg(r).rm16(rm).oper16(),
+        CcR16Rm16(cc, r, rm) => opcode2(0x40).cc(cc).reg(r).rm16(rm).osz(),
         CcR32Rm32(cc, r, rm) => opcode2(0x40).cc(cc).reg(r).rm32(rm),
         CcR64Rm64(cc, r, rm) => opcode2(0x40).cc(cc).reg(r).rm64(rm).rex_w(),
     },
@@ -191,7 +191,7 @@ impl_encode! {
 
     Cmps {
         B => opcode1(0xa6),
-        W => opcode1(0xa7).oper16(),
+        W => opcode1(0xa7).osz(),
         D => opcode1(0xa7),
         Q => opcode1(0xa7).rex_w(),
     },
@@ -199,7 +199,7 @@ impl_encode! {
     Cmpxchg {
         Rm8lR8l(rm, r) => opcode2(0xb0).rm8l(rm).reg(r),
         Rm8R8(rm, r)   => opcode2(0xb0).rm8(rm).reg(r),
-        Rm16R16(rm, r) => opcode2(0xb1).rm16(rm).reg(r).oper16(),
+        Rm16R16(rm, r) => opcode2(0xb1).rm16(rm).reg(r).osz(),
         Rm32R32(rm, r) => opcode2(0xb1).rm32(rm).reg(r),
         Rm64R64(rm, r) => opcode2(0xb1).rm64(rm).reg(r).rex_w(),
     },
@@ -217,20 +217,20 @@ impl_encode! {
     Crc32 {
         R32lRm8l(r, rm) => opcode3(0x38, 0xf0).repne().reg(r).rm8l(rm),
         R32Rm8(r, rm)   => opcode3(0x38, 0xf0).repne().reg(r).rm8(rm),
-        R32Rm16(r, rm)  => opcode3(0x38, 0xf1).repne().reg(r).rm16(rm).oper16(),
+        R32Rm16(r, rm)  => opcode3(0x38, 0xf1).repne().reg(r).rm16(rm).osz(),
         R32Rm32(r, rm)  => opcode3(0x38, 0xf1).repne().reg(r).rm32(rm),
         R64Rm8(r, rm)   => opcode3(0x38, 0xf0).repne().reg(r).rm8(rm).rex_w(),
         R64Rm64(r, rm)  => opcode3(0x38, 0xf1).repne().reg(r).rm64(rm).rex_w(),
     },
 
-    Cwd { opcode1(0x99).oper16() },
+    Cwd { opcode1(0x99).osz() },
     Cdq { opcode1(0x99) },
     Cqo { opcode1(0x99).rex_w() },
 
     Dec {
         Rm8l(rm) => opcode1(0xfe).reg(1).rm8l(rm),
         Rm8(rm)  => opcode1(0xfe).reg(1).rm8(rm),
-        Rm16(rm) => opcode1(0xff).reg(1).rm16(rm).oper16(),
+        Rm16(rm) => opcode1(0xff).reg(1).rm16(rm).osz(),
         Rm32(rm) => opcode1(0xff).reg(1).rm32(rm),
         Rm64(rm) => opcode1(0xff).reg(1).rm64(rm).rex_w(),
     },
@@ -238,7 +238,7 @@ impl_encode! {
     Div {
         Rm8l(rm) => opcode1(0xf6).reg(6).rm8l(rm),
         Rm8(rm)  => opcode1(0xf6).reg(6).rm8(rm),
-        Rm16(rm) => opcode1(0xf7).reg(6).rm16(rm).oper16(),
+        Rm16(rm) => opcode1(0xf7).reg(6).rm16(rm).osz(),
         Rm32(rm) => opcode1(0xf7).reg(6).rm32(rm),
         Rm64(rm) => opcode1(0xf7).reg(6).rm64(rm).rex_w(),
     },
@@ -554,7 +554,7 @@ impl_encode! {
     Idiv {
         Rm8l(rm) => opcode1(0xf6).reg(7).rm8l(rm),
         Rm8(rm)  => opcode1(0xf6).reg(7).rm8(rm),
-        Rm16(rm) => opcode1(0xf7).reg(7).rm16(rm).oper16(),
+        Rm16(rm) => opcode1(0xf7).reg(7).rm16(rm).osz(),
         Rm32(rm) => opcode1(0xf7).reg(7).rm32(rm),
         Rm64(rm) => opcode1(0xf7).reg(7).rm64(rm).rex_w(),
     },
@@ -562,44 +562,44 @@ impl_encode! {
     Imul {
         Rm8l(rm) => opcode1(0xf6).reg(5).rm8l(rm),
         Rm8(rm)  => opcode1(0xf6).reg(5).rm8(rm),
-        Rm16(rm) => opcode1(0xf7).reg(5).rm16(rm).oper16(),
+        Rm16(rm) => opcode1(0xf7).reg(5).rm16(rm).osz(),
         Rm32(rm) => opcode1(0xf7).reg(5).rm32(rm),
         Rm64(rm) => opcode1(0xf7).reg(5).rm64(rm).rex_w(),
 
-        R16Rm16(r, rm) => opcode2(0xaf).reg(r).rm16(rm).oper16(),
+        R16Rm16(r, rm) => opcode2(0xaf).reg(r).rm16(rm).osz(),
         R32Rm32(r, rm) => opcode2(0xaf).reg(r).rm32(rm),
         R64Rm64(r, rm) => opcode2(0xaf).reg(r).rm64(rm).rex_w(),
 
-        R16Rm16Imm8(r, rm, imm) => opcode1(0x6b).reg(r).rm16(rm).imm8(imm).oper16(),
+        R16Rm16Imm8(r, rm, imm) => opcode1(0x6b).reg(r).rm16(rm).imm8(imm).osz(),
         R32Rm32Imm8(r, rm, imm) => opcode1(0x6b).reg(r).rm32(rm).imm8(imm),
         R64Rm64Imm8(r, rm, imm) => opcode1(0x6b).reg(r).rm64(rm).imm8(imm).rex_w(),
 
-        R16Rm16Imm16(r, rm, imm) => opcode1(0x69).reg(r).rm16(rm).imm16(imm).oper16(),
+        R16Rm16Imm16(r, rm, imm) => opcode1(0x69).reg(r).rm16(rm).imm16(imm).osz(),
         R32Rm32Imm32(r, rm, imm) => opcode1(0x69).reg(r).rm32(rm).imm32(imm),
         R64Rm64Imm32(r, rm, imm) => opcode1(0x69).reg(r).rm64(rm).imm32(imm).rex_w(),
     },
 
     In {
         AlImm8(imm)  => opcode1(0xe4).imm8(imm),
-        AxImm8(imm)  => opcode1(0xe5).imm8(imm).oper16(),
+        AxImm8(imm)  => opcode1(0xe5).imm8(imm).osz(),
         EaxImm8(imm) => opcode1(0xe5).imm8(imm),
 
         AlDx  => opcode1(0xec),
-        AxDx  => opcode1(0xed).oper16(),
+        AxDx  => opcode1(0xed).osz(),
         EaxDx => opcode1(0xed),
     },
 
     Inc {
         Rm8l(rm) => opcode1(0xfe).reg(0).rm8l(rm),
         Rm8(rm)  => opcode1(0xfe).reg(0).rm8(rm),
-        Rm16(rm) => opcode1(0xff).reg(0).rm16(rm).oper16(),
+        Rm16(rm) => opcode1(0xff).reg(0).rm16(rm).osz(),
         Rm32(rm) => opcode1(0xff).reg(0).rm32(rm),
         Rm64(rm) => opcode1(0xff).reg(0).rm64(rm).rex_w(),
     },
 
     Ins {
         B => opcode1(0x6c),
-        W => opcode1(0x6d).oper16(),
+        W => opcode1(0x6d).osz(),
         D => opcode1(0x6d),
     },
 
@@ -616,7 +616,7 @@ impl_encode! {
     },
 
     Invpcid {
-        R64M128(r, m) => opcode3(0x38, 0x82).oper16().reg(r).mem(m),
+        R64M128(r, m) => opcode3(0x38, 0x82).osz().reg(r).mem(m),
     },
 
     Iret {
@@ -634,29 +634,29 @@ impl_encode! {
         Rel8(rel)  => opcode1(0xeb).disp8(rel.0),
         Rel32(rel) => opcode1(0xe9).disp32(rel.0),
         Rm64(rm)   => opcode1(0xff).reg(4).rm64(rm),
-        M16x16(m)  => opcode1(0xff).reg(5).mem(m).oper16(),
+        M16x16(m)  => opcode1(0xff).reg(5).mem(m).osz(),
         M16x32(m)  => opcode1(0xff).reg(5).mem(m),
         M16x64(m)  => opcode1(0xff).reg(5).mem(m).rex_w(),
     },
 
     Lss {
-        R16M16x16(r, m) => opcode2(0xb2).reg(r).mem(m).oper16(),
+        R16M16x16(r, m) => opcode2(0xb2).reg(r).mem(m).osz(),
         R32M16x32(r, m) => opcode2(0xb2).reg(r).mem(m),
         R64M16x64(r, m) => opcode2(0xb2).reg(r).mem(m).rex_w(),
     },
     Lfs {
-        R16M16x16(r, m) => opcode2(0xb4).reg(r).mem(m).oper16(),
+        R16M16x16(r, m) => opcode2(0xb4).reg(r).mem(m).osz(),
         R32M16x32(r, m) => opcode2(0xb4).reg(r).mem(m),
         R64M16x64(r, m) => opcode2(0xb4).reg(r).mem(m).rex_w(),
     },
     Lgs {
-        R16M16x16(r, m) => opcode2(0xb5).reg(r).mem(m).oper16(),
+        R16M16x16(r, m) => opcode2(0xb5).reg(r).mem(m).osz(),
         R32M16x32(r, m) => opcode2(0xb5).reg(r).mem(m),
         R64M16x64(r, m) => opcode2(0xb5).reg(r).mem(m).rex_w(),
     },
 
     Lea {
-        R16M(r, m) => opcode1(0x8d).reg(r).mem(m).oper16(),
+        R16M(r, m) => opcode1(0x8d).reg(r).mem(m).osz(),
         R32M(r, m) => opcode1(0x8d).reg(r).mem(m),
         R64M(r, m) => opcode1(0x8d).reg(r).mem(m).rex_w(),
     },
@@ -682,7 +682,7 @@ impl_encode! {
 
     Lods {
         B => opcode1(0xac),
-        W => opcode1(0xad).oper16(),
+        W => opcode1(0xad).osz(),
         D => opcode1(0xad),
         Q => opcode1(0xad).rex_w(),
     },
@@ -698,7 +698,7 @@ impl_encode! {
     },
 
     Lzcnt {
-        R16Rm16(r, rm) => opcode2(0xbd).rep().reg(r).rm16(rm).oper16(),
+        R16Rm16(r, rm) => opcode2(0xbd).rep().reg(r).rm16(rm).osz(),
         R32Rm32(r, rm) => opcode2(0xbd).rep().reg(r).rm32(rm),
         R64Rm64(r, rm) => opcode2(0xbd).rep().reg(r).rm64(rm).rex_w(),
     },
@@ -710,13 +710,13 @@ impl_encode! {
     Mov {
         Rm8lR8l(rm, r) => opcode1(0x88).rm8l(rm).reg(r),
         Rm8R8(rm, r)   => opcode1(0x88).rm8(rm).reg(r),
-        Rm16R16(rm, r) => opcode1(0x89).rm16(rm).reg(r).oper16(),
+        Rm16R16(rm, r) => opcode1(0x89).rm16(rm).reg(r).osz(),
         Rm32R32(rm, r) => opcode1(0x89).rm32(rm).reg(r),
         Rm64R64(rm, r) => opcode1(0x89).rm64(rm).reg(r).rex_w(),
 
         R8lRm8l(r, rm) => opcode1(0x8a).reg(r).rm8l(rm),
         R8Rm8(r, rm)   => opcode1(0x8a).reg(r).rm8(rm),
-        R16Rm16(r, rm) => opcode1(0x8b).reg(r).rm16(rm).oper16(),
+        R16Rm16(r, rm) => opcode1(0x8b).reg(r).rm16(rm).osz(),
         R32Rm32(r, rm) => opcode1(0x8b).reg(r).rm32(rm),
         R64Rm64(r, rm) => opcode1(0x8b).reg(r).rm64(rm).rex_w(),
 
@@ -727,24 +727,24 @@ impl_encode! {
         SregRm64(sreg, rm) => opcode1(0x8e).rm64(rm).reg(sreg).rex_w(),
 
         AlMoffs8(moffs)   => opcode1(0xa0).moffs(moffs),
-        AxMoffs16(moffs)  => opcode1(0xa1).moffs(moffs).oper16(),
+        AxMoffs16(moffs)  => opcode1(0xa1).moffs(moffs).osz(),
         EaxMoffs32(moffs) => opcode1(0xa1).moffs(moffs),
         RaxMoffs64(moffs) => opcode1(0xa1).moffs(moffs).rex_w(),
 
         Moffs8Al(moffs)   => opcode1(0xa2).moffs(moffs),
-        Moffs16Ax(moffs)  => opcode1(0xa3).moffs(moffs).oper16(),
+        Moffs16Ax(moffs)  => opcode1(0xa3).moffs(moffs).osz(),
         Moffs32Eax(moffs) => opcode1(0xa3).moffs(moffs),
         Moffs64Rax(moffs) => opcode1(0xa3).moffs(moffs).rex_w(),
 
         R8lImm8(r, imm)  => opcode1(0xb0).plus(r).imm8(imm),
         R8Imm8(r, imm)   => opcode1(0xb0).plus(r).imm8(imm),
-        R16Imm16(r, imm) => opcode1(0xb8).plus(r).imm16(imm).oper16(),
+        R16Imm16(r, imm) => opcode1(0xb8).plus(r).imm16(imm).osz(),
         R32Imm32(r, imm) => opcode1(0xb8).plus(r).imm32(imm),
         R64Imm64(r, imm) => opcode1(0xb8).plus(r).imm64(imm).rex_w(),
 
         Rm8lImm8(rm, imm)  => opcode1(0xc6).reg(0).rm8l(rm).imm8(imm),
         Rm8Imm8(rm, imm)   => opcode1(0xc6).reg(0).rm8(rm).imm8(imm),
-        Rm16Imm16(rm, imm) => opcode1(0xc7).reg(0).rm16(rm).imm16(imm).oper16(),
+        Rm16Imm16(rm, imm) => opcode1(0xc7).reg(0).rm16(rm).imm16(imm).osz(),
         Rm32Imm32(rm, imm) => opcode1(0xc7).reg(0).rm32(rm).imm32(imm),
         Rm64Imm32(rm, imm) => opcode1(0xc7).reg(0).rm64(rm).imm32(imm).rex_w(),
 

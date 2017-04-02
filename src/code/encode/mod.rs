@@ -186,13 +186,13 @@ impl Instruction {
         self
     }
 
-    fn oper16(mut self) -> Self {
-        self.prefix3 = Some(Prefix3::OperandSize);
+    fn osz(mut self) -> Self {
+        self.prefix3 = Some(Prefix3::Osz);
         self
     }
 
-    fn addr32(mut self) -> Self {
-        self.prefix4 = Some(Prefix4::AddressSize);
+    fn asz(mut self) -> Self {
+        self.prefix4 = Some(Prefix4::Asz);
         self
     }
 
@@ -371,11 +371,11 @@ impl Instruction {
     where B32: Register, I32: Register, B64: Register, I64: Register {
         match mem {
             Mem::Offset32(None, offset) => {
-                self.addr32()
+                self.asz()
                     .offset(offset)
             },
             Mem::Offset32(Some(sreg), offset) => {
-                self.addr32()
+                self.asz()
                     .sreg(sreg)
                     .offset(offset)
             },
@@ -392,11 +392,11 @@ impl Instruction {
     fn moffs(self, moffs: Moffs) -> Self {
         match moffs {
             Moffs::Moffset32(None, offset) => {
-                self.addr32()
+                self.asz()
                     .disp32(offset as i32)
             },
             Moffs::Moffset32(Some(sreg), offset) => {
-                self.addr32()
+                self.asz()
                     .sreg(sreg)
                     .disp32(offset as i32)
             },

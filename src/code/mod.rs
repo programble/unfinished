@@ -28,13 +28,13 @@ pub enum Prefix2 {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[repr(u8)]
 pub enum Prefix3 {
-    OperandSize = 0x66,
+    Osz = 0x66,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 #[repr(u8)]
 pub enum Prefix4 {
-    AddressSize = 0x67,
+    Asz = 0x67,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
