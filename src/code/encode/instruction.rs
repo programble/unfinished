@@ -754,4 +754,14 @@ impl_encode! {
         R64Dr(r, dr) => opcode2(0x21).rm_reg(r).reg(dr),
         DrR64(dr, r) => opcode2(0x23).reg(dr).rm_reg(r),
     },
+
+    Movbe {
+        R16M16(r, m) => opcode3(0x38, 0xf0).reg(r).mem(m).osz(),
+        R32M32(r, m) => opcode3(0x38, 0xf0).reg(r).mem(m),
+        R64M64(r, m) => opcode3(0x38, 0xf0).reg(r).mem(m).rex_w(),
+
+        M16R16(m, r) => opcode3(0x38, 0xf1).mem(m).reg(r).osz(),
+        M32R32(m, r) => opcode3(0x38, 0xf1).mem(m).reg(r),
+        M64R64(m, r) => opcode3(0x38, 0xf1).mem(m).reg(r).rex_w(),
+    },
 }

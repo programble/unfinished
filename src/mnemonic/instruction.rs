@@ -924,4 +924,17 @@ declare! {
         R64Dr(R64, Dr),
         DrR64(Dr, R64),
     },
+
+    // MOVAPD
+    // MOVAPS
+
+    Movbe {
+        R16M16(R16, Mem),
+        R32M32(R32, Mem),
+        R64M64(R64, Mem),
+
+        M16R16(Mem, R16),
+        M32R32(Mem, R32),
+        M64R64(Mem, R64),
+    },
 }
