@@ -750,5 +750,8 @@ impl_encode! {
 
         R64Cr(r, cr) => opcode2(0x20).rm_reg(r).reg(cr),
         CrR64(cr, r) => opcode2(0x22).reg(cr).rm_reg(r),
+
+        R64Dr(r, dr) => opcode2(0x21).rm_reg(r).reg(dr),
+        DrR64(dr, r) => opcode2(0x23).reg(dr).rm_reg(r),
     },
 }

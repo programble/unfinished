@@ -913,6 +913,9 @@ impl Display for Mov {
 
             Mov::R64Cr(r, cr) => write!(f, "mov {}, {}", r, cr),
             Mov::CrR64(cr, r) => write!(f, "mov {}, {}", cr, r),
+
+            Mov::R64Dr(r, dr) => write!(f, "mov {}, {}", r, dr),
+            Mov::DrR64(dr, r) => write!(f, "mov {}, {}", dr, r),
         }
     }
 }

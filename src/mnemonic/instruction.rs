@@ -920,5 +920,8 @@ declare! {
 
         R64Cr(R64, Cr),
         CrR64(Cr, R64),
+
+        R64Dr(R64, Dr),
+        DrR64(Dr, R64),
     },
 }

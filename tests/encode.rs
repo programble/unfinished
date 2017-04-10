@@ -395,4 +395,19 @@ test_encode! {
     mov_cr_r64 {
         Mov::CrR64(Cr0, Rax) => "0f 22 c0",
     },
+
+    mov_r64_dr {
+        Mov::R64Dr(Rax, Dr0) => "0f 21 c0",
+        Mov::R64Dr(Rax, Dr1) => "0f 21 c8",
+        Mov::R64Dr(Rax, Dr2) => "0f 21 d0",
+        Mov::R64Dr(Rax, Dr3) => "0f 21 d8",
+        Mov::R64Dr(Rax, Dr4) => "0f 21 e0",
+        Mov::R64Dr(Rax, Dr5) => "0f 21 e8",
+        Mov::R64Dr(Rax, Dr6) => "0f 21 f0",
+        Mov::R64Dr(Rax, Dr7) => "0f 21 f8",
+    },
+
+    mov_dr_r64 {
+        Mov::DrR64(Dr0, Rax) => "0f 23 c0",
+    },
 }
