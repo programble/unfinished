@@ -764,4 +764,11 @@ impl_encode! {
         M32R32(m, r) => opcode3(0x38, 0xf1).mem(m).reg(r),
         M64R64(m, r) => opcode3(0x38, 0xf1).mem(m).reg(r).rex_w(),
     },
+
+    Movs {
+        B => opcode1(0xa4),
+        W => opcode1(0xa5).osz(),
+        D => opcode1(0xa5),
+        Q => opcode1(0xa5).rex_w(),
+    },
 }

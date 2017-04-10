@@ -921,3 +921,11 @@ impl Display for Mov {
 }
 
 impl_display_binary!("movbe", Movbe { R16M16, R32M32, R64M64, M16R16, M32R32, M64R64 });
+impl_display_reg!(
+    Movs {
+        B => "movsb",
+        W => "movsw",
+        D => "movsd",
+        Q => "movsq",
+    }
+);

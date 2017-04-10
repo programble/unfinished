@@ -937,4 +937,34 @@ declare! {
         M32R32(Mem, R32),
         M64R64(Mem, R64),
     },
+
+    // MOVD/MOVQ
+    // MOVDDUP
+    // MOVDQA
+    // VMOVDQA32/64
+    // MOVDQU
+    // VMOVDQU8/16/32/64
+    // MOVDQ2Q
+    // MOVHPD
+    // MOVHPS
+    // MOVLHPS
+    // MOVLPD
+    // MOVLPS
+    // MOVMSKPD
+    // MOVMSKPS
+    // MOVNTDQA
+    // MOVNTDQU
+    // MOVNTI
+    // MOVNTPD
+    // MOVNTPS
+    // MOVNTQ
+    // MOVQ
+    // MOVQ2DQ
+
+    Movs {
+        B,
+        W,
+        D,
+        Q,
+    },
 }
