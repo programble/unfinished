@@ -10,6 +10,7 @@ pub use mnemonic::operand::R64l;
 pub use mnemonic::operand::R64::*;
 pub use mnemonic::operand::Sti::*;
 pub use mnemonic::operand::Cr::*;
+pub use mnemonic::operand::Dr::*;
 pub use mnemonic::operand::{Index32l, Index32, Index64l, Index64};
 pub use mnemonic::operand::Scale::*;
 pub use mnemonic::operand::Disp::*;

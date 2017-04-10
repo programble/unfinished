@@ -96,6 +96,11 @@ pub enum Cr {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Dr {
+    Dr0, Dr1, Dr2, Dr3, Dr4, Dr5, Dr6, Dr7
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Index32l {
     Eax, Ebx, Ecx, Edx, Esi, Edi, Ebp
 }

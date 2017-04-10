@@ -324,6 +324,19 @@ impl_display_reg!(
 );
 
 impl_display_reg!(
+    Dr {
+        Dr0 => "dr0",
+        Dr1 => "dr1",
+        Dr2 => "dr2",
+        Dr3 => "dr3",
+        Dr4 => "dr4",
+        Dr5 => "dr5",
+        Dr6 => "dr6",
+        Dr7 => "dr7",
+    }
+);
+
+impl_display_reg!(
     Index32l {
         Eax => "eax",
         Ebx => "ebx",
