@@ -795,4 +795,12 @@ impl_encode! {
         R32Rm16(r, rm) => opcode2(0xb7).reg(r).rm16(rm),
         R64Rm16(r, rm) => opcode2(0xb7).reg(r).rm16(rm).rex_w(),
     },
+
+    Mul {
+        Rm8l(rm) => opcode1(0xf6).reg(4).rm8l(rm),
+        Rm8(rm)  => opcode1(0xf6).reg(4).rm8(rm),
+        Rm16(rm) => opcode1(0xf7).reg(4).rm16(rm).osz(),
+        Rm32(rm) => opcode1(0xf7).reg(4).rm32(rm),
+        Rm64(rm) => opcode1(0xf7).reg(4).rm64(rm).rex_w(),
+    },
 }

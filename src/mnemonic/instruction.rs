@@ -999,4 +999,14 @@ declare! {
         R32Rm16(R32, Rm16),
         R64Rm16(R64, Rm16),
     },
+
+    // MPSADBW
+
+    Mul {
+        Rm8l(Rm8l),
+        Rm8(Rm8),
+        Rm16(Rm16),
+        Rm32(Rm32),
+        Rm64(Rm64),
+    },
 }
