@@ -803,4 +803,14 @@ impl_encode! {
         Rm32(rm) => opcode1(0xf7).reg(4).rm32(rm),
         Rm64(rm) => opcode1(0xf7).reg(4).rm64(rm).rex_w(),
     },
+
+    Mwait { opcode3(0x01, 0xc9) },
+
+    Neg {
+        Rm8l(rm) => opcode1(0xf6).reg(3).rm8l(rm),
+        Rm8(rm)  => opcode1(0xf6).reg(3).rm8(rm),
+        Rm16(rm) => opcode1(0xf7).reg(3).rm16(rm).osz(),
+        Rm32(rm) => opcode1(0xf7).reg(3).rm32(rm),
+        Rm64(rm) => opcode1(0xf7).reg(3).rm64(rm).rex_w(),
+    },
 }

@@ -951,3 +951,5 @@ impl_display_binary!(
     Movzx { R16lRm8l, R16Rm8, R32lRm8l, R32Rm8, R64Rm8, R32Rm16, R64Rm16 }
 );
 impl_display_unary!("mul", Mul { Rm8l, Rm8, Rm16, Rm32, Rm64 });
+impl_display_str!("mwait", Mwait);
+impl_display_unary!("neg", Neg { Rm8l, Rm8, Rm16, Rm32, Rm64 });

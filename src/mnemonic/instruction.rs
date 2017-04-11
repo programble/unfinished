@@ -1009,4 +1009,20 @@ declare! {
         Rm32(Rm32),
         Rm64(Rm64),
     },
+
+    // MULPD
+    // MULPS
+    // MULSD
+    // MULSS
+    // MULX
+
+    Mwait(),
+
+    Neg {
+        Rm8l(Rm8l),
+        Rm8(Rm8),
+        Rm16(Rm16),
+        Rm32(Rm32),
+        Rm64(Rm64),
+    },
 }
