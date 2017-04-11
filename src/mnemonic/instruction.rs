@@ -985,4 +985,18 @@ declare! {
 
         R64Rm32(R64, Rm32),
     },
+
+    // MOVUPD
+    // MOVUPS
+
+    Movzx {
+        R16lRm8l(R16l, Rm8l),
+        R16Rm8(R16, Rm8),
+        R32lRm8l(R32l, Rm8l),
+        R32Rm8(R32, Rm8),
+        R64Rm8(R64, Rm8),
+
+        R32Rm16(R32, Rm16),
+        R64Rm16(R64, Rm16),
+    },
 }

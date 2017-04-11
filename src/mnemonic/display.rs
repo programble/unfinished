@@ -946,3 +946,7 @@ impl_display_binary!(
     "movsx",
     Movsx { R16lRm8l, R16Rm8, R32lRm8l, R32Rm8, R64Rm8, R32Rm16, R64Rm16, R64Rm32 }
 );
+impl_display_binary!(
+    "movzx",
+    Movzx { R16lRm8l, R16Rm8, R32lRm8l, R32Rm8, R64Rm8, R32Rm16, R64Rm16 }
+);
