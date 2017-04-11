@@ -212,6 +212,19 @@ impl_display_reg!(
 );
 
 impl_display_reg!(
+    R16l {
+        Ax => "ax",
+        Bx => "bx",
+        Cx => "cx",
+        Dx => "dx",
+        Si => "si",
+        Di => "di",
+        Bp => "bp",
+        Sp => "sp",
+    }
+);
+
+impl_display_reg!(
     R16 {
         Ax => "ax",
         Bx => "bx",
@@ -928,4 +941,8 @@ impl_display_reg!(
         D => "movsd",
         Q => "movsq",
     }
+);
+impl_display_binary!(
+    "movsx",
+    Movsx { R16lRm8l, R16Rm8, R32lRm8l, R32Rm8, R64Rm8, R32Rm16, R64Rm16, R64Rm32 }
 );

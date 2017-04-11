@@ -1,6 +1,6 @@
 use mnemonic::operand::{
     Cc,
-    R8l, R8, R16, R32l, R32, R64l, R64, Sti, Cr, Dr,
+    R8l, R8, R16l, R16, R32l, R32, R64l, R64, Sti, Cr, Dr,
     Index32l, Index32, Index64l, Index64,
     Sreg,
 };
@@ -105,6 +105,21 @@ impl Register for R8 {
         match self {
             R8::Spl | R8::Bpl | R8::Sil | R8::Dil => true,
             _ => false,
+        }
+    }
+}
+
+impl Register for R16l {
+    fn code(self) -> u8 {
+        match self {
+            R16l::Ax => 0,
+            R16l::Cx => 1,
+            R16l::Dx => 2,
+            R16l::Bx => 3,
+            R16l::Sp => 4,
+            R16l::Bp => 5,
+            R16l::Si => 6,
+            R16l::Di => 7,
         }
     }
 }

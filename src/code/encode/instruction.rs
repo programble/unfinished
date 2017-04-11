@@ -771,4 +771,17 @@ impl_encode! {
         D => opcode1(0xa5),
         Q => opcode1(0xa5).rex_w(),
     },
+
+    Movsx {
+        R16lRm8l(r, rm) => opcode2(0xbe).reg(r).rm8l(rm).osz(),
+        R16Rm8(r, rm)   => opcode2(0xbe).reg(r).rm8(rm).osz(),
+        R32lRm8l(r, rm) => opcode2(0xbe).reg(r).rm8l(rm),
+        R32Rm8(r, rm)   => opcode2(0xbe).reg(r).rm8(rm),
+        R64Rm8(r, rm)   => opcode2(0xbe).reg(r).rm8(rm).rex_w(),
+
+        R32Rm16(r, rm) => opcode2(0xbf).reg(r).rm16(rm),
+        R64Rm16(r, rm) => opcode2(0xbf).reg(r).rm16(rm).rex_w(),
+
+        R64Rm32(r, rm) => opcode1(0x63).reg(r).rm32(rm).rex_w(),
+    },
 }

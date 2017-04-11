@@ -61,6 +61,11 @@ pub enum R8 {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum R16l {
+    Ax, Bx, Cx, Dx, Si, Di, Bp, Sp
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum R16 {
     Ax, Bx, Cx, Dx, Si, Di, Bp, Sp, R8w, R9w, R10w, R11w, R12w, R13w, R14w, R15w
 }

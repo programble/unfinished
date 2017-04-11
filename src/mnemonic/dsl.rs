@@ -3,6 +3,7 @@ pub use mnemonic::operand::{Imm8, Imm16, Imm32, Imm64, Rel32};
 pub use mnemonic::operand::Cc::*;
 pub use mnemonic::operand::R8l;
 pub use mnemonic::operand::R8::*;
+pub use mnemonic::operand::R16l;
 pub use mnemonic::operand::R16::*;
 pub use mnemonic::operand::R32l;
 pub use mnemonic::operand::R32::*;
