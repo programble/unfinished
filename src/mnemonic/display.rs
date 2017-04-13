@@ -953,3 +953,15 @@ impl_display_binary!(
 impl_display_unary!("mul", Mul { Rm8l, Rm8, Rm16, Rm32, Rm64 });
 impl_display_str!("mwait", Mwait);
 impl_display_unary!("neg", Neg { Rm8l, Rm8, Rm16, Rm32, Rm64 });
+
+impl Display for Nop {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Nop::Ax  => write!(f, "nop ax"),
+            Nop::Eax => write!(f, "nop eax"),
+
+            Nop::Rm16(rm) => write!(f, "nop {}", rm),
+            Nop::Rm32(rm) => write!(f, "nop {}", rm),
+        }
+    }
+}

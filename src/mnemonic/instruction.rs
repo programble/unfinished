@@ -1025,4 +1025,12 @@ declare! {
         Rm32(Rm32),
         Rm64(Rm64),
     },
+
+    Nop {
+        Ax,
+        Eax,
+
+        Rm16(Rm16),
+        Rm32(Rm32),
+    },
 }

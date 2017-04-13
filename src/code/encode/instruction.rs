@@ -813,4 +813,12 @@ impl_encode! {
         Rm32(rm) => opcode1(0xf7).reg(3).rm32(rm),
         Rm64(rm) => opcode1(0xf7).reg(3).rm64(rm).rex_w(),
     },
+
+    Nop {
+        Ax  => opcode1(0x90).osz(),
+        Eax => opcode1(0x90),
+
+        Rm16(rm) => opcode2(0x1f).reg(0).rm16(rm).osz(),
+        Rm32(rm) => opcode2(0x1f).reg(0).rm32(rm),
+    },
 }
