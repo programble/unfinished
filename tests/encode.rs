@@ -2,6 +2,7 @@ extern crate chasm;
 
 use chasm::code::Encode;
 use chasm::mnemonic::dsl::*;
+use chasm::mnemonic::NOP;
 
 macro_rules! test_encode {
     ($($test:ident { $($mnemonic:expr => $encoding:expr,)+ },)+) => {
@@ -409,5 +410,17 @@ test_encode! {
 
     mov_dr_r64 {
         Mov::DrR64(Dr0, Rax) => "0f 23 c0",
+    },
+
+    nop {
+        NOP[0] => "90",
+        NOP[1] => "66 90",
+        NOP[2] => "0f 1f 00",
+        NOP[3] => "0f 1f 40 00",
+        NOP[4] => "0f 1f 44 00 00",
+        NOP[5] => "66 0f 1f 44 00 00",
+        NOP[6] => "0f 1f 80 00 00 00 00",
+        NOP[7] => "0f 1f 84 00 00 00 00 00",
+        NOP[8] => "66 0f 1f 84 00 00 00 00 00",
     },
 }
