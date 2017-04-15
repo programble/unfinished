@@ -1,8 +1,8 @@
-extern crate chasm;
+extern crate rax;
 
-use chasm::code::Encode;
-use chasm::mnemonic::dsl::*;
-use chasm::mnemonic::NOP;
+use rax::code::Encode;
+use rax::mnemonic::dsl::*;
+use rax::mnemonic::NOP;
 
 macro_rules! test_encode {
     ($($test:ident { $($mnemonic:expr => $encoding:expr,)+ },)+) => {
