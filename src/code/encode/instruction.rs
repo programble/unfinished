@@ -821,4 +821,14 @@ impl_encode! {
         Rm16(rm) => opcode2(0x1f).reg(0).rm16(rm).osz(),
         Rm32(rm) => opcode2(0x1f).reg(0).rm32(rm),
     },
+
+    Not {
+        Rm8l(rm) => opcode1(0xf6).reg(2).rm8l(rm),
+        Rm8(rm)  => opcode1(0xf6).reg(2).rm8(rm),
+        Rm16(rm) => opcode1(0xf7).reg(2).rm16(rm).osz(),
+        Rm32(rm) => opcode1(0xf7).reg(2).rm32(rm),
+        Rm64(rm) => opcode1(0xf7).reg(2).rm64(rm).rex_w(),
+    },
+
+    Or(0x08, 1),
 }

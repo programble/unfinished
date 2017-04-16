@@ -967,3 +967,6 @@ impl Display for Nop {
         }
     }
 }
+
+impl_display_unary!("not", Not { Rm8l, Rm8, Rm16, Rm32, Rm64 });
+impl_display_arith!("or", Or);
