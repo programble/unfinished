@@ -1,4 +1,32 @@
-use mnemonic::operand::*;
+//! Intel 64 instruction set.
+
+pub mod dsl;
+pub mod imm;
+pub mod mem;
+pub mod reg;
+
+// TODO: Move.
+mod nop {
+    use set::dsl::*;
+    pub const NOP: [Nop; 9] = [
+        Nop::Eax,
+        Nop::Ax,
+        Nop::Rm32(M32(Offset64(None, Base(Rax)))),
+        Nop::Rm32(M32(Offset64(None, BaseDisp(Rax, Disp8(0x00))))),
+        Nop::Rm32(M32(Offset64(None, BaseIndexDisp(Rax, Index64::Rax, X1, Disp8(0x00))))),
+        Nop::Rm16(M16(Offset64(None, BaseIndexDisp(Rax, Index64::Rax, X1, Disp8(0x00))))),
+        Nop::Rm32(M32(Offset64(None, BaseDisp(Rax, Disp32(0x00000000))))),
+        Nop::Rm32(M32(Offset64(None, BaseIndexDisp(Rax, Index64::Rax, X1, Disp32(0x00000000))))),
+        Nop::Rm16(M16(Offset64(None, BaseIndexDisp(Rax, Index64::Rax, X1, Disp32(0x00000000))))),
+    ];
+}
+pub use self::nop::NOP;
+
+mod display;
+
+use set::imm::*;
+use set::reg::*;
+use set::mem::*;
 
 macro_rules! declare {
     ($($ty:ident $tt:tt,)+) => {

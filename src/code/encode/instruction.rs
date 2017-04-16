@@ -1,5 +1,5 @@
 use code::{Encode, Instruction, Opcode};
-use mnemonic::instruction::*;
+use set::*;
 
 fn opcode1(a: u8) -> Instruction {
     Instruction::new(Opcode::B1([a]))

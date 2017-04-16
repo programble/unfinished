@@ -3,13 +3,9 @@ mod register;
 
 use code::{Prefix1, Prefix2, Prefix3, Prefix4, Rex, Opcode, Modrm, Sib, Disp, Imm, Instruction};
 use code::encode::register::Register;
-use mnemonic::operand::{
-    self,
-    Imm8, Imm16, Imm32, Imm64,
-    Cc,
-    Scale, Sreg, Offset, Mem, Moffs,
-    Rm8l, Rm8, Rm16, Rm32, Rm64,
-};
+use set::imm::{Imm8, Imm16, Imm32, Imm64, Cc};
+use set::mem::{self, Scale, Offset, Mem, Moffs, Rm8l, Rm8, Rm16, Rm32, Rm64};
+use set::reg::Sreg;
 
 pub trait Encode {
     fn encode(&self) -> Instruction;
@@ -272,13 +268,13 @@ impl Instruction {
             .disp32(disp)
     }
 
-    fn offset_disp(self, disp: operand::Disp) -> Self {
+    fn offset_disp(self, disp: mem::Disp) -> Self {
         match disp {
-            operand::Disp::Disp8(disp) => {
+            mem::Disp::Disp8(disp) => {
                 self.modrm_mode(0b01)
                     .disp8(disp)
             },
-            operand::Disp::Disp32(disp) => {
+            mem::Disp::Disp32(disp) => {
                 self.modrm_mode(0b10)
                     .disp32(disp)
             },
@@ -287,7 +283,7 @@ impl Instruction {
 
     fn offset_base_index<Base, Index>(mut self, base: Base, index: Index, scale: Scale) -> Self
     where Base: Register, Index: Register {
-        if let (_, 0b101) = base.rex_code() { self = self.offset_disp(operand::Disp::Disp8(0)) }
+        if let (_, 0b101) = base.rex_code() { self = self.offset_disp(mem::Disp::Disp8(0)) }
         self.modrm_rm(0b100)
             .scale(scale)
             .index(index)
@@ -297,7 +293,7 @@ impl Instruction {
     fn offset_base<Base>(self, base: Base) -> Self where Base: Register {
         match base.rex_code() {
             (_, 0b100) => self.offset_base_index(base, 0b100, Scale::X1),
-            (_, 0b101) => self.rm(base).offset_disp(operand::Disp::Disp8(0)),
+            (_, 0b101) => self.rm(base).offset_disp(mem::Disp::Disp8(0)),
             _ => self.rm(base),
         }
     }

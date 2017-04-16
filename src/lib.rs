@@ -1,4 +1,4 @@
 #![no_std]
 
-pub mod mnemonic;
+pub mod set;
 pub mod code;

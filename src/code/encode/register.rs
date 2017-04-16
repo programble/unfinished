@@ -1,9 +1,6 @@
-use mnemonic::operand::{
-    Cc,
-    R8l, R8, R16l, R16, R32l, R32, R64l, R64, Sti, Cr, Dr,
-    Index32l, Index32, Index64l, Index64,
-    Sreg,
-};
+use set::imm::Cc;
+use set::reg::{R8l, R8, R16l, R16, R32l, R32, R64l, R64, Sreg, Sti, Cr, Dr};
+use set::mem::{Index32l, Index32, Index64l, Index64};
 
 pub trait Register: Copy {
     fn code(self) -> u8;

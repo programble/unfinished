@@ -1,8 +1,8 @@
 extern crate rax;
 
 use rax::code::Encode;
-use rax::mnemonic::dsl::*;
-use rax::mnemonic::NOP;
+use rax::set::dsl::*;
+use rax::set::NOP;
 
 macro_rules! test_encode {
     ($($test:ident { $($mnemonic:expr => $encoding:expr,)+ },)+) => {

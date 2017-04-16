@@ -1,5 +1,7 @@
-use mnemonic::instruction::*;
-use mnemonic::operand::*;
+use set::*;
+use set::imm::*;
+use set::reg::*;
+use set::mem::*;
 
 use core::fmt::{Display, Formatter, Error};
 
