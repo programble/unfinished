@@ -412,7 +412,7 @@ impl Instruction {
     }
 
     fn imm8(mut self, imm: Imm8) -> Self {
-        self.imm = Some(Imm::B1([imm.0]));
+        self.imm = Some(Imm::B1([imm.0 as u8]));
         self
     }
 

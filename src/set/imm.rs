@@ -1,18 +1,18 @@
 /// 8-bit immediate.
 #[derive(Debug, Default, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
-pub struct Imm8(pub u8);
+pub struct Imm8(pub i8);
 
 /// 16-bit immediate.
 #[derive(Debug, Default, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
-pub struct Imm16(pub u16);
+pub struct Imm16(pub i16);
 
 /// 32-bit immediate.
 #[derive(Debug, Default, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
-pub struct Imm32(pub u32);
+pub struct Imm32(pub i32);
 
 /// 64-bit immediate.
 #[derive(Debug, Default, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
-pub struct Imm64(pub u64);
+pub struct Imm64(pub i64);
 
 /// 8-bit relative address.
 #[derive(Debug, Default, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
