@@ -1,5 +1,3 @@
-//! Registers.
-
 /// 8-bit general-purpose registers without REX prefix.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum R8l {

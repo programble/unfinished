@@ -1,6 +1,4 @@
-//! Memory operands.
-
-use set::reg::{R8l, R8, R16, R32l, R32, R64l, R64, Sreg};
+use super::reg::{R8l, R8, R16, R32l, R32, R64l, R64, Sreg};
 
 /// 32-bit indexing registers without REX prefix.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]

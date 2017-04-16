@@ -1,7 +1,7 @@
-use set::*;
-use set::imm::*;
-use set::reg::*;
-use set::mem::*;
+use super::*;
+use super::imm::*;
+use super::reg::*;
+use super::mem::*;
 
 use core::fmt::{Display, Formatter, Error};
 

@@ -1,13 +1,20 @@
 //! Intel 64 instruction set.
 
+/// Re-exports.
 pub mod dsl;
+
+/// Immediates, relative jumps and condition codes.
 pub mod imm;
+
+/// Memory operands.
 pub mod mem;
+
+/// Registers.
 pub mod reg;
 
 // TODO: Move.
 mod nop {
-    use set::dsl::*;
+    use super::dsl::*;
     pub const NOP: [Nop; 9] = [
         Nop::Eax,
         Nop::Ax,
@@ -24,9 +31,9 @@ pub use self::nop::NOP;
 
 mod display;
 
-use set::imm::*;
-use set::reg::*;
-use set::mem::*;
+use self::imm::*;
+use self::reg::*;
+use self::mem::*;
 
 macro_rules! declare {
     ($($ty:ident $tt:tt,)+) => {

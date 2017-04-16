@@ -1,5 +1,3 @@
-//! Immediates, relative jumps and condition codes.
-
 /// 8-bit immediate.
 #[derive(Debug, Default, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct Imm8(pub u8);
