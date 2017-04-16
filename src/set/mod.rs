@@ -12,9 +12,17 @@ pub mod mem;
 /// Registers.
 pub mod reg;
 
-// TODO: Move.
+mod display;
+
+use self::imm::*;
+use self::reg::*;
+use self::mem::*;
+
+pub use self::nop::NOP;
 mod nop {
     use super::dsl::*;
+
+    /// Recommended multi-byte NOP instructions.
     pub const NOP: [Nop; 9] = [
         Nop::Eax,
         Nop::Ax,
@@ -27,13 +35,6 @@ mod nop {
         Nop::Rm16(M16(Offset64(None, BaseIndexDisp(Rax, Index64::Rax, X1, Disp32(0x00000000))))),
     ];
 }
-pub use self::nop::NOP;
-
-mod display;
-
-use self::imm::*;
-use self::reg::*;
-use self::mem::*;
 
 macro_rules! declare {
     ($($ty:ident $tt:tt,)+) => {
