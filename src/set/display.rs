@@ -2,616 +2,513 @@ use super::*;
 
 use core::fmt::{Display, Formatter, Error};
 
-macro_rules! impl_display_reg {
-    ($ty:ident { $($var:ident => $str:expr,)+ }) => {
+macro_rules! impl_display {
+    ($($ty:ident $tt:tt,)+) => {
+        $(impl_display!($ty $tt);)+
+    };
+
+    ($ty:ident { $($pat:pat => $fmt:expr,)+ }) => {
         impl Display for $ty {
             fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-                f.write_str(match *self { $($ty::$var => $str),+ })
+                use self::$ty::*;
+                match *self {
+                    $($pat => f.write_fmt($fmt),)+
+                }
             }
         }
-    }
-}
+    };
 
-macro_rules! impl_display_str {
-    ($str:expr, $ty:ident) => {
+    ($ty:ident($str:expr)) => {
         impl Display for $ty {
             fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
                 f.write_str($str)
             }
         }
-    }
-}
+    };
 
-macro_rules! impl_display_unary {
-    ($str:expr, $ty:ident { $($var:ident),+ }) => {
-        impl Display for $ty {
-            fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-                match *self {
-                    $($ty::$var(a) => write!(f, concat!($str, " {}"), a)),+
-                }
+    ($ty:ident($str:expr, 1, { $($var:ident),+ })) => {
+        impl_display! {
+            $ty {
+                $($var(a) => format_args!(concat!($str, " {}"), a),)+
             }
         }
-    }
-}
+    };
 
-macro_rules! impl_display_binary {
-    ($str:expr, $ty:ident { $($var:ident),+ }) => {
-        impl Display for $ty {
-            fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-                match *self {
-                    $($ty::$var(a, b) => write!(f, concat!($str, " {}, {}"), a, b)),+
-                }
+    ($ty:ident($str:expr, 2, { $($var:ident),+ })) => {
+        impl_display! {
+            $ty {
+                $($var(a, b) => format_args!(concat!($str, " {}, {}"), a, b),)+
             }
         }
-    }
-}
+    };
 
-macro_rules! impl_display_arith {
-    ($str:expr, $ty:ident) => {
-        impl Display for $ty {
-            fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-                match *self {
-                    $ty::AlImm8(imm)        => write!(f, concat!($str, " al, {}"), imm),
-                    $ty::AxImm16(imm)       => write!(f, concat!($str, " ax, {}"), imm),
-                    $ty::EaxImm32(imm)      => write!(f, concat!($str, " eax, {}"), imm),
-                    $ty::RaxImm32(imm)      => write!(f, concat!($str, " rax, {}"), imm),
-                    $ty::Rm8lImm8(rm, imm)  => write!(f, concat!($str, " {}, {}"), rm, imm),
-                    $ty::Rm8Imm8(rm, imm)   => write!(f, concat!($str, " {}, {}"), rm, imm),
-                    $ty::Rm16Imm16(rm, imm) => write!(f, concat!($str, " {}, {}"), rm, imm),
-                    $ty::Rm32Imm32(rm, imm) => write!(f, concat!($str, " {}, {}"), rm, imm),
-                    $ty::Rm64Imm32(rm, imm) => write!(f, concat!($str, " {}, {}"), rm, imm),
-                    $ty::Rm16Imm8(rm, imm)  => write!(f, concat!($str, " {}, {}"), rm, imm),
-                    $ty::Rm32Imm8(rm, imm)  => write!(f, concat!($str, " {}, {}"), rm, imm),
-                    $ty::Rm64Imm8(rm, imm)  => write!(f, concat!($str, " {}, {}"), rm, imm),
-                    $ty::Rm8lR8l(rm, r)     => write!(f, concat!($str, " {}, {}"), rm, r),
-                    $ty::Rm8R8(rm, r)       => write!(f, concat!($str, " {}, {}"), rm, r),
-                    $ty::Rm16R16(rm, r)     => write!(f, concat!($str, " {}, {}"), rm, r),
-                    $ty::Rm32R32(rm, r)     => write!(f, concat!($str, " {}, {}"), rm, r),
-                    $ty::Rm64R64(rm, r)     => write!(f, concat!($str, " {}, {}"), rm, r),
-                    $ty::R8lRm8l(r, rm)     => write!(f, concat!($str, " {}, {}"), r, rm),
-                    $ty::R8Rm8(r, rm)       => write!(f, concat!($str, " {}, {}"), r, rm),
-                    $ty::R16Rm16(r, rm)     => write!(f, concat!($str, " {}, {}"), r, rm),
-                    $ty::R32Rm32(r, rm)     => write!(f, concat!($str, " {}, {}"), r, rm),
-                    $ty::R64Rm64(r, rm)     => write!(f, concat!($str, " {}, {}"), r, rm),
-                }
+    ($ty:ident($str:expr, a)) => {
+        impl_display! {
+            $ty {
+                AlImm8(imm)        => format_args!(concat!($str, " al, {}"), imm),
+                AxImm16(imm)       => format_args!(concat!($str, " ax, {}"), imm),
+                EaxImm32(imm)      => format_args!(concat!($str, " eax, {}"), imm),
+                RaxImm32(imm)      => format_args!(concat!($str, " rax, {}"), imm),
+                Rm8lImm8(rm, imm)  => format_args!(concat!($str, " {}, {}"), rm, imm),
+                Rm8Imm8(rm, imm)   => format_args!(concat!($str, " {}, {}"), rm, imm),
+                Rm16Imm16(rm, imm) => format_args!(concat!($str, " {}, {}"), rm, imm),
+                Rm32Imm32(rm, imm) => format_args!(concat!($str, " {}, {}"), rm, imm),
+                Rm64Imm32(rm, imm) => format_args!(concat!($str, " {}, {}"), rm, imm),
+                Rm16Imm8(rm, imm)  => format_args!(concat!($str, " {}, {}"), rm, imm),
+                Rm32Imm8(rm, imm)  => format_args!(concat!($str, " {}, {}"), rm, imm),
+                Rm64Imm8(rm, imm)  => format_args!(concat!($str, " {}, {}"), rm, imm),
+                Rm8lR8l(rm, r)     => format_args!(concat!($str, " {}, {}"), rm, r),
+                Rm8R8(rm, r)       => format_args!(concat!($str, " {}, {}"), rm, r),
+                Rm16R16(rm, r)     => format_args!(concat!($str, " {}, {}"), rm, r),
+                Rm32R32(rm, r)     => format_args!(concat!($str, " {}, {}"), rm, r),
+                Rm64R64(rm, r)     => format_args!(concat!($str, " {}, {}"), rm, r),
+                R8lRm8l(r, rm)     => format_args!(concat!($str, " {}, {}"), r, rm),
+                R8Rm8(r, rm)       => format_args!(concat!($str, " {}, {}"), r, rm),
+                R16Rm16(r, rm)     => format_args!(concat!($str, " {}, {}"), r, rm),
+                R32Rm32(r, rm)     => format_args!(concat!($str, " {}, {}"), r, rm),
+                R64Rm64(r, rm)     => format_args!(concat!($str, " {}, {}"), r, rm),
             }
         }
-    }
-}
+    };
 
-macro_rules! impl_display_farith {
-    ($fstr:expr, $fpstr:expr, $fistr:expr, $fty:ident, $fpty:ident, $fity:ident) => {
-        impl Display for $fty {
-            fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-                match *self {
-                    $fty::M32fp(m)  => write!(f, concat!($fstr, " dword {}"), m),
-                    $fty::M64fp(m)  => write!(f, concat!($fstr, " qword {}"), m),
-                    $fty::St0Sti(i) => write!(f, concat!($fstr, " st0, {}"), i),
-                    $fty::StiSt0(i) => write!(f, concat!($fstr, " {}, st0"), i),
-                }
+    ($ty:ident($str:expr, f)) => {
+        impl_display! {
+            $ty {
+                M32fp(m)  => format_args!(concat!($str, " dword {}"), m),
+                M64fp(m)  => format_args!(concat!($str, " qword {}"), m),
+                St0Sti(i) => format_args!(concat!($str, " st0, {}"), i),
+                StiSt0(i) => format_args!(concat!($str, " {}, st0"), i),
             }
         }
+    };
 
-        impl Display for $fpty {
-            fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-                match *self {
-                    $fpty::StiSt0(i) => write!(f, concat!($fpstr, " {}, st0"), i),
-                }
+    ($ty:ident($str:expr, fp)) => {
+        impl_display! {
+            $ty {
+                StiSt0(i) => format_args!(concat!($str, " {}, st0"), i),
             }
         }
+    };
 
-        impl Display for $fity {
-            fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-                match *self {
-                    $fity::M32int(m) => write!(f, concat!($fistr, " dword {}"), m),
-                    $fity::M16int(m) => write!(f, concat!($fistr, " word {}"), m),
-                }
+    ($ty:ident($str:expr, fi)) => {
+        impl_display! {
+            $ty {
+                M32int(m) => format_args!(concat!($str, " dword {}"), m),
+                M16int(m) => format_args!(concat!($str, " word {}"), m),
             }
         }
-    }
+    };
 }
 
-impl_display_arith!("adc", Adc);
-impl_display_binary!("adcx", Adcx { R32Rm32, R64Rm64 });
-impl_display_arith!("add", Add);
-impl_display_binary!("adox", Adox { R32Rm32, R64Rm64 });
-impl_display_arith!("and", And);
-impl_display_binary!("bsf", Bsf { R16Rm16, R32Rm32, R64Rm64 });
-impl_display_binary!("bsr", Bsr { R16Rm16, R32Rm32, R64Rm64 });
-impl_display_unary!("bswap", Bswap { R32, R64 });
-impl_display_binary!("bt", Bt { Rm16R16, Rm32R32, Rm64R64, Rm16Imm8, Rm32Imm8, Rm64Imm8 });
-impl_display_binary!("btc", Btc { Rm16R16, Rm32R32, Rm64R64, Rm16Imm8, Rm32Imm8, Rm64Imm8 });
-impl_display_binary!("btr", Btr { Rm16R16, Rm32R32, Rm64R64, Rm16Imm8, Rm32Imm8, Rm64Imm8 });
-impl_display_binary!("bts", Bts { Rm16R16, Rm32R32, Rm64R64, Rm16Imm8, Rm32Imm8, Rm64Imm8 });
+impl_display! {
+    Adc("adc", a),
+    Adcx("adcx", 2, { R32Rm32, R64Rm64 }),
+    Add("add", a),
+    Adox("adox", 2, { R32Rm32, R64Rm64 }),
+    And("and", a),
+    Bsf("bsf", 2, { R16Rm16, R32Rm32, R64Rm64 }),
+    Bsr("bsj", 2, { R16Rm16, R32Rm32, R64Rm64 }),
+    Bswap("bswap", 1, { R32, R64 }),
+    Bt("bt", 2, { Rm16R16, Rm32R32, Rm64R64, Rm16Imm8, Rm32Imm8, Rm64Imm8 }),
+    Btc("btc", 2, { Rm16R16, Rm32R32, Rm64R64, Rm16Imm8, Rm32Imm8, Rm64Imm8 }),
+    Btr("btr", 2, { Rm16R16, Rm32R32, Rm64R64, Rm16Imm8, Rm32Imm8, Rm64Imm8 }),
+    Bts("bts", 2, { Rm16R16, Rm32R32, Rm64R64, Rm16Imm8, Rm32Imm8, Rm64Imm8 }),
 
-impl Display for Call {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-        match *self {
-            Call::Rel32(rel) => write!(f, "call rel {}", rel),
-            Call::Rm64(rm)   => write!(f, "call near {}", rm),
-            Call::M16x16(m)  => write!(f, "call far word {}", m),
-            Call::M16x32(m)  => write!(f, "call far dword {}", m),
-            Call::M16x64(m)  => write!(f, "call far qword {}", m),
-        }
-    }
-}
+    Call {
+        Rel32(rel) => format_args!("call rel {}", rel),
+        Rm64(rm)   => format_args!("call near {}", rm),
+        M16x16(m)  => format_args!("call far word {}", m),
+        M16x32(m)  => format_args!("call far dword {}", m),
+        M16x64(m)  => format_args!("call far qword {}", m),
+    },
 
-impl_display_str!("cbw", Cbw);
-impl_display_str!("cwde", Cwde);
-impl_display_str!("cdqe", Cdqe);
-impl_display_str!("clac", Clac);
-impl_display_str!("clc", Clc);
-impl_display_str!("cld", Cld);
-impl_display_unary!("clflush", Clflush { M8 });
-impl_display_unary!("clflushopt", Clflushopt { M8 });
-impl_display_str!("cli", Cli);
-impl_display_str!("clts", Clts);
-impl_display_str!("cmc", Cmc);
+    Cbw("cbw"),
+    Cwde("cwde"),
+    Cdqe("cdqe"),
+    Clac("clac"),
+    Clc("clc"),
+    Cld("cld"),
+    Clflush("clflush", 1, { M8 }),
+    Clflushopt("clflushopt", 1, { M8 }),
+    Cli("cli"),
+    Clts("clts"),
+    Cmc("cmc"),
 
-impl Display for Cmov {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-        match *self {
-            Cmov::CcR16Rm16(cc, r, rm) => write!(f, "cmov{} {}, {}", cc, r, rm),
-            Cmov::CcR32Rm32(cc, r, rm) => write!(f, "cmov{} {}, {}", cc, r, rm),
-            Cmov::CcR64Rm64(cc, r, rm) => write!(f, "cmov{} {}, {}", cc, r, rm),
-        }
-    }
-}
+    Cmov {
+        CcR16Rm16(cc, r, rm) => format_args!("cmov{} {}, {}", cc, r, rm),
+        CcR32Rm32(cc, r, rm) => format_args!("cmov{} {}, {}", cc, r, rm),
+        CcR64Rm64(cc, r, rm) => format_args!("cmov{} {}, {}", cc, r, rm),
+    },
 
-impl_display_arith!("cmp", Cmp);
-impl_display_reg!(
+    Cmp("cmp", a),
+
     Cmps {
-        B => "cmpsb",
-        W => "cmpsw",
-        D => "cmpsd",
-        Q => "cmpsq",
-    }
-);
-impl_display_binary!("cmpxchg", Cmpxchg { Rm8lR8l, Rm8R8, Rm16R16, Rm32R32, Rm64R64 });
-impl_display_unary!("cmpxchg8b", Cmpxchg8b { M64 });
-impl_display_unary!("cmpxchg16b", Cmpxchg16b { M128 });
-impl_display_str!("cpuid", Cpuid);
-impl_display_binary!("crc32", Crc32 { R32lRm8l, R32Rm8, R32Rm16, R32Rm32, R64Rm8, R64Rm64 });
-impl_display_str!("cwd", Cwd);
-impl_display_str!("cdq", Cdq);
-impl_display_str!("cqo", Cqo);
-impl_display_unary!("dec", Dec { Rm8l, Rm8, Rm16, Rm32, Rm64 });
-impl_display_unary!("div", Div { Rm8l, Rm8, Rm16, Rm32, Rm64 });
-impl_display_str!("f2xm1", F2xm1);
-impl_display_str!("fabs", Fabs);
-impl_display_farith!("fadd", "faddp", "fiadd", Fadd, Faddp, Fiadd);
-impl_display_unary!("fbld", Fbld { M80dec });
-impl_display_unary!("fbstp", Fbstp { M80bcd });
-impl_display_str!("fchs", Fchs);
-impl_display_str!("fclex", Fclex);
-impl_display_str!("fnclex", Fnclex);
+        B => format_args!("cmpsb"),
+        W => format_args!("cmpsw"),
+        D => format_args!("cmpsd"),
+        Q => format_args!("cmpsq"),
+    },
 
-impl Display for Fcmov {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-        match *self {
-            Fcmov::BSt0Sti(i)   => write!(f, "fcmovb st0, {}", i),
-            Fcmov::ESt0Sti(i)   => write!(f, "fcmove st0, {}", i),
-            Fcmov::BeSt0Sti(i)  => write!(f, "fcmovbe st0, {}", i),
-            Fcmov::USt0Sti(i)   => write!(f, "fcmovu st0, {}", i),
-            Fcmov::NbSt0Sti(i)  => write!(f, "fcmovnb st0, {}", i),
-            Fcmov::NeSt0Sti(i)  => write!(f, "fcmovne st0, {}", i),
-            Fcmov::NbeSt0Sti(i) => write!(f, "fcmovnbe st0, {}", i),
-            Fcmov::NuSt0Sti(i)  => write!(f, "fcmovnu st0, {}", i),
-        }
-    }
-}
+    Cmpxchg("cmpxchg", 2, { Rm8lR8l, Rm8R8, Rm16R16, Rm32R32, Rm64R64 }),
+    Cmpxchg8b("cmpxchg8b", 1, { M64 }),
+    Cmpxchg16b("cmpxchg16b", 1, { M128 }),
+    Cpuid("cpuid"),
+    Crc32("crc32", 2, { R32lRm8l, R32Rm8, R32Rm16, R32Rm32, R64Rm8, R64Rm64 }),
+    Cwd("cwd"),
+    Cdq("cdq"),
+    Cqo("cqo"),
+    Dec("dec", 1, { Rm8l, Rm8, Rm16, Rm32, Rm64 }),
+    Div("div", 1, { Rm8l, Rm8, Rm16, Rm32, Rm64 }),
+    F2xm1("f2xm1"),
+    Fabs("fabs"),
+    Fadd("fadd", f),
+    Faddp("faddp", fp),
+    Fiadd("fiadd", fi),
+    Fbld("fbld", 1, { M80dec }),
+    Fbstp("fbstp", 1, { M80bcd }),
+    Fchs("fchs"),
+    Fclex("fclex"),
+    Fnclex("fnclex"),
 
-impl Display for Fcom {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-        match *self {
-            Fcom::M32fp(m) => write!(f, "fcom dword {}", m),
-            Fcom::M64fp(m) => write!(f, "fcom qword {}", m),
-            Fcom::Sti(i)   => write!(f, "fcom {}", i),
-        }
-    }
-}
+    Fcmov {
+        BSt0Sti(i)   => format_args!("fcmovb st0, {}", i),
+        ESt0Sti(i)   => format_args!("fcmove st0, {}", i),
+        BeSt0Sti(i)  => format_args!("fcmovbe st0, {}", i),
+        USt0Sti(i)   => format_args!("fcmovu st0, {}", i),
+        NbSt0Sti(i)  => format_args!("fcmovnb st0, {}", i),
+        NeSt0Sti(i)  => format_args!("fcmovne st0, {}", i),
+        NbeSt0Sti(i) => format_args!("fcmovnbe st0, {}", i),
+        NuSt0Sti(i)  => format_args!("fcmovnu st0, {}", i),
+    },
 
-impl Display for Fcomp {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-        match *self {
-            Fcomp::M32fp(m) => write!(f, "fcomp dword {}", m),
-            Fcomp::M64fp(m) => write!(f, "fcomp qword {}", m),
-            Fcomp::Sti(i)   => write!(f, "fcomp {}", i),
-        }
-    }
-}
+    Fcom {
+        M32fp(m) => format_args!("fcom dword {}", m),
+        M64fp(m) => format_args!("fcom qword {}", m),
+        Sti(i)   => format_args!("fcom {}", i),
+    },
 
-impl_display_str!("fcompp", Fcompp);
-impl_display_unary!("fcomi st0,", Fcomi { St0Sti });
-impl_display_unary!("fcomip st0,", Fcomip { St0Sti });
-impl_display_unary!("fucomi st0,", Fucomi { St0Sti });
-impl_display_unary!("fucomip st0,", Fucomip { St0Sti });
-impl_display_str!("fcos", Fcos);
-impl_display_str!("fdecstp", Fdecstp);
-impl_display_farith!("fdiv", "fdivp", "fidiv", Fdiv, Fdivp, Fidiv);
-impl_display_farith!("fdivr", "fdivrp", "fidivr", Fdivr, Fdivrp, Fidivr);
-impl_display_unary!("ffree", Ffree { Sti });
+    Fcomp {
+        M32fp(m) => format_args!("fcomp dword {}", m),
+        M64fp(m) => format_args!("fcomp qword {}", m),
+        Sti(i)   => format_args!("fcomp {}", i),
+    },
 
-impl Display for Ficom {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-        match *self {
-            Ficom::M16int(m) => write!(f, "ficom word {}", m),
-            Ficom::M32int(m) => write!(f, "ficom dword {}", m),
-        }
-    }
-}
+    Fcompp("fcompp"),
+    Fcomi("fcomi st0,", 1, { St0Sti }),
+    Fcomip("fcomip st0,", 1, { St0Sti }),
+    Fucomi("fucomi st0,", 1, { St0Sti }),
+    Fucomip("fucomip st0,", 1, { St0Sti }),
+    Fcos("fcos"),
+    Fdecstp("fdecstp"),
 
-impl Display for Ficomp {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-        match *self {
-            Ficomp::M16int(m) => write!(f, "ficomp word {}", m),
-            Ficomp::M32int(m) => write!(f, "ficomp dword {}", m),
-        }
-    }
-}
+    Fdiv("fdiv", f),
+    Fdivp("fdivp", fp),
+    Fidiv("fidiv", fi),
+    Fdivr("fdivr", f),
+    Fdivrp("fdivrp", fp),
+    Fidivr("fidivr", fi),
+    Ffree("ffree", 1, { Sti }),
 
-impl Display for Fild {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-        match *self {
-            Fild::M16int(m) => write!(f, "fild word {}", m),
-            Fild::M32int(m) => write!(f, "fild dword {}", m),
-            Fild::M64int(m) => write!(f, "fild qword {}", m),
-        }
-    }
-}
+    Ficom {
+        M16int(m) => format_args!("ficom word {}", m),
+        M32int(m) => format_args!("ficom dword {}", m),
+    },
 
-impl_display_str!("fincstp", Fincstp);
-impl_display_str!("finit", Finit);
-impl_display_str!("fninit", Fninit);
+    Ficomp {
+        M16int(m) => format_args!("ficomp word {}", m),
+        M32int(m) => format_args!("ficomp dword {}", m),
+    },
 
-impl Display for Fist {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-        match *self {
-            Fist::M16int(m) => write!(f, "fist word {}", m),
-            Fist::M32int(m) => write!(f, "fist dword {}", m),
-        }
-    }
-}
+    Fild {
+        M16int(m) => format_args!("fild word {}", m),
+        M32int(m) => format_args!("fild dword {}", m),
+        M64int(m) => format_args!("fild qword {}", m),
+    },
 
-impl Display for Fistp {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-        match *self {
-            Fistp::M16int(m) => write!(f, "fistp word {}", m),
-            Fistp::M32int(m) => write!(f, "fistp dword {}", m),
-            Fistp::M64int(m) => write!(f, "fistp qword {}", m),
-        }
-    }
-}
+    Fincstp("fincstp"),
+    Finit("finit"),
+    Fninit("fninit"),
 
-impl Display for Fisttp {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-        match *self {
-            Fisttp::M16int(m) => write!(f, "fisttp word {}", m),
-            Fisttp::M32int(m) => write!(f, "fisttp dword {}", m),
-            Fisttp::M64int(m) => write!(f, "fisttp qword {}", m),
-        }
-    }
-}
+    Fist {
+        M16int(m) => format_args!("fist word {}", m),
+        M32int(m) => format_args!("fist dword {}", m),
+    },
 
-impl Display for Fld {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-        match *self {
-            Fld::M32fp(m) => write!(f, "fld dword {}", m),
-            Fld::M64fp(m) => write!(f, "fld qword {}", m),
-            Fld::M80fp(m) => write!(f, "fld tword {}", m),
-            Fld::Sti(i)   => write!(f, "fld {}", i),
-        }
-    }
-}
+    Fistp {
+        M16int(m) => format_args!("fistp word {}", m),
+        M32int(m) => format_args!("fistp dword {}", m),
+        M64int(m) => format_args!("fistp qword {}", m),
+    },
 
-impl_display_str!("fld1", Fld1);
-impl_display_str!("fldl2t", Fldl2t);
-impl_display_str!("fldl2e", Fldl2e);
-impl_display_str!("fldpi", Fldpi);
-impl_display_str!("fldlg2", Fldlg2);
-impl_display_str!("fldln2", Fldln2);
-impl_display_str!("fldz", Fldz);
-impl_display_unary!("fldcw", Fldcw { M2byte });
-impl_display_unary!("fldenv", Fldenv { M28byte });
-impl_display_farith!("fmul", "fmulp", "fimul", Fmul, Fmulp, Fimul);
-impl_display_str!("fnop", Fnop);
-impl_display_str!("fpatan", Fpatan);
-impl_display_str!("fprem", Fprem);
-impl_display_str!("fprem1", Fprem1);
-impl_display_str!("fptan", Fptan);
-impl_display_str!("frndint", Frndint);
-impl_display_unary!("frstor", Frstor { M108byte });
-impl_display_unary!("fsave", Fsave { M108byte });
-impl_display_unary!("fnsave", Fnsave { M108byte });
-impl_display_str!("fscale", Fscale);
-impl_display_str!("fsin", Fsin);
-impl_display_str!("fsincos", Fsincos);
-impl_display_str!("fsqrt", Fsqrt);
+    Fisttp {
+        M16int(m) => format_args!("fisttp word {}", m),
+        M32int(m) => format_args!("fisttp dword {}", m),
+        M64int(m) => format_args!("fisttp qword {}", m),
+    },
 
-impl Display for Fst {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-        match *self {
-            Fst::M32fp(m) => write!(f, "fst dword {}", m),
-            Fst::M64fp(m) => write!(f, "fst qword {}", m),
-            Fst::Sti(i)   => write!(f, "fst {}", i),
-        }
-    }
-}
+    Fld {
+        M32fp(m) => format_args!("fld dword {}", m),
+        M64fp(m) => format_args!("fld qword {}", m),
+        M80fp(m) => format_args!("fld tword {}", m),
+        Sti(i)   => format_args!("fld {}", i),
+    },
 
-impl Display for Fstp {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-        match *self {
-            Fstp::M32fp(m) => write!(f, "fstp dword {}", m),
-            Fstp::M64fp(m) => write!(f, "fstp qword {}", m),
-            Fstp::M80fp(m) => write!(f, "fstp tword {}", m),
-            Fstp::Sti(i)   => write!(f, "fstp {}", i),
-        }
-    }
-}
+    Fld1("fld1"),
+    Fldl2t("fldl2t"),
+    Fldl2e("fldl2e"),
+    Fldpi("fldpi"),
+    Fldlg2("fldlg2"),
+    Fldln2("fldln2"),
+    Fldz("fldz"),
+    Fldcw("fldcw", 1, { M2byte }),
+    Fldenv("fldenv", 1, { M28byte }),
+    Fmul("fmul", f),
+    Fmulp("fmulp", fp),
+    Fimul("fimul", fi),
+    Fnop("fnop"),
+    Fpatan("fpatan"),
+    Fprem("fprem"),
+    Fprem1("fprem1"),
+    Fptan("fptan"),
+    Frndint("frndint"),
+    Frstor("frstor", 1, { M108byte }),
+    Fsave("fsave", 1, { M108byte }),
+    Fnsave("fnsave", 1, { M108byte }),
+    Fscale("fscale"),
+    Fsin("fsin"),
+    Fsincos("fsincos"),
+    Fsqrt("fsqrt"),
 
-impl_display_unary!("fstcw", Fstcw { M2byte });
-impl_display_unary!("fnstcw", Fnstcw { M2byte });
-impl_display_unary!("fstenv", Fstenv { M28byte });
-impl_display_unary!("fnstenv", Fnstenv { M28byte });
+    Fst {
+        M32fp(m) => format_args!("fst dword {}", m),
+        M64fp(m) => format_args!("fst qword {}", m),
+        Sti(i)   => format_args!("fst {}", i),
+    },
 
-impl Display for Fstsw {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-        match *self {
-            Fstsw::M2byte(m) => write!(f, "fstsw {}", m),
-            Fstsw::Ax        => write!(f, "fstsw ax"),
-        }
-    }
-}
+    Fstp {
+        M32fp(m) => format_args!("fstp dword {}", m),
+        M64fp(m) => format_args!("fstp qword {}", m),
+        M80fp(m) => format_args!("fstp tword {}", m),
+        Sti(i)   => format_args!("fstp {}", i),
+    },
 
-impl Display for Fnstsw {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-        match *self {
-            Fnstsw::M2byte(m) => write!(f, "fnstsw {}", m),
-            Fnstsw::Ax        => write!(f, "fnstsw ax"),
-        }
-    }
-}
+    Fstcw("fstcw", 1, { M2byte }),
+    Fnstcw("fnstcw", 1, { M2byte }),
+    Fstenv("fstenv", 1, { M28byte }),
+    Fnstenv("fnstenv", 1, { M28byte }),
 
-impl_display_farith!("fsub", "fsubp", "fisub", Fsub, Fsubp, Fisub);
-impl_display_farith!("fsubr", "fsubrp", "fisubr", Fsubr, Fsubrp, Fisubr);
-impl_display_str!("ftst", Ftst);
-impl_display_unary!("fucom", Fucom { Sti });
-impl_display_unary!("fucomp", Fucomp { Sti });
-impl_display_str!("fucompp", Fucompp);
-impl_display_str!("fxam", Fxam);
-impl_display_unary!("fxch", Fxch { Sti });
-impl_display_unary!("fxrstor", Fxrstor { M512byte });
-impl_display_unary!("fxrstor64", Fxrstor64 { M512byte });
-impl_display_unary!("fxsave", Fxsave { M512byte });
-impl_display_unary!("fxsave64", Fxsave64 { M512byte });
-impl_display_str!("fxtract", Fxtract);
-impl_display_str!("fyl2x", Fyl2x);
-impl_display_str!("fyl2xp1", Fyl2xp1);
-impl_display_str!("hlt", Hlt);
-impl_display_unary!("idiv", Idiv { Rm8l, Rm8, Rm16, Rm32, Rm64 });
+    Fstsw {
+        M2byte(m) => format_args!("fstsw {}", m),
+        Ax        => format_args!("fstsw ax"),
+    },
 
-impl Display for Imul {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-        match *self {
-            Imul::Rm8l(rm) => write!(f, "imul {}", rm),
-            Imul::Rm8(rm)  => write!(f, "imul {}", rm),
-            Imul::Rm16(rm) => write!(f, "imul {}", rm),
-            Imul::Rm32(rm) => write!(f, "imul {}", rm),
-            Imul::Rm64(rm) => write!(f, "imul {}", rm),
+    Fnstsw {
+        M2byte(m) => format_args!("fnstsw {}", m),
+        Ax        => format_args!("fnstsw ax"),
+    },
 
-            Imul::R16Rm16(r, rm) => write!(f, "imul {}, {}", r, rm),
-            Imul::R32Rm32(r, rm) => write!(f, "imul {}, {}", r, rm),
-            Imul::R64Rm64(r, rm) => write!(f, "imul {}, {}", r, rm),
+    Fsub("fsub", f),
+    Fsubp("fsubp", fp),
+    Fisub("fisub", fi),
+    Fsubr("fsubr", f),
+    Fsubrp("fsubrp", fp),
+    Fisubr("fisubr", fi),
+    Ftst("ftst"),
+    Fucom("fucom", 1, { Sti }),
+    Fucomp("fucomp", 1, { Sti }),
+    Fucompp("fucompp"),
+    Fxam("fxam"),
+    Fxch("fxch", 1, { Sti }),
+    Fxrstor("fxrstor", 1, { M512byte }),
+    Fxrstor64("fxrstor64", 1, { M512byte }),
+    Fxsave("fxsave", 1, { M512byte }),
+    Fxsave64("fxsave64", 1, { M512byte }),
+    Fxtract("fxtract"),
+    Fyl2x("fyl2x"),
+    Fyl2xp1("fyl2xp1"),
+    Hlt("hlt"),
+    Idiv("idiv", 1, { Rm8l, Rm8, Rm16, Rm32, Rm64 }),
 
-            Imul::R16Rm16Imm8(r, rm, imm) => write!(f, "imul {}, {}, {}", r, rm, imm),
-            Imul::R32Rm32Imm8(r, rm, imm) => write!(f, "imul {}, {}, {}", r, rm, imm),
-            Imul::R64Rm64Imm8(r, rm, imm) => write!(f, "imul {}, {}, {}", r, rm, imm),
+    Imul {
+        Rm8l(rm) => format_args!("imul {}", rm),
+        Rm8(rm)  => format_args!("imul {}", rm),
+        Rm16(rm) => format_args!("imul {}", rm),
+        Rm32(rm) => format_args!("imul {}", rm),
+        Rm64(rm) => format_args!("imul {}", rm),
 
-            Imul::R16Rm16Imm16(r, rm, imm) => write!(f, "imul {}, {}, {}", r, rm, imm),
-            Imul::R32Rm32Imm32(r, rm, imm) => write!(f, "imul {}, {}, {}", r, rm, imm),
-            Imul::R64Rm64Imm32(r, rm, imm) => write!(f, "imul {}, {}, {}", r, rm, imm),
-        }
-    }
-}
+        R16Rm16(r, rm) => format_args!("imul {}, {}", r, rm),
+        R32Rm32(r, rm) => format_args!("imul {}, {}", r, rm),
+        R64Rm64(r, rm) => format_args!("imul {}, {}", r, rm),
 
-impl Display for In {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-        match *self {
-            In::AlImm8(imm)  => write!(f, "in al, {}", imm),
-            In::AxImm8(imm)  => write!(f, "in ax, {}", imm),
-            In::EaxImm8(imm) => write!(f, "in eax, {}", imm),
+        R16Rm16Imm8(r, rm, imm) => format_args!("imul {}, {}, {}", r, rm, imm),
+        R32Rm32Imm8(r, rm, imm) => format_args!("imul {}, {}, {}", r, rm, imm),
+        R64Rm64Imm8(r, rm, imm) => format_args!("imul {}, {}, {}", r, rm, imm),
 
-            In::AlDx  => write!(f, "in al, dx"),
-            In::AxDx  => write!(f, "in ax, dx"),
-            In::EaxDx => write!(f, "in eax, dx"),
-        }
-    }
-}
+        R16Rm16Imm16(r, rm, imm) => format_args!("imul {}, {}, {}", r, rm, imm),
+        R32Rm32Imm32(r, rm, imm) => format_args!("imul {}, {}, {}", r, rm, imm),
+        R64Rm64Imm32(r, rm, imm) => format_args!("imul {}, {}, {}", r, rm, imm),
+    },
 
-impl_display_unary!("inc", Inc { Rm8l, Rm8, Rm16, Rm32, Rm64 });
-impl_display_reg!(
+    In {
+        AlImm8(imm)  => format_args!("in al, {}", imm),
+        AxImm8(imm)  => format_args!("in ax, {}", imm),
+        EaxImm8(imm) => format_args!("in eax, {}", imm),
+
+        AlDx  => format_args!("in al, dx"),
+        AxDx  => format_args!("in ax, dx"),
+        EaxDx => format_args!("in eax, dx"),
+    },
+
+    Inc("inc", 1, { Rm8l, Rm8, Rm16, Rm32, Rm64 }),
+
     Ins {
-        B => "insb",
-        W => "insw",
-        D => "insd",
-    }
-);
-impl_display_str!("int 3", Int3);
-impl_display_unary!("int", Int { Imm8 });
-impl_display_str!("into", Into);
-impl_display_str!("invd", Invd);
-impl_display_unary!("invlpg", Invlpg { M });
-impl_display_binary!("invpcid", Invpcid { R64M128 });
-impl_display_reg!(
+        B => format_args!("insb"),
+        W => format_args!("insw"),
+        D => format_args!("insd"),
+    },
+    Int3("int 3"),
+    Int("int", 1, { Imm8 }),
+    Into("into"),
+    Invd("invd"),
+    Invlpg("invlpg", 1, { M }),
+    Invpcid("invpcid", 2, { R64M128 }),
+
     Iret {
-        D => "iretd",
-        Q => "iretq",
-    }
-);
+        D => format_args!("iretd"),
+        Q => format_args!("iretq"),
+    },
 
-impl Display for J {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-        match *self {
-            J::CcRel8(cc, rel)  => write!(f, "j{} short {}", cc, rel),
-            J::RcxzRel8(rel)    => write!(f, "jrcxz short {}", rel),
-            J::CcRel32(cc, rel) => write!(f, "j{} near {}", cc, rel),
-        }
-    }
-}
+    J {
+        CcRel8(cc, rel)  => format_args!("j{} short {}", cc, rel),
+        RcxzRel8(rel)    => format_args!("jrcxz short {}", rel),
+        CcRel32(cc, rel) => format_args!("j{} near {}", cc, rel),
+    },
 
-impl Display for Jmp {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-        match *self {
-            Jmp::Rel8(rel)  => write!(f, "jmp short {}", rel),
-            Jmp::Rel32(rel) => write!(f, "jmp rel {}", rel),
-            Jmp::Rm64(rm)   => write!(f, "jmp near {}", rm),
-            Jmp::M16x16(m)  => write!(f, "jmp far word {}", m),
-            Jmp::M16x32(m)  => write!(f, "jmp far dword {}", m),
-            Jmp::M16x64(m)  => write!(f, "jmp far qword {}", m),
-        }
-    }
-}
+    Jmp {
+        Rel8(rel)  => format_args!("jmp short {}", rel),
+        Rel32(rel) => format_args!("jmp rel {}", rel),
+        Rm64(rm)   => format_args!("jmp near {}", rm),
+        M16x16(m)  => format_args!("jmp far word {}", m),
+        M16x32(m)  => format_args!("jmp far dword {}", m),
+        M16x64(m)  => format_args!("jmp far qword {}", m),
+    },
 
-impl_display_binary!("lss", Lss { R16M16x16, R32M16x32, R64M16x64 });
-impl_display_binary!("lfs", Lfs { R16M16x16, R32M16x32, R64M16x64 });
-impl_display_binary!("lgs", Lgs { R16M16x16, R32M16x32, R64M16x64 });
-impl_display_binary!("lea", Lea { R16M, R32M, R64M });
-impl_display_str!("leave", Leave);
-impl_display_str!("lfence", Lfence);
-impl_display_unary!("lgdt", Lgdt { M16x64 });
-impl_display_unary!("lidt", Lidt { M16x64 });
-impl_display_unary!("lldt", Lldt { Rm16 });
-impl_display_unary!("lmsw", Lmsw { Rm16 });
-impl_display_reg!(
+    Lss("lss", 2, { R16M16x16, R32M16x32, R64M16x64 }),
+    Lfs("lfs", 2, { R16M16x16, R32M16x32, R64M16x64 }),
+    Lgs("lgs", 2, { R16M16x16, R32M16x32, R64M16x64 }),
+    Lea("lea", 2, { R16M, R32M, R64M }),
+    Leave("leave"),
+    Lfence("lfence"),
+    Lgdt("lgdt", 1, { M16x64 }),
+    Lidt("lidt", 1, { M16x64 }),
+    Lldt("lldt", 1, { Rm16 }),
+    Lmsw("lmsw", 1, { Rm16 }),
+
     Lods {
-        B => "lodsb",
-        W => "lodsw",
-        D => "lodsd",
-        Q => "lodsq",
-    }
-);
+        B => format_args!("lodsb"),
+        W => format_args!("lodsw"),
+        D => format_args!("lodsd"),
+        Q => format_args!("lodsq"),
+    },
 
-impl Display for Loop {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-        match *self {
-            Loop::Rel8(rel)   => write!(f, "loop {}", rel),
-            Loop::ERel8(rel)  => write!(f, "loope {}", rel),
-            Loop::NeRel8(rel) => write!(f, "loopne {}", rel),
-        }
-    }
-}
+    Loop {
+        Rel8(rel)   => format_args!("loop {}", rel),
+        ERel8(rel)  => format_args!("loope {}", rel),
+        NeRel8(rel) => format_args!("loopne {}", rel),
+    },
 
-impl_display_unary!("ltr", Ltr { Rm16 });
-impl_display_binary!("lzcnt", Lzcnt { R16Rm16, R32Rm32, R64Rm64 });
-impl_display_str!("mfence", Mfence);
-impl_display_str!("monitor", Monitor);
+    Ltr("ltr", 1, { Rm16 }),
+    Lzcnt("lzcnt", 2, { R16Rm16, R32Rm32, R64Rm64 }),
+    Mfence("mfence"),
+    Monitor("monitor"),
 
-impl Display for Mov {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-        match *self {
-            Mov::Rm8lR8l(rm, r) => write!(f, "mov {}, {}", rm, r),
-            Mov::Rm8R8(rm, r)   => write!(f, "mov {}, {}", rm, r),
-            Mov::Rm16R16(rm, r) => write!(f, "mov {}, {}", rm, r),
-            Mov::Rm32R32(rm, r) => write!(f, "mov {}, {}", rm, r),
-            Mov::Rm64R64(rm, r) => write!(f, "mov {}, {}", rm, r),
+    Mov {
+        Rm8lR8l(rm, r) => format_args!("mov {}, {}", rm, r),
+        Rm8R8(rm, r)   => format_args!("mov {}, {}", rm, r),
+        Rm16R16(rm, r) => format_args!("mov {}, {}", rm, r),
+        Rm32R32(rm, r) => format_args!("mov {}, {}", rm, r),
+        Rm64R64(rm, r) => format_args!("mov {}, {}", rm, r),
 
-            Mov::R8lRm8l(r, rm) => write!(f, "mov {}, {}", r, rm),
-            Mov::R8Rm8(r, rm)   => write!(f, "mov {}, {}", r, rm),
-            Mov::R16Rm16(r, rm) => write!(f, "mov {}, {}", r, rm),
-            Mov::R32Rm32(r, rm) => write!(f, "mov {}, {}", r, rm),
-            Mov::R64Rm64(r, rm) => write!(f, "mov {}, {}", r, rm),
+        R8lRm8l(r, rm) => format_args!("mov {}, {}", r, rm),
+        R8Rm8(r, rm)   => format_args!("mov {}, {}", r, rm),
+        R16Rm16(r, rm) => format_args!("mov {}, {}", r, rm),
+        R32Rm32(r, rm) => format_args!("mov {}, {}", r, rm),
+        R64Rm64(r, rm) => format_args!("mov {}, {}", r, rm),
 
-            Mov::Rm16Sreg(rm, sreg) => write!(f, "mov {}, {}", rm, sreg),
-            Mov::Rm64Sreg(rm, sreg) => write!(f, "mov {}, {}", rm, sreg),
+        Rm16Sreg(rm, sreg) => format_args!("mov {}, {}", rm, sreg),
+        Rm64Sreg(rm, sreg) => format_args!("mov {}, {}", rm, sreg),
 
-            Mov::SregRm16(sreg, rm) => write!(f, "mov {}, {}", sreg, rm),
-            Mov::SregRm64(sreg, rm) => write!(f, "mov {}, {}", sreg, rm),
+        SregRm16(sreg, rm) => format_args!("mov {}, {}", sreg, rm),
+        SregRm64(sreg, rm) => format_args!("mov {}, {}", sreg, rm),
 
-            Mov::AlMoffs8(moffs)   => write!(f, "mov al, {}", moffs),
-            Mov::AxMoffs16(moffs)  => write!(f, "mov ax, {}", moffs),
-            Mov::EaxMoffs32(moffs) => write!(f, "mov eax, {}", moffs),
-            Mov::RaxMoffs64(moffs) => write!(f, "mov rax, {}", moffs),
+        AlMoffs8(moffs)   => format_args!("mov al, {}", moffs),
+        AxMoffs16(moffs)  => format_args!("mov ax, {}", moffs),
+        EaxMoffs32(moffs) => format_args!("mov eax, {}", moffs),
+        RaxMoffs64(moffs) => format_args!("mov rax, {}", moffs),
 
-            Mov::Moffs8Al(moffs)   => write!(f, "mov {}, al", moffs),
-            Mov::Moffs16Ax(moffs)  => write!(f, "mov {}, ax", moffs),
-            Mov::Moffs32Eax(moffs) => write!(f, "mov {}, eax", moffs),
-            Mov::Moffs64Rax(moffs) => write!(f, "mov {}, rax", moffs),
+        Moffs8Al(moffs)   => format_args!("mov {}, al", moffs),
+        Moffs16Ax(moffs)  => format_args!("mov {}, ax", moffs),
+        Moffs32Eax(moffs) => format_args!("mov {}, eax", moffs),
+        Moffs64Rax(moffs) => format_args!("mov {}, rax", moffs),
 
-            Mov::R8lImm8(r, imm)  => write!(f, "mov {}, {}", r, imm),
-            Mov::R8Imm8(r, imm)   => write!(f, "mov {}, {}", r, imm),
-            Mov::R16Imm16(r, imm) => write!(f, "mov {}, {}", r, imm),
-            Mov::R32Imm32(r, imm) => write!(f, "mov {}, {}", r, imm),
-            Mov::R64Imm64(r, imm) => write!(f, "mov {}, {}", r, imm),
+        R8lImm8(r, imm)  => format_args!("mov {}, {}", r, imm),
+        R8Imm8(r, imm)   => format_args!("mov {}, {}", r, imm),
+        R16Imm16(r, imm) => format_args!("mov {}, {}", r, imm),
+        R32Imm32(r, imm) => format_args!("mov {}, {}", r, imm),
+        R64Imm64(r, imm) => format_args!("mov {}, {}", r, imm),
 
-            Mov::Rm8lImm8(rm, imm)  => write!(f, "mov {}, {}", rm, imm),
-            Mov::Rm8Imm8(rm, imm)   => write!(f, "mov {}, {}", rm, imm),
-            Mov::Rm16Imm16(rm, imm) => write!(f, "mov {}, {}", rm, imm),
-            Mov::Rm32Imm32(rm, imm) => write!(f, "mov {}, {}", rm, imm),
-            Mov::Rm64Imm32(rm, imm) => write!(f, "mov {}, {}", rm, imm),
+        Rm8lImm8(rm, imm)  => format_args!("mov {}, {}", rm, imm),
+        Rm8Imm8(rm, imm)   => format_args!("mov {}, {}", rm, imm),
+        Rm16Imm16(rm, imm) => format_args!("mov {}, {}", rm, imm),
+        Rm32Imm32(rm, imm) => format_args!("mov {}, {}", rm, imm),
+        Rm64Imm32(rm, imm) => format_args!("mov {}, {}", rm, imm),
 
-            Mov::R64Cr(r, cr) => write!(f, "mov {}, {}", r, cr),
-            Mov::CrR64(cr, r) => write!(f, "mov {}, {}", cr, r),
+        R64Cr(r, cr) => format_args!("mov {}, {}", r, cr),
+        CrR64(cr, r) => format_args!("mov {}, {}", cr, r),
 
-            Mov::R64Dr(r, dr) => write!(f, "mov {}, {}", r, dr),
-            Mov::DrR64(dr, r) => write!(f, "mov {}, {}", dr, r),
-        }
-    }
-}
+        R64Dr(r, dr) => format_args!("mov {}, {}", r, dr),
+        DrR64(dr, r) => format_args!("mov {}, {}", dr, r),
+    },
 
-impl_display_binary!("movbe", Movbe { R16M16, R32M32, R64M64, M16R16, M32R32, M64R64 });
-impl_display_reg!(
+    Movbe("movbe", 2, { R16M16, R32M32, R64M64, M16R16, M32R32, M64R64 }),
+
     Movs {
-        B => "movsb",
-        W => "movsw",
-        D => "movsd",
-        Q => "movsq",
-    }
-);
-impl_display_binary!(
-    "movsx",
-    Movsx { R16lRm8l, R16Rm8, R32lRm8l, R32Rm8, R64Rm8, R32Rm16, R64Rm16, R64Rm32 }
-);
-impl_display_binary!(
-    "movzx",
-    Movzx { R16lRm8l, R16Rm8, R32lRm8l, R32Rm8, R64Rm8, R32Rm16, R64Rm16 }
-);
-impl_display_unary!("mul", Mul { Rm8l, Rm8, Rm16, Rm32, Rm64 });
-impl_display_str!("mwait", Mwait);
-impl_display_unary!("neg", Neg { Rm8l, Rm8, Rm16, Rm32, Rm64 });
+        B => format_args!("movsb"),
+        W => format_args!("movsw"),
+        D => format_args!("movsd"),
+        Q => format_args!("movsq"),
+    },
 
-impl Display for Nop {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-        match *self {
-            Nop::Ax  => write!(f, "nop ax"),
-            Nop::Eax => write!(f, "nop eax"),
+    Movsx("movsx", 2, { R16lRm8l, R16Rm8, R32lRm8l, R32Rm8, R64Rm8, R32Rm16, R64Rm16, R64Rm32 }),
+    Movzx("movzx", 2, { R16lRm8l, R16Rm8, R32lRm8l, R32Rm8, R64Rm8, R32Rm16, R64Rm16 }),
+    Mul("mul", 1, { Rm8l, Rm8, Rm16, Rm32, Rm64 }),
+    Mwait("mwait"),
+    Neg("neg", 1, { Rm8l, Rm8, Rm16, Rm32, Rm64 }),
 
-            Nop::Rm16(rm) => write!(f, "nop {}", rm),
-            Nop::Rm32(rm) => write!(f, "nop {}", rm),
-        }
-    }
-}
+    Nop {
+        Ax  => format_args!("nop ax"),
+        Eax => format_args!("nop eax"),
 
-impl_display_unary!("not", Not { Rm8l, Rm8, Rm16, Rm32, Rm64 });
-impl_display_arith!("or", Or);
+        Rm16(rm) => format_args!("nop {}", rm),
+        Rm32(rm) => format_args!("nop {}", rm),
+    },
 
-impl Display for Out {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-        match *self {
-            Out::Imm8Al(imm)  => write!(f, "out {}, al", imm),
-            Out::Imm8Ax(imm)  => write!(f, "out {}, ax", imm),
-            Out::Imm8Eax(imm) => write!(f, "out {}, eax", imm),
+    Not("not", 1, { Rm8l, Rm8, Rm16, Rm32, Rm64 }),
+    Or("or", a),
 
-            Out::DxAl  => write!(f, "out dx, al"),
-            Out::DxAx  => write!(f, "out dx, ax"),
-            Out::DxEax => write!(f, "out dx, eax"),
-        }
-    }
-}
+    Out {
+        Imm8Al(imm)  => format_args!("out {}, al", imm),
+        Imm8Ax(imm)  => format_args!("out {}, ax", imm),
+        Imm8Eax(imm) => format_args!("out {}, eax", imm),
 
-impl_display_reg!(
+        DxAl  => format_args!("out dx, al"),
+        DxAx  => format_args!("out dx, ax"),
+        DxEax => format_args!("out dx, eax"),
+    },
+
     Outs {
-        B => "outsb",
-        W => "outsw",
-        D => "outsd",
-    }
-);
+        B => format_args!("outsb"),
+        W => format_args!("outsw"),
+        D => format_args!("outsd"),
+    },
+}
