@@ -33,6 +33,18 @@ macro_rules! impl_encode {
         }
     };
 
+    ($ty:ident($reg:expr)) => {
+        impl_encode! {
+            $ty {
+                Rm8l(rm) => opcode1(0xf6).reg($reg).rm8l(rm),
+                Rm8(rm)  => opcode1(0xf6).reg($reg).rm8(rm),
+                Rm16(rm) => opcode1(0xf7).reg($reg).rm16(rm).osz(),
+                Rm32(rm) => opcode1(0xf7).reg($reg).rm32(rm),
+                Rm64(rm) => opcode1(0xf7).reg($reg).rm64(rm).rex_w(),
+            }
+        }
+    };
+
     ($ty:ident($opcode:expr, $reg:expr)) => {
         impl_encode! {
             $ty {
@@ -235,13 +247,7 @@ impl_encode! {
         Rm64(rm) => opcode1(0xff).reg(1).rm64(rm).rex_w(),
     },
 
-    Div {
-        Rm8l(rm) => opcode1(0xf6).reg(6).rm8l(rm),
-        Rm8(rm)  => opcode1(0xf6).reg(6).rm8(rm),
-        Rm16(rm) => opcode1(0xf7).reg(6).rm16(rm).osz(),
-        Rm32(rm) => opcode1(0xf7).reg(6).rm32(rm),
-        Rm64(rm) => opcode1(0xf7).reg(6).rm64(rm).rex_w(),
-    },
+    Div(6),
 
     F2xm1 { fopcode(0xf0) },
 
@@ -551,13 +557,7 @@ impl_encode! {
 
     Hlt { opcode1(0xf4) },
 
-    Idiv {
-        Rm8l(rm) => opcode1(0xf6).reg(7).rm8l(rm),
-        Rm8(rm)  => opcode1(0xf6).reg(7).rm8(rm),
-        Rm16(rm) => opcode1(0xf7).reg(7).rm16(rm).osz(),
-        Rm32(rm) => opcode1(0xf7).reg(7).rm32(rm),
-        Rm64(rm) => opcode1(0xf7).reg(7).rm64(rm).rex_w(),
-    },
+    Idiv(7),
 
     Imul {
         Rm8l(rm) => opcode1(0xf6).reg(5).rm8l(rm),
@@ -796,23 +796,11 @@ impl_encode! {
         R64Rm16(r, rm) => opcode2(0xb7).reg(r).rm16(rm).rex_w(),
     },
 
-    Mul {
-        Rm8l(rm) => opcode1(0xf6).reg(4).rm8l(rm),
-        Rm8(rm)  => opcode1(0xf6).reg(4).rm8(rm),
-        Rm16(rm) => opcode1(0xf7).reg(4).rm16(rm).osz(),
-        Rm32(rm) => opcode1(0xf7).reg(4).rm32(rm),
-        Rm64(rm) => opcode1(0xf7).reg(4).rm64(rm).rex_w(),
-    },
+    Mul(4),
 
     Mwait { opcode3(0x01, 0xc9) },
 
-    Neg {
-        Rm8l(rm) => opcode1(0xf6).reg(3).rm8l(rm),
-        Rm8(rm)  => opcode1(0xf6).reg(3).rm8(rm),
-        Rm16(rm) => opcode1(0xf7).reg(3).rm16(rm).osz(),
-        Rm32(rm) => opcode1(0xf7).reg(3).rm32(rm),
-        Rm64(rm) => opcode1(0xf7).reg(3).rm64(rm).rex_w(),
-    },
+    Neg(3),
 
     Nop {
         Ax  => opcode1(0x90).osz(),
@@ -822,13 +810,7 @@ impl_encode! {
         Rm32(rm) => opcode2(0x1f).reg(0).rm32(rm),
     },
 
-    Not {
-        Rm8l(rm) => opcode1(0xf6).reg(2).rm8l(rm),
-        Rm8(rm)  => opcode1(0xf6).reg(2).rm8(rm),
-        Rm16(rm) => opcode1(0xf7).reg(2).rm16(rm).osz(),
-        Rm32(rm) => opcode1(0xf7).reg(2).rm32(rm),
-        Rm64(rm) => opcode1(0xf7).reg(2).rm64(rm).rex_w(),
-    },
+    Not(2),
 
     Or(0x08, 1),
 }
