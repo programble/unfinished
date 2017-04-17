@@ -1,3 +1,5 @@
+use core::fmt::{Display, Formatter, Error};
+
 use super::reg::{R8l, R8, R16, R32l, R32, R64l, R64, Sreg};
 
 /// 32-bit indexing registers without REX prefix.
@@ -118,4 +120,173 @@ pub enum Rm32 {
 pub enum Rm64 {
     R64(R64),
     M64(Mem),
+}
+
+macro_rules! impl_display {
+    ($($ty:ident { $($var:ident => $str:expr,)+ },)+) => {
+        $(
+            impl Display for $ty {
+                fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+                    f.write_str(match *self { $($ty::$var => $str),+ })
+                }
+            }
+        )+
+    }
+}
+
+impl_display! {
+    Index32l {
+        Eax => "eax",
+        Ebx => "ebx",
+        Ecx => "ecx",
+        Edx => "edx",
+        Esi => "esi",
+        Edi => "edi",
+        Ebp => "ebp",
+    },
+
+    Index32 {
+        Eax => "eax",
+        Ebx => "ebx",
+        Ecx => "ecx",
+        Edx => "edx",
+        Esi => "esi",
+        Edi => "edi",
+        Ebp => "ebp",
+        R8d => "r8d",
+        R9d => "r9d",
+        R10d => "r10d",
+        R11d => "r11d",
+        R12d => "r12d",
+        R13d => "r13d",
+        R14d => "r14d",
+        R15d => "r15d",
+    },
+
+    Index64l {
+        Rax => "rax",
+        Rbx => "rbx",
+        Rcx => "rcx",
+        Rdx => "rdx",
+        Rsi => "rsi",
+        Rdi => "rdi",
+        Rbp => "rbp",
+    },
+
+    Index64 {
+        Rax => "rax",
+        Rbx => "rbx",
+        Rcx => "rcx",
+        Rdx => "rdx",
+        Rsi => "rsi",
+        Rdi => "rdi",
+        Rbp => "rbp",
+        R8 => "r8",
+        R9 => "r9",
+        R10 => "r10",
+        R11 => "r11",
+        R12 => "r12",
+        R13 => "r13",
+        R14 => "r14",
+        R15 => "r15",
+    },
+
+    Scale {
+        X1 => "1",
+        X2 => "2",
+        X4 => "4",
+        X8 => "8",
+    },
+}
+
+impl Display for Disp {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Disp::Disp8(disp)  => write!(f, "{:#04x}", disp),
+            Disp::Disp32(disp) => write!(f, "{:#010x}", disp),
+        }
+    }
+}
+
+impl<Base, Index> Display for Offset<Base, Index>
+where Base: Display, Index: Display {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Offset::Base(ref b) => write!(f, "{}", b),
+            Offset::BaseDisp(ref b, d) => write!(f, "{} + {}", b, d),
+            Offset::BaseIndex(ref b, ref i, s) => write!(f, "{} + {} * {}", b, i, s),
+            Offset::BaseIndexDisp(ref b, ref i, s, d) => write!(f, "{} + {} * {} + {}", b, i, s, d),
+            Offset::IndexDisp(ref i, s, d) => write!(f, "{} * {} + {}", i, s, d),
+            Offset::Disp(d) => write!(f, "{:#010x}", d),
+            Offset::RipDisp(d) => write!(f, "rip + {:#010x}", d),
+        }
+    }
+}
+
+impl<B32, I32, B64, I64> Display for Mem<B32, I32, B64, I64>
+where Offset<B32, I32>: Display, Offset<B64, I64>: Display {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Mem::Offset32(None, ref offset) => write!(f, "[{}]", offset),
+            Mem::Offset64(None, ref offset) => write!(f, "[{}]", offset),
+            Mem::Offset32(Some(sreg), ref offset) => write!(f, "[{}:{}]", sreg, offset),
+            Mem::Offset64(Some(sreg), ref offset) => write!(f, "[{}:{}]", sreg, offset),
+        }
+    }
+}
+
+impl Display for Moffs {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Moffs::Moffset32(None, offset) => write!(f, "[dword {:#010x}]", offset),
+            Moffs::Moffset64(None, offset) => write!(f, "[qword {:#018x}]", offset),
+            Moffs::Moffset32(Some(sreg), offset) => write!(f, "[{}:dword {:#010x}]", sreg, offset),
+            Moffs::Moffset64(Some(sreg), offset) => write!(f, "[{}:qword {:#018x}]", sreg, offset),
+        }
+    }
+}
+
+impl Display for Rm8l {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Rm8l::R8l(r) => write!(f, "{}", r),
+            Rm8l::M8l(m) => write!(f, "byte {}", m),
+        }
+    }
+}
+
+impl Display for Rm8 {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Rm8::R8(r) => write!(f, "{}", r),
+            Rm8::M8(m) => write!(f, "byte {}", m),
+        }
+    }
+}
+
+impl Display for Rm16 {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Rm16::R16(r) => write!(f, "{}", r),
+            Rm16::M16(m) => write!(f, "word {}", m),
+        }
+    }
+}
+
+impl Display for Rm32 {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Rm32::R32(r) => write!(f, "{}", r),
+            Rm32::M32(m) => write!(f, "dword {}", m),
+        }
+    }
+}
+
+impl Display for Rm64 {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Rm64::R64(r) => write!(f, "{}", r),
+            Rm64::M64(m) => write!(f, "qword {}", m),
+        }
+    }
 }
