@@ -850,4 +850,9 @@ impl_encode! {
         R32Rm32(r, rm) => opcode2(0xb8).rep().reg(r).rm32(rm),
         R64Rm64(r, rm) => opcode2(0xb8).rep().reg(r).rm64(rm).rex_w(),
     },
+
+    Popf {
+        W => opcode1(0x9d).osz(),
+        Q => opcode1(0x9d),
+    },
 }

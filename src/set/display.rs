@@ -528,4 +528,9 @@ impl_display! {
     },
 
     Popcnt("popcnt", 2, { R16Rm16, R32Rm32, R64Rm64 }),
+
+    Popf {
+        W => format_args!("popf"),
+        Q => format_args!("popfq"),
+    },
 }
