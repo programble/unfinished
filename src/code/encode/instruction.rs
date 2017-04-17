@@ -831,4 +831,17 @@ impl_encode! {
     },
 
     Pause { opcode1(0x90).rep() },
+
+    Pop {
+        Rm16(rm) => opcode1(0x8f).reg(0).rm16(rm).osz(),
+        Rm64(rm) => opcode1(0x8f).reg(0).rm64(rm),
+
+        R16(r) => opcode1(0x58).plus(r).osz(),
+        R64(r) => opcode1(0x58).plus(r),
+
+        Fs16 => opcode2(0xa1).osz(),
+        Fs64 => opcode2(0xa1),
+        Gs16 => opcode2(0xa9).osz(),
+        Gs64 => opcode2(0xa9),
+    },
 }

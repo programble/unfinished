@@ -1136,4 +1136,53 @@ declare! {
     // PANDN
 
     Pause(),
+
+    // PAVG
+    // PBLEND
+    // PCLMULQDQ
+    // PCMPEQ
+    // PCMPEQQ
+    // PCMPESTRI
+    // PCMPESTRM
+    // PCMPGT
+    // PCMPGTQ
+    // PCMPISTRI
+    // PCMPISTRM
+    // PDEP
+    // PEXT
+    // PEXTR
+    // PHADD
+    // PHADDSW
+    // PHMINPOSUW
+    // PHSUB
+    // PHSUBSW
+    // PINS
+    // PMADDUBSW
+    // PMADDWD
+    // PMAXS
+    // PMAXU
+    // PMINS
+    // PMINU
+    // PMOVMSKB
+    // PMOVSZ
+    // PMOVZX
+    // PMULDQ
+    // PMULHRSW
+    // PMULHUW
+    // PMULHW
+    // PMULL
+    // PMULUDQ
+
+    Pop {
+        Rm16(Rm16),
+        Rm64(Rm64),
+
+        R16(R16),
+        R64(R64),
+
+        Fs16,
+        Fs64,
+        Gs16,
+        Gs64,
+    },
 }

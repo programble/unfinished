@@ -513,4 +513,17 @@ impl_display! {
     },
 
     Pause("pause"),
+
+    Pop {
+        Rm16(rm) => format_args!("pop {}", rm),
+        Rm64(rm) => format_args!("pop {}", rm),
+
+        R16(r) => format_args!("pop {}", r),
+        R64(r) => format_args!("pop {}", r),
+
+        Fs16 => format_args!("pop word fs"),
+        Fs64 => format_args!("pop qword fs"),
+        Gs16 => format_args!("pop word gs"),
+        Gs64 => format_args!("pop qword gs"),
+    },
 }
