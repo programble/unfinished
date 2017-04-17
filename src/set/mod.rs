@@ -1185,4 +1185,10 @@ declare! {
         Gs16,
         Gs64,
     },
+
+    Popcnt {
+        R16Rm16(R16, Rm16),
+        R32Rm32(R32, Rm32),
+        R64Rm64(R64, Rm64),
+    },
 }

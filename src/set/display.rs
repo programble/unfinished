@@ -526,4 +526,6 @@ impl_display! {
         Gs16 => format_args!("pop word gs"),
         Gs64 => format_args!("pop qword gs"),
     },
+
+    Popcnt("popcnt", 2, { R16Rm16, R32Rm32, R64Rm64 }),
 }

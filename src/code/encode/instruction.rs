@@ -844,4 +844,10 @@ impl_encode! {
         Gs16 => opcode2(0xa9).osz(),
         Gs64 => opcode2(0xa9),
     },
+
+    Popcnt {
+        R16Rm16(r, rm) => opcode2(0xb8).rep().reg(r).rm16(rm).osz(),
+        R32Rm32(r, rm) => opcode2(0xb8).rep().reg(r).rm32(rm),
+        R64Rm64(r, rm) => opcode2(0xb8).rep().reg(r).rm64(rm).rex_w(),
+    },
 }
