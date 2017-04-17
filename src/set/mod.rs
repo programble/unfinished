@@ -1125,4 +1125,15 @@ declare! {
         W,
         D,
     },
+
+    // PABS
+    // PACKSS
+    // PACKUS
+    // PADD
+    // PADDS
+    // PALIGNR
+    // PAND
+    // PANDN
+
+    Pause(),
 }

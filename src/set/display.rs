@@ -511,4 +511,6 @@ impl_display! {
         W => format_args!("outsw"),
         D => format_args!("outsd"),
     },
+
+    Pause("pause"),
 }

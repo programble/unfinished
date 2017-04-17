@@ -829,4 +829,6 @@ impl_encode! {
         W => opcode1(0x6f).osz(),
         D => opcode1(0x6f),
     },
+
+    Pause { opcode1(0x90).rep() },
 }
