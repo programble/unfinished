@@ -813,4 +813,20 @@ impl_encode! {
     Not(2),
 
     Or(0x08, 1),
+
+    Out {
+        Imm8Al(imm)  => opcode1(0xe6).imm8(imm),
+        Imm8Ax(imm)  => opcode1(0xe7).imm8(imm).osz(),
+        Imm8Eax(imm) => opcode1(0xe7).imm8(imm),
+
+        DxAl  => opcode1(0xee),
+        DxAx  => opcode1(0xef).osz(),
+        DxEax => opcode1(0xef),
+    },
+
+    Outs {
+        B => opcode1(0x6e),
+        W => opcode1(0x6f).osz(),
+        D => opcode1(0x6f),
+    },
 }

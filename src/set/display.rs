@@ -970,3 +970,25 @@ impl Display for Nop {
 
 impl_display_unary!("not", Not { Rm8l, Rm8, Rm16, Rm32, Rm64 });
 impl_display_arith!("or", Or);
+
+impl Display for Out {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
+        match *self {
+            Out::Imm8Al(imm)  => write!(f, "out {}, al", imm),
+            Out::Imm8Ax(imm)  => write!(f, "out {}, ax", imm),
+            Out::Imm8Eax(imm) => write!(f, "out {}, eax", imm),
+
+            Out::DxAl  => write!(f, "out dx, al"),
+            Out::DxAx  => write!(f, "out dx, ax"),
+            Out::DxEax => write!(f, "out dx, eax"),
+        }
+    }
+}
+
+impl_display_reg!(
+    Outs {
+        B => "outsb",
+        W => "outsw",
+        D => "outsd",
+    }
+);
