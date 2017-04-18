@@ -1213,4 +1213,26 @@ declare! {
     Prefetchwt1 {
         M8(Mem),
     },
+
+    // PSADBW
+    // PSHUFB
+    // PSHUFD
+    // PSHUFHW
+    // PSHUFLW
+    // PSHUFW
+    // PSIGN
+    // PSLLDQ
+    // PSLL
+    // PSRA
+    // PSRLDQ
+    // PSRL
+    // PSUB
+    // PSUBS
+    // PSUBUS
+    // PTEST
+
+    Ptwrite {
+        Rm32(Rm32),
+        Rm64(Rm64),
+    },
 }

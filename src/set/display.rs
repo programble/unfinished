@@ -543,4 +543,5 @@ impl_display! {
 
     Prefetchw("prefetchw", 1, { M8 }),
     Prefetchwt1("prefetchwt1", 1, { M8 }),
+    Ptwrite("ptwrite", 1, { Rm32, Rm64 }),
 }

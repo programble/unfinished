@@ -870,4 +870,9 @@ impl_encode! {
     Prefetchwt1 {
         M8(m) => opcode2(0x0d).reg(2).mem(m),
     },
+
+    Ptwrite {
+        Rm32(rm) => opcode2(0xae).rep().reg(4).rm32(rm),
+        Rm64(rm) => opcode2(0xae).rep().reg(4).rm64(rm).rex_w(),
+    },
 }
