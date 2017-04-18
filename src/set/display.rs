@@ -533,4 +533,14 @@ impl_display! {
         W => format_args!("popf"),
         Q => format_args!("popfq"),
     },
+
+    Prefetch {
+        T0M8(m)  => format_args!("prefetcht0 {}", m),
+        T1M8(m)  => format_args!("prefetcht1 {}", m),
+        T2M8(m)  => format_args!("prefetcht2 {}", m),
+        NtaM8(m) => format_args!("prefetchnta {}", m),
+    },
+
+    Prefetchw("prefetchw", 1, { M8 }),
+    Prefetchwt1("prefetchwt1", 1, { M8 }),
 }

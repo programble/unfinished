@@ -1196,4 +1196,21 @@ declare! {
         W,
         Q,
     },
+
+    // POR
+
+    Prefetch {
+        T0M8(Mem),
+        T1M8(Mem),
+        T2M8(Mem),
+        NtaM8(Mem),
+    },
+
+    Prefetchw {
+        M8(Mem),
+    },
+
+    Prefetchwt1 {
+        M8(Mem),
+    },
 }

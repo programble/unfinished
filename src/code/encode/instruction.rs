@@ -855,4 +855,19 @@ impl_encode! {
         W => opcode1(0x9d).osz(),
         Q => opcode1(0x9d),
     },
+
+    Prefetch {
+        T0M8(m)  => opcode2(0x18).reg(1).mem(m),
+        T1M8(m)  => opcode2(0x18).reg(2).mem(m),
+        T2M8(m)  => opcode2(0x18).reg(3).mem(m),
+        NtaM8(m) => opcode2(0x18).reg(0).mem(m),
+    },
+
+    Prefetchw {
+        M8(m) => opcode2(0x0d).reg(1).mem(m),
+    },
+
+    Prefetchwt1 {
+        M8(m) => opcode2(0x0d).reg(2).mem(m),
+    },
 }
