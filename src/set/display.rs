@@ -544,4 +544,21 @@ impl_display! {
     Prefetchw("prefetchw", 1, { M8 }),
     Prefetchwt1("prefetchwt1", 1, { M8 }),
     Ptwrite("ptwrite", 1, { Rm32, Rm64 }),
+
+    Push {
+        Rm16(rm) => format_args!("push {}", rm),
+        Rm64(rm) => format_args!("push {}", rm),
+
+        R16(r) => format_args!("push {}", r),
+        R64(r) => format_args!("push {}", r),
+
+        Imm8(imm)  => format_args!("push {}", imm),
+        Imm16(imm) => format_args!("push {}", imm),
+        Imm32(imm) => format_args!("push {}", imm),
+
+        Fs16 => format_args!("push word fs"),
+        Fs64 => format_args!("push qword fs"),
+        Gs16 => format_args!("push word gs"),
+        Gs64 => format_args!("push qword gs"),
+    },
 }

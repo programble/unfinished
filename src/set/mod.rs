@@ -1233,4 +1233,21 @@ declare! {
         Rm32(Rm32),
         Rm64(Rm64),
     },
+
+    Push {
+        Rm16(Rm16),
+        Rm64(Rm64),
+
+        R16(R16),
+        R64(R64),
+
+        Imm8(Imm8),
+        Imm16(Imm16),
+        Imm32(Imm32),
+
+        Fs16,
+        Fs64,
+        Gs16,
+        Gs64,
+    },
 }

@@ -1252,4 +1252,21 @@ impl_encode! {
         Rm32(rm) => Inst::opcode2(0xae).rep().reg(4).rm32(rm),
         Rm64(rm) => Inst::opcode2(0xae).rep().reg(4).rm64(rm).rex_w(),
     },
+
+    Push {
+        Rm16(rm) => Inst::opcode1(0xff).reg(6).rm16(rm).osz(),
+        Rm64(rm) => Inst::opcode1(0xff).reg(6).rm64(rm),
+
+        R16(r) => Inst::opcode1(0x50).plus(r).osz(),
+        R64(r) => Inst::opcode1(0x50).plus(r),
+
+        Imm8(imm)  => Inst::opcode1(0x6a).imm8(imm),
+        Imm16(imm) => Inst::opcode1(0x68).imm16(imm).osz(),
+        Imm32(imm) => Inst::opcode1(0x68).imm32(imm),
+
+        Fs16 => Inst::opcode2(0xa0).osz(),
+        Fs64 => Inst::opcode2(0xa0),
+        Gs16 => Inst::opcode2(0xa8).osz(),
+        Gs64 => Inst::opcode2(0xa8),
+    },
 }
