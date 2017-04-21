@@ -1,5 +1,3 @@
-//! Intel 64 instruction set.
-
 /// Re-exports.
 pub mod dsl;
 

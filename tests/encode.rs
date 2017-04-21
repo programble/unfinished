@@ -1,6 +1,6 @@
 extern crate rax;
 
-use rax::code::Encode;
+use rax::code::encode::Encode;
 use rax::set::dsl::*;
 use rax::set::NOP;
 
