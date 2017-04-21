@@ -1250,4 +1250,9 @@ declare! {
         Gs16,
         Gs64,
     },
+
+    Pushf {
+        W,
+        Q,
+    },
 }

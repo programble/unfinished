@@ -561,4 +561,9 @@ impl_display! {
         Gs16 => format_args!("push word gs"),
         Gs64 => format_args!("push qword gs"),
     },
+
+    Pushf {
+        W => format_args!("pushf"),
+        Q => format_args!("pushfq"),
+    },
 }

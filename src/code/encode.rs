@@ -1269,4 +1269,9 @@ impl_encode! {
         Gs16 => Inst::opcode2(0xa8).osz(),
         Gs64 => Inst::opcode2(0xa8),
     },
+
+    Pushf {
+        W => Inst::opcode1(0x9c).osz(),
+        Q => Inst::opcode1(0x9c),
+    },
 }
