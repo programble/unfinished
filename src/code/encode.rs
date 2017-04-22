@@ -1484,4 +1484,6 @@ impl_encode! {
         Rm32Imm8(rm, imm) => Inst::opcode1(0xc1).reg(5).rm32(rm).imm8(imm),
         Rm64Imm8(rm, imm) => Inst::opcode1(0xc1).reg(5).rm64(rm).imm8(imm).rex_w(),
     },
+
+    Sbb(0x18, 3),
 }

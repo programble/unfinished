@@ -749,4 +749,6 @@ impl_display! {
         Rm32Imm8(rm, imm) => format_args!("shr {}, {}", rm, imm),
         Rm64Imm8(rm, imm) => format_args!("shr {}, {}", rm, imm),
     },
+
+    Sbb("sbb", a),
 }
