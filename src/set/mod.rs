@@ -1350,4 +1350,14 @@ declare! {
         R32(R32),
         R64(R64),
     },
+
+    Rdmsr(),
+
+    Rdpid {
+        R64(R64),
+    },
+
+    Rdpkru(),
+
+    Rdpmc(),
 }

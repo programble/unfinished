@@ -649,4 +649,8 @@ impl_display! {
 
     Rdfsbase("rdfsbase", 1, { R32, R64 }),
     Rdgsbase("rdgsbase", 1, { R32, R64 }),
+    Rdmsr("rdmsr"),
+    Rdpid("rdpid", 1, { R64 }),
+    Rdpkru("rdpkru"),
+    Rdpmc("rdpmc"),
 }

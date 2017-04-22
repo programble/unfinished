@@ -1364,4 +1364,14 @@ impl_encode! {
         R32(r) => Inst::opcode2(0xae).rep().reg(1).rm_reg(r),
         R64(r) => Inst::opcode2(0xae).rep().reg(1).rm_reg(r).rex_w(),
     },
+
+    Rdmsr { Inst::opcode2(0x32) },
+
+    Rdpid {
+        R64(r) => Inst::opcode2(0xc7).rep().reg(7).rm_reg(r),
+    },
+
+    Rdpkru { Inst::opcode3(0x01, 0xee) },
+
+    Rdpmc { Inst::opcode2(0x33) },
 }
