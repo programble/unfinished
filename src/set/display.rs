@@ -393,6 +393,7 @@ impl_display! {
         M16x64(m)  => format_args!("jmp far qword {}", m),
     },
 
+    Lahf("lahf"),
     Lss("lss", 2, { R16M16x16, R32M16x32, R64M16x64 }),
     Lfs("lfs", 2, { R16M16x16, R32M16x32, R64M16x64 }),
     Lgs("lgs", 2, { R16M16x16, R32M16x32, R64M16x64 }),
@@ -667,4 +668,5 @@ impl_display! {
     },
 
     Rsm("rsm"),
+    Sahf("sahf"),
 }

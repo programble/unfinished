@@ -823,6 +823,9 @@ declare! {
     // KUNPCK
     // KXNOR
     // KXOR
+
+    Lahf(),
+
     // LAR
     // LDDQU
     // LDMXCSR
@@ -1394,4 +1397,9 @@ declare! {
     // ROUNDSS
 
     Rsm(),
+
+    // RSQRTPS
+    // RSQRTSS
+
+    Sahf(),
 }

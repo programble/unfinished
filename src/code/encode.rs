@@ -1016,6 +1016,8 @@ impl_encode! {
         M16x64(m)  => Inst::opcode1(0xff).reg(5).mem(m).rex_w(),
     },
 
+    Lahf { Inst::opcode1(0x9f) },
+
     Lss {
         R16M16x16(r, m) => Inst::opcode2(0xb2).reg(r).mem(m).osz(),
         R32M16x32(r, m) => Inst::opcode2(0xb2).reg(r).mem(m),
@@ -1400,4 +1402,6 @@ impl_encode! {
     },
 
     Rsm { Inst::opcode2(0xaa) },
+
+    Sahf { Inst::opcode1(0x9e) },
 }
