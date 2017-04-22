@@ -665,4 +665,6 @@ impl_display! {
         NearImm16(imm) => format_args!("ret near {}", imm),
         FarImm16(imm)  => format_args!("ret far {}", imm),
     },
+
+    Rsm("rsm"),
 }

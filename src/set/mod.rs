@@ -1386,4 +1386,12 @@ declare! {
         NearImm16(Imm16),
         FarImm16(Imm16),
     },
+
+    // RORX
+    // ROUNDPD
+    // ROUNDPS
+    // ROUNDSD
+    // ROUNDSS
+
+    Rsm(),
 }

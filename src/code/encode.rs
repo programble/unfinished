@@ -1398,4 +1398,6 @@ impl_encode! {
         NearImm16(imm) => Inst::opcode1(0xc2).imm16(imm),
         FarImm16(imm)  => Inst::opcode1(0xca).imm16(imm),
     },
+
+    Rsm { Inst::opcode2(0xaa) },
 }
