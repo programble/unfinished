@@ -1527,4 +1527,10 @@ declare! {
         CcRm8l(Cc, Rm8l),
         CcRm8(Cc, Rm8),
     },
+
+    Sfence(),
+
+    Sgdt {
+        M(Mem),
+    },
 }

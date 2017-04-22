@@ -1498,4 +1498,10 @@ impl_encode! {
         CcRm8l(cc, rm) => Inst::opcode2(0x90).cc(cc).rm8l(rm),
         CcRm8(cc, rm)  => Inst::opcode2(0x90).cc(cc).rm8(rm),
     },
+
+    Sfence { Inst::opcode3(0xae, 0xf8) },
+
+    Sgdt {
+        M(m) => Inst::opcode2(0x01).reg(0).mem(m),
+    },
 }

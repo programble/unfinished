@@ -763,4 +763,7 @@ impl_display! {
         CcRm8l(cc, rm) => format_args!("set{} {}", cc, rm),
         CcRm8(cc, rm)  => format_args!("set{} {}", cc, rm),
     },
+
+    Sfence("sfence"),
+    Sgdt("sgdt", 1, { M }),
 }
