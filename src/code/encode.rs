@@ -1386,4 +1386,8 @@ impl_encode! {
         R32(r) => Inst::opcode2(0xc7).reg(7).rm_reg(r),
         R64(r) => Inst::opcode2(0xc7).reg(7).rm_reg(r).rex_w(),
     },
+
+    Rdtsc { Inst::opcode2(0x31) },
+
+    Rdtscp { Inst::opcode3(0x01, 0xf9) },
 }

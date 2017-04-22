@@ -655,4 +655,6 @@ impl_display! {
     Rdpmc("rdpmc"),
     Rdrand("rdrand", 1, { R16, R32, R64 }),
     Rdseed("rdseed", 1, { R16, R32, R64 }),
+    Rdtsc("rdtsc"),
+    Rdtscp("rdtscp"),
 }

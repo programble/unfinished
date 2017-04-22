@@ -1372,4 +1372,8 @@ declare! {
         R32(R32),
         R64(R64),
     },
+
+    Rdtsc(),
+
+    Rdtscp(),
 }
