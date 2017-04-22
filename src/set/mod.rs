@@ -1522,4 +1522,9 @@ declare! {
         D,
         Q,
     },
+
+    Set {
+        CcRm8l(Cc, Rm8l),
+        CcRm8(Cc, Rm8),
+    },
 }

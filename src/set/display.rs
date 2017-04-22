@@ -758,4 +758,9 @@ impl_display! {
         D => format_args!("scasd"),
         Q => format_args!("scasq"),
     },
+
+    Set {
+        CcRm8l(cc, rm) => format_args!("set{} {}", cc, rm),
+        CcRm8(cc, rm)  => format_args!("set{} {}", cc, rm),
+    },
 }

@@ -1493,4 +1493,9 @@ impl_encode! {
         D => Inst::opcode1(0xaf),
         Q => Inst::opcode1(0xaf).rex_w(),
     },
+
+    Set {
+        CcRm8l(cc, rm) => Inst::opcode2(0x90).cc(cc).rm8l(rm),
+        CcRm8(cc, rm)  => Inst::opcode2(0x90).cc(cc).rm8(rm),
+    },
 }
