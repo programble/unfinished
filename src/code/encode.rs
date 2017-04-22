@@ -1404,4 +1404,84 @@ impl_encode! {
     Rsm { Inst::opcode2(0xaa) },
 
     Sahf { Inst::opcode1(0x9e) },
+
+    Sal {
+        Rm8l(rm)          => Inst::opcode1(0xd0).reg(4).rm8l(rm),
+        Rm8(rm)           => Inst::opcode1(0xd0).reg(4).rm8(rm),
+        Rm8lCl(rm)        => Inst::opcode1(0xd2).reg(4).rm8l(rm),
+        Rm8Cl(rm)         => Inst::opcode1(0xd2).reg(4).rm8(rm),
+        Rm8lImm8(rm, imm) => Inst::opcode1(0xc0).reg(4).rm8l(rm).imm8(imm),
+        Rm8Imm8(rm, imm)  => Inst::opcode1(0xc0).reg(4).rm8(rm).imm8(imm),
+
+        Rm16(rm)          => Inst::opcode1(0xd1).reg(4).rm16(rm).osz(),
+        Rm16Cl(rm)        => Inst::opcode1(0xd3).reg(4).rm16(rm).osz(),
+        Rm16Imm8(rm, imm) => Inst::opcode1(0xc1).reg(4).rm16(rm).imm8(imm).osz(),
+
+        Rm32(rm)          => Inst::opcode1(0xd1).reg(4).rm32(rm),
+        Rm64(rm)          => Inst::opcode1(0xd1).reg(4).rm64(rm).rex_w(),
+        Rm32Cl(rm)        => Inst::opcode1(0xd3).reg(4).rm32(rm),
+        Rm64Cl(rm)        => Inst::opcode1(0xd3).reg(4).rm64(rm).rex_w(),
+        Rm32Imm8(rm, imm) => Inst::opcode1(0xc1).reg(4).rm32(rm).imm8(imm),
+        Rm64Imm8(rm, imm) => Inst::opcode1(0xc1).reg(4).rm64(rm).imm8(imm).rex_w(),
+    },
+
+    Sar {
+        Rm8l(rm)          => Inst::opcode1(0xd0).reg(7).rm8l(rm),
+        Rm8(rm)           => Inst::opcode1(0xd0).reg(7).rm8(rm),
+        Rm8lCl(rm)        => Inst::opcode1(0xd2).reg(7).rm8l(rm),
+        Rm8Cl(rm)         => Inst::opcode1(0xd2).reg(7).rm8(rm),
+        Rm8lImm8(rm, imm) => Inst::opcode1(0xc0).reg(7).rm8l(rm).imm8(imm),
+        Rm8Imm8(rm, imm)  => Inst::opcode1(0xc0).reg(7).rm8(rm).imm8(imm),
+
+        Rm16(rm)          => Inst::opcode1(0xd1).reg(7).rm16(rm).osz(),
+        Rm16Cl(rm)        => Inst::opcode1(0xd3).reg(7).rm16(rm).osz(),
+        Rm16Imm8(rm, imm) => Inst::opcode1(0xc1).reg(7).rm16(rm).imm8(imm).osz(),
+
+        Rm32(rm)          => Inst::opcode1(0xd1).reg(7).rm32(rm),
+        Rm64(rm)          => Inst::opcode1(0xd1).reg(7).rm64(rm).rex_w(),
+        Rm32Cl(rm)        => Inst::opcode1(0xd3).reg(7).rm32(rm),
+        Rm64Cl(rm)        => Inst::opcode1(0xd3).reg(7).rm64(rm).rex_w(),
+        Rm32Imm8(rm, imm) => Inst::opcode1(0xc1).reg(7).rm32(rm).imm8(imm),
+        Rm64Imm8(rm, imm) => Inst::opcode1(0xc1).reg(7).rm64(rm).imm8(imm).rex_w(),
+    },
+
+    Shl {
+        Rm8l(rm)          => Inst::opcode1(0xd0).reg(4).rm8l(rm),
+        Rm8(rm)           => Inst::opcode1(0xd0).reg(4).rm8(rm),
+        Rm8lCl(rm)        => Inst::opcode1(0xd2).reg(4).rm8l(rm),
+        Rm8Cl(rm)         => Inst::opcode1(0xd2).reg(4).rm8(rm),
+        Rm8lImm8(rm, imm) => Inst::opcode1(0xc0).reg(4).rm8l(rm).imm8(imm),
+        Rm8Imm8(rm, imm)  => Inst::opcode1(0xc0).reg(4).rm8(rm).imm8(imm),
+
+        Rm16(rm)          => Inst::opcode1(0xd1).reg(4).rm16(rm).osz(),
+        Rm16Cl(rm)        => Inst::opcode1(0xd3).reg(4).rm16(rm).osz(),
+        Rm16Imm8(rm, imm) => Inst::opcode1(0xc1).reg(4).rm16(rm).imm8(imm).osz(),
+
+        Rm32(rm)          => Inst::opcode1(0xd1).reg(4).rm32(rm),
+        Rm64(rm)          => Inst::opcode1(0xd1).reg(4).rm64(rm).rex_w(),
+        Rm32Cl(rm)        => Inst::opcode1(0xd3).reg(4).rm32(rm),
+        Rm64Cl(rm)        => Inst::opcode1(0xd3).reg(4).rm64(rm).rex_w(),
+        Rm32Imm8(rm, imm) => Inst::opcode1(0xc1).reg(4).rm32(rm).imm8(imm),
+        Rm64Imm8(rm, imm) => Inst::opcode1(0xc1).reg(4).rm64(rm).imm8(imm).rex_w(),
+    },
+
+    Shr {
+        Rm8l(rm)          => Inst::opcode1(0xd0).reg(5).rm8l(rm),
+        Rm8(rm)           => Inst::opcode1(0xd0).reg(5).rm8(rm),
+        Rm8lCl(rm)        => Inst::opcode1(0xd2).reg(5).rm8l(rm),
+        Rm8Cl(rm)         => Inst::opcode1(0xd2).reg(5).rm8(rm),
+        Rm8lImm8(rm, imm) => Inst::opcode1(0xc0).reg(5).rm8l(rm).imm8(imm),
+        Rm8Imm8(rm, imm)  => Inst::opcode1(0xc0).reg(5).rm8(rm).imm8(imm),
+
+        Rm16(rm)          => Inst::opcode1(0xd1).reg(5).rm16(rm).osz(),
+        Rm16Cl(rm)        => Inst::opcode1(0xd3).reg(5).rm16(rm).osz(),
+        Rm16Imm8(rm, imm) => Inst::opcode1(0xc1).reg(5).rm16(rm).imm8(imm).osz(),
+
+        Rm32(rm)          => Inst::opcode1(0xd1).reg(5).rm32(rm),
+        Rm64(rm)          => Inst::opcode1(0xd1).reg(5).rm64(rm).rex_w(),
+        Rm32Cl(rm)        => Inst::opcode1(0xd3).reg(5).rm32(rm),
+        Rm64Cl(rm)        => Inst::opcode1(0xd3).reg(5).rm64(rm).rex_w(),
+        Rm32Imm8(rm, imm) => Inst::opcode1(0xc1).reg(5).rm32(rm).imm8(imm),
+        Rm64Imm8(rm, imm) => Inst::opcode1(0xc1).reg(5).rm64(rm).imm8(imm).rex_w(),
+    },
 }

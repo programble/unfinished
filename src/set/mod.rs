@@ -1402,4 +1402,84 @@ declare! {
     // RSQRTSS
 
     Sahf(),
+
+    Sal {
+        Rm8l(Rm8l),
+        Rm8(Rm8),
+        Rm8lCl(Rm8l),
+        Rm8Cl(Rm8),
+        Rm8lImm8(Rm8l, Imm8),
+        Rm8Imm8(Rm8, Imm8),
+
+        Rm16(Rm16),
+        Rm16Cl(Rm16),
+        Rm16Imm8(Rm16, Imm8),
+
+        Rm32(Rm32),
+        Rm64(Rm64),
+        Rm32Cl(Rm32),
+        Rm64Cl(Rm64),
+        Rm32Imm8(Rm32, Imm8),
+        Rm64Imm8(Rm64, Imm8),
+    },
+
+    Sar {
+        Rm8l(Rm8l),
+        Rm8(Rm8),
+        Rm8lCl(Rm8l),
+        Rm8Cl(Rm8),
+        Rm8lImm8(Rm8l, Imm8),
+        Rm8Imm8(Rm8, Imm8),
+
+        Rm16(Rm16),
+        Rm16Cl(Rm16),
+        Rm16Imm8(Rm16, Imm8),
+
+        Rm32(Rm32),
+        Rm64(Rm64),
+        Rm32Cl(Rm32),
+        Rm64Cl(Rm64),
+        Rm32Imm8(Rm32, Imm8),
+        Rm64Imm8(Rm64, Imm8),
+    },
+
+    Shl {
+        Rm8l(Rm8l),
+        Rm8(Rm8),
+        Rm8lCl(Rm8l),
+        Rm8Cl(Rm8),
+        Rm8lImm8(Rm8l, Imm8),
+        Rm8Imm8(Rm8, Imm8),
+
+        Rm16(Rm16),
+        Rm16Cl(Rm16),
+        Rm16Imm8(Rm16, Imm8),
+
+        Rm32(Rm32),
+        Rm64(Rm64),
+        Rm32Cl(Rm32),
+        Rm64Cl(Rm64),
+        Rm32Imm8(Rm32, Imm8),
+        Rm64Imm8(Rm64, Imm8),
+    },
+
+    Shr {
+        Rm8l(Rm8l),
+        Rm8(Rm8),
+        Rm8lCl(Rm8l),
+        Rm8Cl(Rm8),
+        Rm8lImm8(Rm8l, Imm8),
+        Rm8Imm8(Rm8, Imm8),
+
+        Rm16(Rm16),
+        Rm16Cl(Rm16),
+        Rm16Imm8(Rm16, Imm8),
+
+        Rm32(Rm32),
+        Rm64(Rm64),
+        Rm32Cl(Rm32),
+        Rm64Cl(Rm64),
+        Rm32Imm8(Rm32, Imm8),
+        Rm64Imm8(Rm64, Imm8),
+    },
 }
