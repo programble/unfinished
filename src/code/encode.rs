@@ -1486,4 +1486,11 @@ impl_encode! {
     },
 
     Sbb(0x18, 3),
+
+    Scas {
+        B => Inst::opcode1(0xae),
+        W => Inst::opcode1(0xaf).osz(),
+        D => Inst::opcode1(0xaf),
+        Q => Inst::opcode1(0xaf).rex_w(),
+    },
 }

@@ -751,4 +751,11 @@ impl_display! {
     },
 
     Sbb("sbb", a),
+
+    Scas {
+        B => format_args!("scasb"),
+        W => format_args!("scasw"),
+        D => format_args!("scasd"),
+        Q => format_args!("scasq"),
+    },
 }
