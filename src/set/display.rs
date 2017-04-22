@@ -566,4 +566,84 @@ impl_display! {
         W => format_args!("pushf"),
         Q => format_args!("pushfq"),
     },
+
+    Rcl {
+        Rm8l(rm)          => format_args!("rcl {}, 1", rm),
+        Rm8(rm)           => format_args!("rcl {}, 1", rm),
+        Rm8lCl(rm)        => format_args!("rcl {}, cl", rm),
+        Rm8Cl(rm)         => format_args!("rcl {}, cl", rm),
+        Rm8lImm8(rm, imm) => format_args!("rcl {}, {}", rm, imm),
+        Rm8Imm8(rm, imm)  => format_args!("rcl {}, {}", rm, imm),
+
+        Rm16(rm)          => format_args!("rcl {}, 1", rm),
+        Rm16Cl(rm)        => format_args!("rcl {}, cl", rm),
+        Rm16Imm8(rm, imm) => format_args!("rcl {}, {}", rm, imm),
+
+        Rm32(rm)          => format_args!("rcl {}, 1", rm),
+        Rm64(rm)          => format_args!("rcl {}, 1", rm),
+        Rm32Cl(rm)        => format_args!("rcl {}, cl", rm),
+        Rm64Cl(rm)        => format_args!("rcl {}, cl", rm),
+        Rm32Imm8(rm, imm) => format_args!("rcl {}, {}", rm, imm),
+        Rm64Imm8(rm, imm) => format_args!("rcl {}, {}", rm, imm),
+    },
+
+    Rcr {
+        Rm8l(rm)          => format_args!("rcr {}, 1", rm),
+        Rm8(rm)           => format_args!("rcr {}, 1", rm),
+        Rm8lCl(rm)        => format_args!("rcr {}, cl", rm),
+        Rm8Cl(rm)         => format_args!("rcr {}, cl", rm),
+        Rm8lImm8(rm, imm) => format_args!("rcr {}, {}", rm, imm),
+        Rm8Imm8(rm, imm)  => format_args!("rcr {}, {}", rm, imm),
+
+        Rm16(rm)          => format_args!("rcr {}, 1", rm),
+        Rm16Cl(rm)        => format_args!("rcr {}, cl", rm),
+        Rm16Imm8(rm, imm) => format_args!("rcr {}, {}", rm, imm),
+
+        Rm32(rm)          => format_args!("rcr {}, 1", rm),
+        Rm64(rm)          => format_args!("rcr {}, 1", rm),
+        Rm32Cl(rm)        => format_args!("rcr {}, cl", rm),
+        Rm64Cl(rm)        => format_args!("rcr {}, cl", rm),
+        Rm32Imm8(rm, imm) => format_args!("rcr {}, {}", rm, imm),
+        Rm64Imm8(rm, imm) => format_args!("rcr {}, {}", rm, imm),
+    },
+
+    Rol {
+        Rm8l(rm)          => format_args!("rol {}, 1", rm),
+        Rm8(rm)           => format_args!("rol {}, 1", rm),
+        Rm8lCl(rm)        => format_args!("rol {}, cl", rm),
+        Rm8Cl(rm)         => format_args!("rol {}, cl", rm),
+        Rm8lImm8(rm, imm) => format_args!("rol {}, {}", rm, imm),
+        Rm8Imm8(rm, imm)  => format_args!("rol {}, {}", rm, imm),
+
+        Rm16(rm)          => format_args!("rol {}, 1", rm),
+        Rm16Cl(rm)        => format_args!("rol {}, cl", rm),
+        Rm16Imm8(rm, imm) => format_args!("rol {}, {}", rm, imm),
+
+        Rm32(rm)          => format_args!("rol {}, 1", rm),
+        Rm64(rm)          => format_args!("rol {}, 1", rm),
+        Rm32Cl(rm)        => format_args!("rol {}, cl", rm),
+        Rm64Cl(rm)        => format_args!("rol {}, cl", rm),
+        Rm32Imm8(rm, imm) => format_args!("rol {}, {}", rm, imm),
+        Rm64Imm8(rm, imm) => format_args!("rol {}, {}", rm, imm),
+    },
+
+    Ror {
+        Rm8l(rm)          => format_args!("ror {}, 1", rm),
+        Rm8(rm)           => format_args!("ror {}, 1", rm),
+        Rm8lCl(rm)        => format_args!("ror {}, cl", rm),
+        Rm8Cl(rm)         => format_args!("ror {}, cl", rm),
+        Rm8lImm8(rm, imm) => format_args!("ror {}, {}", rm, imm),
+        Rm8Imm8(rm, imm)  => format_args!("ror {}, {}", rm, imm),
+
+        Rm16(rm)          => format_args!("ror {}, 1", rm),
+        Rm16Cl(rm)        => format_args!("ror {}, cl", rm),
+        Rm16Imm8(rm, imm) => format_args!("ror {}, {}", rm, imm),
+
+        Rm32(rm)          => format_args!("ror {}, 1", rm),
+        Rm64(rm)          => format_args!("ror {}, 1", rm),
+        Rm32Cl(rm)        => format_args!("ror {}, cl", rm),
+        Rm64Cl(rm)        => format_args!("ror {}, cl", rm),
+        Rm32Imm8(rm, imm) => format_args!("ror {}, {}", rm, imm),
+        Rm64Imm8(rm, imm) => format_args!("ror {}, {}", rm, imm),
+    },
 }
