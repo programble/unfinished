@@ -1360,4 +1360,16 @@ declare! {
     Rdpkru(),
 
     Rdpmc(),
+
+    Rdrand {
+        R16(R16),
+        R32(R32),
+        R64(R64),
+    },
+
+    Rdseed {
+        R16(R16),
+        R32(R32),
+        R64(R64),
+    },
 }

@@ -653,4 +653,6 @@ impl_display! {
     Rdpid("rdpid", 1, { R64 }),
     Rdpkru("rdpkru"),
     Rdpmc("rdpmc"),
+    Rdrand("rdrand", 1, { R16, R32, R64 }),
+    Rdseed("rdseed", 1, { R16, R32, R64 }),
 }

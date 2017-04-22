@@ -1374,4 +1374,16 @@ impl_encode! {
     Rdpkru { Inst::opcode3(0x01, 0xee) },
 
     Rdpmc { Inst::opcode2(0x33) },
+
+    Rdrand {
+        R16(r) => Inst::opcode2(0xc7).reg(6).rm_reg(r).osz(),
+        R32(r) => Inst::opcode2(0xc7).reg(6).rm_reg(r),
+        R64(r) => Inst::opcode2(0xc7).reg(6).rm_reg(r).rex_w(),
+    },
+
+    Rdseed {
+        R16(r) => Inst::opcode2(0xc7).reg(7).rm_reg(r).osz(),
+        R32(r) => Inst::opcode2(0xc7).reg(7).rm_reg(r),
+        R64(r) => Inst::opcode2(0xc7).reg(7).rm_reg(r).rex_w(),
+    },
 }
