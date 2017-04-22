@@ -1376,4 +1376,14 @@ declare! {
     Rdtsc(),
 
     Rdtscp(),
+
+    // REP
+
+    Ret {
+        Near,
+        Far,
+
+        NearImm16(Imm16),
+        FarImm16(Imm16),
+    },
 }

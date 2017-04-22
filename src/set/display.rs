@@ -657,4 +657,12 @@ impl_display! {
     Rdseed("rdseed", 1, { R16, R32, R64 }),
     Rdtsc("rdtsc"),
     Rdtscp("rdtscp"),
+
+    Ret {
+        Near => format_args!("ret near"),
+        Far  => format_args!("ret far"),
+
+        NearImm16(imm) => format_args!("ret near {}", imm),
+        FarImm16(imm)  => format_args!("ret far {}", imm),
+    },
 }

@@ -1390,4 +1390,12 @@ impl_encode! {
     Rdtsc { Inst::opcode2(0x31) },
 
     Rdtscp { Inst::opcode3(0x01, 0xf9) },
+
+    Ret {
+        Near => Inst::opcode1(0xc3),
+        Far  => Inst::opcode1(0xcb),
+
+        NearImm16(imm) => Inst::opcode1(0xc2).imm16(imm),
+        FarImm16(imm)  => Inst::opcode1(0xca).imm16(imm),
+    },
 }
