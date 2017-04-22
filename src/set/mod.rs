@@ -1337,4 +1337,17 @@ declare! {
         Rm32Imm8(Rm32, Imm8),
         Rm64Imm8(Rm64, Imm8),
     },
+
+    // RCPPS
+    // RCPSS
+
+    Rdfsbase {
+        R32(R32),
+        R64(R64),
+    },
+
+    Rdgsbase {
+        R32(R32),
+        R64(R64),
+    },
 }

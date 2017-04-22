@@ -1354,4 +1354,14 @@ impl_encode! {
         Rm32Imm8(rm, imm) => Inst::opcode1(0xc1).reg(1).rm32(rm).imm8(imm),
         Rm64Imm8(rm, imm) => Inst::opcode1(0xc1).reg(1).rm64(rm).imm8(imm).rex_w(),
     },
+
+    Rdfsbase {
+        R32(r) => Inst::opcode2(0xae).rep().reg(0).rm_reg(r),
+        R64(r) => Inst::opcode2(0xae).rep().reg(0).rm_reg(r).rex_w(),
+    },
+
+    Rdgsbase {
+        R32(r) => Inst::opcode2(0xae).rep().reg(1).rm_reg(r),
+        R64(r) => Inst::opcode2(0xae).rep().reg(1).rm_reg(r).rex_w(),
+    },
 }

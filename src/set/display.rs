@@ -646,4 +646,7 @@ impl_display! {
         Rm32Imm8(rm, imm) => format_args!("ror {}, {}", rm, imm),
         Rm64Imm8(rm, imm) => format_args!("ror {}, {}", rm, imm),
     },
+
+    Rdfsbase("rdfsbase", 1, { R32, R64 }),
+    Rdgsbase("rdgsbase", 1, { R32, R64 }),
 }
