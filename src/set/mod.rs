@@ -1533,4 +1533,30 @@ declare! {
     Sgdt {
         M(Mem),
     },
+
+    // SHA1RNDS4
+    // SHA1NEXTE
+    // SHA1MSG1
+    // SHA1MSG2
+    // SHA256RNDS2
+    // SHA256MSG1
+    // SHA256MSG2
+
+    Shld {
+        Rm16R16Imm8(Rm16, R16, Imm8),
+        Rm16R16Cl(Rm16, R16),
+        Rm32R32Imm8(Rm32, R32, Imm8),
+        Rm64R64Imm8(Rm64, R64, Imm8),
+        Rm32R32Cl(Rm32, R32),
+        Rm64R64Cl(Rm64, R64),
+    },
+
+    Shrd {
+        Rm16R16Imm8(Rm16, R16, Imm8),
+        Rm16R16Cl(Rm16, R16),
+        Rm32R32Imm8(Rm32, R32, Imm8),
+        Rm64R64Imm8(Rm64, R64, Imm8),
+        Rm32R32Cl(Rm32, R32),
+        Rm64R64Cl(Rm64, R64),
+    },
 }

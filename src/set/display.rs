@@ -766,4 +766,22 @@ impl_display! {
 
     Sfence("sfence"),
     Sgdt("sgdt", 1, { M }),
+
+    Shld {
+        Rm16R16Imm8(rm, r, imm) => format_args!("shld {}, {}, {}", rm, r, imm),
+        Rm16R16Cl(rm, r)        => format_args!("shld {}, {}, cl", rm, r),
+        Rm32R32Imm8(rm, r, imm) => format_args!("shld {}, {}, {}", rm, r, imm),
+        Rm64R64Imm8(rm, r, imm) => format_args!("shld {}, {}, {}", rm, r, imm),
+        Rm32R32Cl(rm, r)        => format_args!("shld {}, {}, cl", rm, r),
+        Rm64R64Cl(rm, r)        => format_args!("shld {}, {}, cl", rm, r),
+    },
+
+    Shrd {
+        Rm16R16Imm8(rm, r, imm) => format_args!("shrd {}, {}, {}", rm, r, imm),
+        Rm16R16Cl(rm, r)        => format_args!("shrd {}, {}, cl", rm, r),
+        Rm32R32Imm8(rm, r, imm) => format_args!("shrd {}, {}, {}", rm, r, imm),
+        Rm64R64Imm8(rm, r, imm) => format_args!("shrd {}, {}, {}", rm, r, imm),
+        Rm32R32Cl(rm, r)        => format_args!("shrd {}, {}, cl", rm, r),
+        Rm64R64Cl(rm, r)        => format_args!("shrd {}, {}, cl", rm, r),
+    },
 }

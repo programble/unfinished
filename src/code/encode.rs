@@ -1504,4 +1504,22 @@ impl_encode! {
     Sgdt {
         M(m) => Inst::opcode2(0x01).reg(0).mem(m),
     },
+
+    Shld {
+        Rm16R16Imm8(rm, r, imm) => Inst::opcode2(0xa4).rm16(rm).reg(r).imm8(imm).osz(),
+        Rm16R16Cl(rm, r)        => Inst::opcode2(0xa5).rm16(rm).reg(r).osz(),
+        Rm32R32Imm8(rm, r, imm) => Inst::opcode2(0xa4).rm32(rm).reg(r).imm8(imm),
+        Rm64R64Imm8(rm, r, imm) => Inst::opcode2(0xa4).rm64(rm).reg(r).imm8(imm).rex_w(),
+        Rm32R32Cl(rm, r)        => Inst::opcode2(0xa5).rm32(rm).reg(r),
+        Rm64R64Cl(rm, r)        => Inst::opcode2(0xa5).rm64(rm).reg(r).rex_w(),
+    },
+
+    Shrd {
+        Rm16R16Imm8(rm, r, imm) => Inst::opcode2(0xac).rm16(rm).reg(r).imm8(imm).osz(),
+        Rm16R16Cl(rm, r)        => Inst::opcode2(0xad).rm16(rm).reg(r).osz(),
+        Rm32R32Imm8(rm, r, imm) => Inst::opcode2(0xac).rm32(rm).reg(r).imm8(imm),
+        Rm64R64Imm8(rm, r, imm) => Inst::opcode2(0xac).rm64(rm).reg(r).imm8(imm).rex_w(),
+        Rm32R32Cl(rm, r)        => Inst::opcode2(0xad).rm32(rm).reg(r),
+        Rm64R64Cl(rm, r)        => Inst::opcode2(0xad).rm64(rm).reg(r).rex_w(),
+    },
 }
