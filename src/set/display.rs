@@ -784,4 +784,7 @@ impl_display! {
         Rm32R32Cl(rm, r)        => format_args!("shrd {}, {}, cl", rm, r),
         Rm64R64Cl(rm, r)        => format_args!("shrd {}, {}, cl", rm, r),
     },
+
+    Sidt("sidt", 1, { M }),
+    Sldt("sldt", 1, { Rm16, R64 }),
 }

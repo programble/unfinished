@@ -1521,4 +1521,13 @@ impl_encode! {
         Rm32R32Cl(rm, r)        => Inst::opcode2(0xad).rm32(rm).reg(r),
         Rm64R64Cl(rm, r)        => Inst::opcode2(0xad).rm64(rm).reg(r).rex_w(),
     },
+
+    Sidt {
+        M(m) => Inst::opcode2(0x01).reg(1).mem(m),
+    },
+
+    Sldt {
+        Rm16(rm) => Inst::opcode2(0x00).reg(0).rm16(rm),
+        R64(r)   => Inst::opcode2(0x00).reg(0).rm_reg(r).rex_w(),
+    },
 }

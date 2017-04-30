@@ -1559,4 +1559,16 @@ declare! {
         Rm32R32Cl(Rm32, R32),
         Rm64R64Cl(Rm64, R64),
     },
+
+    // SHUFPD
+    // SHUFPS
+
+    Sidt {
+        M(Mem),
+    },
+
+    Sldt {
+        Rm16(Rm16),
+        R64(R64),
+    },
 }
