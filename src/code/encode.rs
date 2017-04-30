@@ -82,7 +82,6 @@ pub trait InstExt {
     fn imm64(self, imm: Imm64) -> Self;
 }
 
-#[allow(unused_variables)]
 impl InstExt for Inst {
     #[inline]
     fn lock(mut self) -> Self {
