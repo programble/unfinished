@@ -1536,4 +1536,12 @@ impl_encode! {
         Rm32(rm) => Inst::opcode2(0x01).reg(4).rm32(rm),
         Rm64(rm) => Inst::opcode2(0x01).reg(4).rm64(rm).rex_w(),
     },
+
+    Stac { Inst::opcode3(0x01, 0xCB) },
+
+    Stc { Inst::opcode1(0xf9) },
+
+    Std { Inst::opcode1(0xfd) },
+
+    Sti { Inst::opcode1(0xfb) },
 }

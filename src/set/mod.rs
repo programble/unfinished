@@ -1577,4 +1577,17 @@ declare! {
         Rm32(Rm32),
         Rm64(Rm64),
     },
+
+    // SQRTPD
+    // SQRTPS
+    // SQRTSD
+    // SQRTSS
+
+    Stac(),
+
+    Stc(),
+
+    Std(),
+
+    Sti(),
 }
