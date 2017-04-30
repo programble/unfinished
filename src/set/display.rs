@@ -786,5 +786,6 @@ impl_display! {
     },
 
     Sidt("sidt", 1, { M }),
-    Sldt("sldt", 1, { Rm16, R64 }),
+    Sldt("sldt", 1, { Rm16, Rm64 }),
+    Smsw("smsw", 1, { Rm16, Rm32, Rm64 }),
 }

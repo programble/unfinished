@@ -1528,6 +1528,12 @@ impl_encode! {
 
     Sldt {
         Rm16(rm) => Inst::opcode2(0x00).reg(0).rm16(rm),
-        R64(r)   => Inst::opcode2(0x00).reg(0).rm_reg(r).rex_w(),
+        Rm64(rm) => Inst::opcode2(0x00).reg(0).rm64(rm).rex_w(),
+    },
+
+    Smsw {
+        Rm16(rm) => Inst::opcode2(0x01).reg(4).rm16(rm).osz(),
+        Rm32(rm) => Inst::opcode2(0x01).reg(4).rm32(rm),
+        Rm64(rm) => Inst::opcode2(0x01).reg(4).rm64(rm).rex_w(),
     },
 }

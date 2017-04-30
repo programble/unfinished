@@ -1569,6 +1569,12 @@ declare! {
 
     Sldt {
         Rm16(Rm16),
-        R64(R64),
+        Rm64(Rm64),
+    },
+
+    Smsw {
+        Rm16(Rm16),
+        Rm32(Rm32),
+        Rm64(Rm64),
     },
 }
