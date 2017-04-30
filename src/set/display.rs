@@ -791,5 +791,12 @@ impl_display! {
     Stac("stac"),
     Stc("stc"),
     Std("std"),
-    Sti("sti"),
+    //Sti("sti"),
+
+    Stos {
+        B => format_args!("stosb"),
+        W => format_args!("stosw"),
+        D => format_args!("stosd"),
+        Q => format_args!("stosq"),
+    },
 }

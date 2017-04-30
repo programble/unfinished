@@ -1589,5 +1589,14 @@ declare! {
 
     Std(),
 
-    Sti(),
+    //Sti(),
+
+    // STMXCR
+
+    Stos {
+        B,
+        W,
+        D,
+        Q,
+    },
 }

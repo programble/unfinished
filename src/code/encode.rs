@@ -1543,5 +1543,12 @@ impl_encode! {
 
     Std { Inst::opcode1(0xfd) },
 
-    Sti { Inst::opcode1(0xfb) },
+    //Sti { Inst::opcode1(0xfb) },
+
+    Stos {
+        B => Inst::opcode1(0xaa),
+        W => Inst::opcode1(0xab).osz(),
+        D => Inst::opcode1(0xab),
+        Q => Inst::opcode1(0xab).rex_w(),
+    },
 }
