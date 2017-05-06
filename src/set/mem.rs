@@ -87,40 +87,27 @@ pub enum Moffs {
     Moffset64(Option<Sreg>, u64),
 }
 
-/// 8-bit register or memory operand without REX prefix.
+/// Register or memory operand.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum Rm8l {
-    R8l(R8l),
-    M8l(Mem<R32l, Index32l, R64l, Index64l>),
+pub enum Rm<R, B32 = R32, I32 = Index32, B64 = R64, I64 = Index64> {
+    R(R),
+    M(Mem<B32, I32, B64, I64>),
 }
+
+/// 8-bit register or memory operand without REX prefix.
+pub type Rm8l = Rm<R8l, R32l, Index32l, R64l, Index64l>;
 
 /// 8-bit register or memory operand.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum Rm8 {
-    R8(R8),
-    M8(Mem),
-}
+pub type Rm8 = Rm<R8>;
 
 /// 16-bit register or memory operand.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum Rm16 {
-    R16(R16),
-    M16(Mem),
-}
+pub type Rm16 = Rm<R16>;
 
 /// 32-bit register or memory operand.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum Rm32 {
-    R32(R32),
-    M32(Mem),
-}
+pub type Rm32 = Rm<R32>;
 
 /// 64-bit register or memory operand.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum Rm64 {
-    R64(R64),
-    M64(Mem),
-}
+pub type Rm64 = Rm<R64>;
 
 macro_rules! impl_display {
     ($($ty:ident { $($var:ident => $str:expr,)+ },)+) => {
@@ -246,47 +233,12 @@ impl Display for Moffs {
     }
 }
 
-impl Display for Rm8l {
+impl<R, B32, I32, B64, I64> Display for Rm<R, B32, I32, B64, I64>
+where R: Display, Mem<B32, I32, B64, I64>: Display {
     fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
         match *self {
-            Rm8l::R8l(r) => write!(f, "{}", r),
-            Rm8l::M8l(m) => write!(f, "byte {}", m),
-        }
-    }
-}
-
-impl Display for Rm8 {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-        match *self {
-            Rm8::R8(r) => write!(f, "{}", r),
-            Rm8::M8(m) => write!(f, "byte {}", m),
-        }
-    }
-}
-
-impl Display for Rm16 {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-        match *self {
-            Rm16::R16(r) => write!(f, "{}", r),
-            Rm16::M16(m) => write!(f, "word {}", m),
-        }
-    }
-}
-
-impl Display for Rm32 {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-        match *self {
-            Rm32::R32(r) => write!(f, "{}", r),
-            Rm32::M32(m) => write!(f, "dword {}", m),
-        }
-    }
-}
-
-impl Display for Rm64 {
-    fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
-        match *self {
-            Rm64::R64(r) => write!(f, "{}", r),
-            Rm64::M64(m) => write!(f, "qword {}", m),
+            Rm::R(ref r) => write!(f, "{}", r),
+            Rm::M(ref m) => write!(f, "{}", m), // FIXME: size.
         }
     }
 }

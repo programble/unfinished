@@ -1,6 +1,6 @@
 use set::*;
 use set::imm::{Cc, Imm8, Imm16, Imm32, Imm64};
-use set::mem::{self, Scale, Offset, Mem, Moffs, Rm8l, Rm8, Rm16, Rm32, Rm64};
+use set::mem::{self, Scale, Offset, Mem, Moffs, Rm};
 use set::reg::Sreg;
 
 use super::{Prefix1, Prefix2, Prefix3, Prefix4, Opcode, Disp, Imm, Inst};
@@ -44,7 +44,7 @@ pub trait InstExt {
     fn modrm_rm(self, rm: u8) -> Self;
 
     fn reg<R>(self, reg: R) -> Self where R: Reg;
-    fn rm<R>(self, reg: R) -> Self where R: Reg;
+    fn rm_base<R>(self, reg: R) -> Self where R: Reg;
     fn rm_reg<R>(self, reg: R) -> Self where R: Reg;
 
     fn sib_scale(self, scale: u8) -> Self;
@@ -70,11 +70,8 @@ pub trait InstExt {
         where B32: Reg, I32: Reg, B64: Reg, I64: Reg;
     fn moffs(self, moffs: Moffs) -> Self;
 
-    fn rm8l(self, rm: Rm8l) -> Self;
-    fn rm8(self, rm: Rm8) -> Self;
-    fn rm16(self, rm: Rm16) -> Self;
-    fn rm32(self, rm: Rm32) -> Self;
-    fn rm64(self, rm: Rm64) -> Self;
+    fn rm<R, B32, I32, B64, I64>(self, rm: Rm<R, B32, I32, B64, I64>) -> Self
+        where R: Reg, B32: Reg, I32: Reg, B64: Reg, I64: Reg;
 
     fn imm8(self, imm: Imm8) -> Self;
     fn imm16(self, imm: Imm16) -> Self;
@@ -217,13 +214,13 @@ impl InstExt for Inst {
         if reg.high_bit() { self = self.rex_r() }
         self.modrm_reg(reg.low_bits())
     }
-    fn rm<R>(mut self, reg: R) -> Self where R: Reg {
+    fn rm_base<R>(mut self, reg: R) -> Self where R: Reg {
         if reg.force_rex() { self = self.rex() }
         if reg.high_bit() { self = self.rex_b() }
         self.modrm_rm(reg.low_bits())
     }
     fn rm_reg<R>(self, reg: R) -> Self where R: Reg {
-        self.modrm_mod(0b11).rm(reg)
+        self.modrm_mod(0b11).rm_base(reg)
     }
 
     #[inline]
@@ -294,8 +291,8 @@ impl InstExt for Inst {
     fn offset_base<Base>(self, base: Base) -> Self where Base: Reg {
         match base.low_bits() {
             0b100 => self.offset_base_index(base, 0b100, Scale::X1),
-            0b101 => self.rm(base).offset_disp(mem::Disp::Disp8(0)),
-            _ => self.rm(base),
+            0b101 => self.rm_base(base).offset_disp(mem::Disp::Disp8(0)),
+            _ => self.rm_base(base),
         }
     }
     #[inline]
@@ -335,39 +332,11 @@ impl InstExt for Inst {
         }
     }
 
-    #[inline]
-    fn rm8l(self, rm: Rm8l) -> Self {
+    fn rm<R, B32, I32, B64, I64>(self, rm: Rm<R, B32, I32, B64, I64>) -> Self
+    where R: Reg, B32: Reg, I32: Reg, B64: Reg, I64: Reg {
         match rm {
-            Rm8l::R8l(r) => self.rm_reg(r),
-            Rm8l::M8l(m) => self.mem(m),
-        }
-    }
-    #[inline]
-    fn rm8(self, rm: Rm8) -> Self {
-        match rm {
-            Rm8::R8(r) => self.rm_reg(r),
-            Rm8::M8(m) => self.mem(m),
-        }
-    }
-    #[inline]
-    fn rm16(self, rm: Rm16) -> Self {
-        match rm {
-            Rm16::R16(r) => self.rm_reg(r),
-            Rm16::M16(m) => self.mem(m),
-        }
-    }
-    #[inline]
-    fn rm32(self, rm: Rm32) -> Self {
-        match rm {
-            Rm32::R32(r) => self.rm_reg(r),
-            Rm32::M32(m) => self.mem(m),
-        }
-    }
-    #[inline]
-    fn rm64(self, rm: Rm64) -> Self {
-        match rm {
-            Rm64::R64(r) => self.rm_reg(r),
-            Rm64::M64(m) => self.mem(m),
+            Rm::R(r) => self.rm_reg(r),
+            Rm::M(m) => self.mem(m),
         }
     }
 
@@ -412,11 +381,11 @@ macro_rules! impl_encode {
     ($ty:ident($reg:expr)) => {
         impl_encode! {
             $ty {
-                Rm8l(rm) => Inst::opcode1(0xf6).reg($reg).rm8l(rm),
-                Rm8(rm)  => Inst::opcode1(0xf6).reg($reg).rm8(rm),
-                Rm16(rm) => Inst::opcode1(0xf7).reg($reg).rm16(rm).osz(),
-                Rm32(rm) => Inst::opcode1(0xf7).reg($reg).rm32(rm),
-                Rm64(rm) => Inst::opcode1(0xf7).reg($reg).rm64(rm).rex_w(),
+                Rm8l(rm) => Inst::opcode1(0xf6).reg($reg).rm(rm),
+                Rm8(rm)  => Inst::opcode1(0xf6).reg($reg).rm(rm),
+                Rm16(rm) => Inst::opcode1(0xf7).reg($reg).rm(rm).osz(),
+                Rm32(rm) => Inst::opcode1(0xf7).reg($reg).rm(rm),
+                Rm64(rm) => Inst::opcode1(0xf7).reg($reg).rm(rm).rex_w(),
             }
         }
     };
@@ -424,32 +393,32 @@ macro_rules! impl_encode {
     ($ty:ident($code:expr, $reg:expr)) => {
         impl_encode! {
             $ty {
-                Rm8lR8l(rm, r) => Inst::opcode1($code).rm8l(rm).reg(r),
-                Rm8R8(rm, r)   => Inst::opcode1($code).rm8(rm).reg(r),
-                Rm16R16(rm, r) => Inst::opcode1($code + 1).rm16(rm).reg(r).osz(),
-                Rm32R32(rm, r) => Inst::opcode1($code + 1).rm32(rm).reg(r),
-                Rm64R64(rm, r) => Inst::opcode1($code + 1).rm64(rm).reg(r).rex_w(),
+                Rm8lR8l(rm, r) => Inst::opcode1($code).rm(rm).reg(r),
+                Rm8R8(rm, r)   => Inst::opcode1($code).rm(rm).reg(r),
+                Rm16R16(rm, r) => Inst::opcode1($code + 1).rm(rm).reg(r).osz(),
+                Rm32R32(rm, r) => Inst::opcode1($code + 1).rm(rm).reg(r),
+                Rm64R64(rm, r) => Inst::opcode1($code + 1).rm(rm).reg(r).rex_w(),
 
-                R8lRm8l(r, rm) => Inst::opcode1($code + 2).reg(r).rm8l(rm),
-                R8Rm8(r, rm)   => Inst::opcode1($code + 2).reg(r).rm8(rm),
-                R16Rm16(r, rm) => Inst::opcode1($code + 3).reg(r).rm16(rm).osz(),
-                R32Rm32(r, rm) => Inst::opcode1($code + 3).reg(r).rm32(rm),
-                R64Rm64(r, rm) => Inst::opcode1($code + 3).reg(r).rm64(rm).rex_w(),
+                R8lRm8l(r, rm) => Inst::opcode1($code + 2).reg(r).rm(rm),
+                R8Rm8(r, rm)   => Inst::opcode1($code + 2).reg(r).rm(rm),
+                R16Rm16(r, rm) => Inst::opcode1($code + 3).reg(r).rm(rm).osz(),
+                R32Rm32(r, rm) => Inst::opcode1($code + 3).reg(r).rm(rm),
+                R64Rm64(r, rm) => Inst::opcode1($code + 3).reg(r).rm(rm).rex_w(),
 
                 AlImm8(imm)   => Inst::opcode1($code + 4).imm8(imm),
                 AxImm16(imm)  => Inst::opcode1($code + 5).imm16(imm).osz(),
                 EaxImm32(imm) => Inst::opcode1($code + 5).imm32(imm),
                 RaxImm32(imm) => Inst::opcode1($code + 5).imm32(imm).rex_w(),
 
-                Rm8lImm8(rm, imm)  => Inst::opcode1(0x80).reg($reg).rm8l(rm).imm8(imm),
-                Rm8Imm8(rm, imm)   => Inst::opcode1(0x80).reg($reg).rm8(rm).imm8(imm),
-                Rm16Imm16(rm, imm) => Inst::opcode1(0x81).reg($reg).rm16(rm).imm16(imm).osz(),
-                Rm32Imm32(rm, imm) => Inst::opcode1(0x81).reg($reg).rm32(rm).imm32(imm),
-                Rm64Imm32(rm, imm) => Inst::opcode1(0x81).reg($reg).rm64(rm).imm32(imm).rex_w(),
+                Rm8lImm8(rm, imm)  => Inst::opcode1(0x80).reg($reg).rm(rm).imm8(imm),
+                Rm8Imm8(rm, imm)   => Inst::opcode1(0x80).reg($reg).rm(rm).imm8(imm),
+                Rm16Imm16(rm, imm) => Inst::opcode1(0x81).reg($reg).rm(rm).imm16(imm).osz(),
+                Rm32Imm32(rm, imm) => Inst::opcode1(0x81).reg($reg).rm(rm).imm32(imm),
+                Rm64Imm32(rm, imm) => Inst::opcode1(0x81).reg($reg).rm(rm).imm32(imm).rex_w(),
 
-                Rm16Imm8(rm, imm) => Inst::opcode1(0x83).reg($reg).rm16(rm).imm8(imm).osz(),
-                Rm32Imm8(rm, imm) => Inst::opcode1(0x83).reg($reg).rm32(rm).imm8(imm),
-                Rm64Imm8(rm, imm) => Inst::opcode1(0x83).reg($reg).rm64(rm).imm8(imm).rex_w(),
+                Rm16Imm8(rm, imm) => Inst::opcode1(0x83).reg($reg).rm(rm).imm8(imm).osz(),
+                Rm32Imm8(rm, imm) => Inst::opcode1(0x83).reg($reg).rm(rm).imm8(imm),
+                Rm64Imm8(rm, imm) => Inst::opcode1(0x83).reg($reg).rm(rm).imm8(imm).rex_w(),
             }
         }
     };
@@ -467,29 +436,29 @@ impl_encode! {
     Adc(0x10, 2),
 
     Adcx {
-        R32Rm32(r, rm) => Inst::opcode3(0x38, 0xf6).osz().reg(r).rm32(rm),
-        R64Rm64(r, rm) => Inst::opcode3(0x38, 0xf6).osz().reg(r).rm64(rm).rex_w(),
+        R32Rm32(r, rm) => Inst::opcode3(0x38, 0xf6).osz().reg(r).rm(rm),
+        R64Rm64(r, rm) => Inst::opcode3(0x38, 0xf6).osz().reg(r).rm(rm).rex_w(),
     },
 
     Add(0x00, 0),
 
     Adox {
-        R32Rm32(r, rm) => Inst::opcode3(0x38, 0xf6).rep().reg(r).rm32(rm),
-        R64Rm64(r, rm) => Inst::opcode3(0x38, 0xf6).rep().reg(r).rm64(rm).rex_w(),
+        R32Rm32(r, rm) => Inst::opcode3(0x38, 0xf6).rep().reg(r).rm(rm),
+        R64Rm64(r, rm) => Inst::opcode3(0x38, 0xf6).rep().reg(r).rm(rm).rex_w(),
     },
 
     And(0x20, 4),
 
     Bsf {
-        R16Rm16(r, rm) => Inst::opcode2(0xbc).reg(r).rm16(rm).osz(),
-        R32Rm32(r, rm) => Inst::opcode2(0xbc).reg(r).rm32(rm),
-        R64Rm64(r, rm) => Inst::opcode2(0xbc).reg(r).rm64(rm).rex_w(),
+        R16Rm16(r, rm) => Inst::opcode2(0xbc).reg(r).rm(rm).osz(),
+        R32Rm32(r, rm) => Inst::opcode2(0xbc).reg(r).rm(rm),
+        R64Rm64(r, rm) => Inst::opcode2(0xbc).reg(r).rm(rm).rex_w(),
     },
 
     Bsr {
-        R16Rm16(r, rm) => Inst::opcode2(0xbd).reg(r).rm16(rm).osz(),
-        R32Rm32(r, rm) => Inst::opcode2(0xbd).reg(r).rm32(rm),
-        R64Rm64(r, rm) => Inst::opcode2(0xbd).reg(r).rm64(rm).rex_w(),
+        R16Rm16(r, rm) => Inst::opcode2(0xbd).reg(r).rm(rm).osz(),
+        R32Rm32(r, rm) => Inst::opcode2(0xbd).reg(r).rm(rm),
+        R64Rm64(r, rm) => Inst::opcode2(0xbd).reg(r).rm(rm).rex_w(),
     },
 
     Bswap {
@@ -498,48 +467,48 @@ impl_encode! {
     },
 
     Bt {
-        Rm16R16(rm, r) => Inst::opcode2(0xa3).rm16(rm).reg(r).osz(),
-        Rm32R32(rm, r) => Inst::opcode2(0xa3).rm32(rm).reg(r),
-        Rm64R64(rm, r) => Inst::opcode2(0xa3).rm64(rm).reg(r).rex_w(),
+        Rm16R16(rm, r) => Inst::opcode2(0xa3).rm(rm).reg(r).osz(),
+        Rm32R32(rm, r) => Inst::opcode2(0xa3).rm(rm).reg(r),
+        Rm64R64(rm, r) => Inst::opcode2(0xa3).rm(rm).reg(r).rex_w(),
 
-        Rm16Imm8(rm, imm) => Inst::opcode2(0xba).reg(4).rm16(rm).imm8(imm).osz(),
-        Rm32Imm8(rm, imm) => Inst::opcode2(0xba).reg(4).rm32(rm).imm8(imm),
-        Rm64Imm8(rm, imm) => Inst::opcode2(0xba).reg(4).rm64(rm).imm8(imm).rex_w(),
+        Rm16Imm8(rm, imm) => Inst::opcode2(0xba).reg(4).rm(rm).imm8(imm).osz(),
+        Rm32Imm8(rm, imm) => Inst::opcode2(0xba).reg(4).rm(rm).imm8(imm),
+        Rm64Imm8(rm, imm) => Inst::opcode2(0xba).reg(4).rm(rm).imm8(imm).rex_w(),
     },
 
     Btc {
-        Rm16R16(rm, r) => Inst::opcode2(0xbb).rm16(rm).reg(r).osz(),
-        Rm32R32(rm, r) => Inst::opcode2(0xbb).rm32(rm).reg(r),
-        Rm64R64(rm, r) => Inst::opcode2(0xbb).rm64(rm).reg(r).rex_w(),
+        Rm16R16(rm, r) => Inst::opcode2(0xbb).rm(rm).reg(r).osz(),
+        Rm32R32(rm, r) => Inst::opcode2(0xbb).rm(rm).reg(r),
+        Rm64R64(rm, r) => Inst::opcode2(0xbb).rm(rm).reg(r).rex_w(),
 
-        Rm16Imm8(rm, imm) => Inst::opcode2(0xba).reg(7).rm16(rm).imm8(imm).osz(),
-        Rm32Imm8(rm, imm) => Inst::opcode2(0xba).reg(7).rm32(rm).imm8(imm),
-        Rm64Imm8(rm, imm) => Inst::opcode2(0xba).reg(7).rm64(rm).imm8(imm).rex_w(),
+        Rm16Imm8(rm, imm) => Inst::opcode2(0xba).reg(7).rm(rm).imm8(imm).osz(),
+        Rm32Imm8(rm, imm) => Inst::opcode2(0xba).reg(7).rm(rm).imm8(imm),
+        Rm64Imm8(rm, imm) => Inst::opcode2(0xba).reg(7).rm(rm).imm8(imm).rex_w(),
     },
 
     Btr {
-        Rm16R16(rm, r) => Inst::opcode2(0xb3).rm16(rm).reg(r).osz(),
-        Rm32R32(rm, r) => Inst::opcode2(0xb3).rm32(rm).reg(r),
-        Rm64R64(rm, r) => Inst::opcode2(0xb3).rm64(rm).reg(r).rex_w(),
+        Rm16R16(rm, r) => Inst::opcode2(0xb3).rm(rm).reg(r).osz(),
+        Rm32R32(rm, r) => Inst::opcode2(0xb3).rm(rm).reg(r),
+        Rm64R64(rm, r) => Inst::opcode2(0xb3).rm(rm).reg(r).rex_w(),
 
-        Rm16Imm8(rm, imm) => Inst::opcode2(0xba).reg(6).rm16(rm).imm8(imm).osz(),
-        Rm32Imm8(rm, imm) => Inst::opcode2(0xba).reg(6).rm32(rm).imm8(imm),
-        Rm64Imm8(rm, imm) => Inst::opcode2(0xba).reg(6).rm64(rm).imm8(imm).rex_w(),
+        Rm16Imm8(rm, imm) => Inst::opcode2(0xba).reg(6).rm(rm).imm8(imm).osz(),
+        Rm32Imm8(rm, imm) => Inst::opcode2(0xba).reg(6).rm(rm).imm8(imm),
+        Rm64Imm8(rm, imm) => Inst::opcode2(0xba).reg(6).rm(rm).imm8(imm).rex_w(),
     },
 
     Bts {
-        Rm16R16(rm, r) => Inst::opcode2(0xab).rm16(rm).reg(r).osz(),
-        Rm32R32(rm, r) => Inst::opcode2(0xab).rm32(rm).reg(r),
-        Rm64R64(rm, r) => Inst::opcode2(0xab).rm64(rm).reg(r).rex_w(),
+        Rm16R16(rm, r) => Inst::opcode2(0xab).rm(rm).reg(r).osz(),
+        Rm32R32(rm, r) => Inst::opcode2(0xab).rm(rm).reg(r),
+        Rm64R64(rm, r) => Inst::opcode2(0xab).rm(rm).reg(r).rex_w(),
 
-        Rm16Imm8(rm, imm) => Inst::opcode2(0xba).reg(5).rm16(rm).imm8(imm).osz(),
-        Rm32Imm8(rm, imm) => Inst::opcode2(0xba).reg(5).rm32(rm).imm8(imm),
-        Rm64Imm8(rm, imm) => Inst::opcode2(0xba).reg(5).rm64(rm).imm8(imm).rex_w(),
+        Rm16Imm8(rm, imm) => Inst::opcode2(0xba).reg(5).rm(rm).imm8(imm).osz(),
+        Rm32Imm8(rm, imm) => Inst::opcode2(0xba).reg(5).rm(rm).imm8(imm),
+        Rm64Imm8(rm, imm) => Inst::opcode2(0xba).reg(5).rm(rm).imm8(imm).rex_w(),
     },
 
     Call {
         Rel32(rel) => Inst::opcode1(0xe8).disp(rel.0),
-        Rm64(rm)   => Inst::opcode1(0xff).reg(2).rm64(rm),
+        Rm64(rm)   => Inst::opcode1(0xff).reg(2).rm(rm),
         M16x16(m)  => Inst::opcode1(0xff).reg(3).mem(m).osz(),
         M16x32(m)  => Inst::opcode1(0xff).reg(3).mem(m),
         M16x64(m)  => Inst::opcode1(0xff).reg(3).mem(m).rex_w(),
@@ -570,9 +539,9 @@ impl_encode! {
     Cmc { Inst::opcode1(0xf5) },
 
     Cmov {
-        CcR16Rm16(cc, r, rm) => Inst::opcode2(0x40).cc(cc).reg(r).rm16(rm).osz(),
-        CcR32Rm32(cc, r, rm) => Inst::opcode2(0x40).cc(cc).reg(r).rm32(rm),
-        CcR64Rm64(cc, r, rm) => Inst::opcode2(0x40).cc(cc).reg(r).rm64(rm).rex_w(),
+        CcR16Rm16(cc, r, rm) => Inst::opcode2(0x40).cc(cc).reg(r).rm(rm).osz(),
+        CcR32Rm32(cc, r, rm) => Inst::opcode2(0x40).cc(cc).reg(r).rm(rm),
+        CcR64Rm64(cc, r, rm) => Inst::opcode2(0x40).cc(cc).reg(r).rm(rm).rex_w(),
     },
 
     Cmp(0x38, 7),
@@ -585,11 +554,11 @@ impl_encode! {
     },
 
     Cmpxchg {
-        Rm8lR8l(rm, r) => Inst::opcode2(0xb0).rm8l(rm).reg(r),
-        Rm8R8(rm, r)   => Inst::opcode2(0xb0).rm8(rm).reg(r),
-        Rm16R16(rm, r) => Inst::opcode2(0xb1).rm16(rm).reg(r).osz(),
-        Rm32R32(rm, r) => Inst::opcode2(0xb1).rm32(rm).reg(r),
-        Rm64R64(rm, r) => Inst::opcode2(0xb1).rm64(rm).reg(r).rex_w(),
+        Rm8lR8l(rm, r) => Inst::opcode2(0xb0).rm(rm).reg(r),
+        Rm8R8(rm, r)   => Inst::opcode2(0xb0).rm(rm).reg(r),
+        Rm16R16(rm, r) => Inst::opcode2(0xb1).rm(rm).reg(r).osz(),
+        Rm32R32(rm, r) => Inst::opcode2(0xb1).rm(rm).reg(r),
+        Rm64R64(rm, r) => Inst::opcode2(0xb1).rm(rm).reg(r).rex_w(),
     },
 
     Cmpxchg8b {
@@ -603,12 +572,12 @@ impl_encode! {
     Cpuid { Inst::opcode2(0xa2) },
 
     Crc32 {
-        R32lRm8l(r, rm) => Inst::opcode3(0x38, 0xf0).repne().reg(r).rm8l(rm),
-        R32Rm8(r, rm)   => Inst::opcode3(0x38, 0xf0).repne().reg(r).rm8(rm),
-        R32Rm16(r, rm)  => Inst::opcode3(0x38, 0xf1).repne().reg(r).rm16(rm).osz(),
-        R32Rm32(r, rm)  => Inst::opcode3(0x38, 0xf1).repne().reg(r).rm32(rm),
-        R64Rm8(r, rm)   => Inst::opcode3(0x38, 0xf0).repne().reg(r).rm8(rm).rex_w(),
-        R64Rm64(r, rm)  => Inst::opcode3(0x38, 0xf1).repne().reg(r).rm64(rm).rex_w(),
+        R32lRm8l(r, rm) => Inst::opcode3(0x38, 0xf0).repne().reg(r).rm(rm),
+        R32Rm8(r, rm)   => Inst::opcode3(0x38, 0xf0).repne().reg(r).rm(rm),
+        R32Rm16(r, rm)  => Inst::opcode3(0x38, 0xf1).repne().reg(r).rm(rm).osz(),
+        R32Rm32(r, rm)  => Inst::opcode3(0x38, 0xf1).repne().reg(r).rm(rm),
+        R64Rm8(r, rm)   => Inst::opcode3(0x38, 0xf0).repne().reg(r).rm(rm).rex_w(),
+        R64Rm64(r, rm)  => Inst::opcode3(0x38, 0xf1).repne().reg(r).rm(rm).rex_w(),
     },
 
     Cwd { Inst::opcode1(0x99).osz() },
@@ -616,11 +585,11 @@ impl_encode! {
     Cqo { Inst::opcode1(0x99).rex_w() },
 
     Dec {
-        Rm8l(rm) => Inst::opcode1(0xfe).reg(1).rm8l(rm),
-        Rm8(rm)  => Inst::opcode1(0xfe).reg(1).rm8(rm),
-        Rm16(rm) => Inst::opcode1(0xff).reg(1).rm16(rm).osz(),
-        Rm32(rm) => Inst::opcode1(0xff).reg(1).rm32(rm),
-        Rm64(rm) => Inst::opcode1(0xff).reg(1).rm64(rm).rex_w(),
+        Rm8l(rm) => Inst::opcode1(0xfe).reg(1).rm(rm),
+        Rm8(rm)  => Inst::opcode1(0xfe).reg(1).rm(rm),
+        Rm16(rm) => Inst::opcode1(0xff).reg(1).rm(rm).osz(),
+        Rm32(rm) => Inst::opcode1(0xff).reg(1).rm(rm),
+        Rm64(rm) => Inst::opcode1(0xff).reg(1).rm(rm).rex_w(),
     },
 
     Div(6),
@@ -936,23 +905,23 @@ impl_encode! {
     Idiv(7),
 
     Imul {
-        Rm8l(rm) => Inst::opcode1(0xf6).reg(5).rm8l(rm),
-        Rm8(rm)  => Inst::opcode1(0xf6).reg(5).rm8(rm),
-        Rm16(rm) => Inst::opcode1(0xf7).reg(5).rm16(rm).osz(),
-        Rm32(rm) => Inst::opcode1(0xf7).reg(5).rm32(rm),
-        Rm64(rm) => Inst::opcode1(0xf7).reg(5).rm64(rm).rex_w(),
+        Rm8l(rm) => Inst::opcode1(0xf6).reg(5).rm(rm),
+        Rm8(rm)  => Inst::opcode1(0xf6).reg(5).rm(rm),
+        Rm16(rm) => Inst::opcode1(0xf7).reg(5).rm(rm).osz(),
+        Rm32(rm) => Inst::opcode1(0xf7).reg(5).rm(rm),
+        Rm64(rm) => Inst::opcode1(0xf7).reg(5).rm(rm).rex_w(),
 
-        R16Rm16(r, rm) => Inst::opcode2(0xaf).reg(r).rm16(rm).osz(),
-        R32Rm32(r, rm) => Inst::opcode2(0xaf).reg(r).rm32(rm),
-        R64Rm64(r, rm) => Inst::opcode2(0xaf).reg(r).rm64(rm).rex_w(),
+        R16Rm16(r, rm) => Inst::opcode2(0xaf).reg(r).rm(rm).osz(),
+        R32Rm32(r, rm) => Inst::opcode2(0xaf).reg(r).rm(rm),
+        R64Rm64(r, rm) => Inst::opcode2(0xaf).reg(r).rm(rm).rex_w(),
 
-        R16Rm16Imm8(r, rm, imm) => Inst::opcode1(0x6b).reg(r).rm16(rm).imm8(imm).osz(),
-        R32Rm32Imm8(r, rm, imm) => Inst::opcode1(0x6b).reg(r).rm32(rm).imm8(imm),
-        R64Rm64Imm8(r, rm, imm) => Inst::opcode1(0x6b).reg(r).rm64(rm).imm8(imm).rex_w(),
+        R16Rm16Imm8(r, rm, imm) => Inst::opcode1(0x6b).reg(r).rm(rm).imm8(imm).osz(),
+        R32Rm32Imm8(r, rm, imm) => Inst::opcode1(0x6b).reg(r).rm(rm).imm8(imm),
+        R64Rm64Imm8(r, rm, imm) => Inst::opcode1(0x6b).reg(r).rm(rm).imm8(imm).rex_w(),
 
-        R16Rm16Imm16(r, rm, imm) => Inst::opcode1(0x69).reg(r).rm16(rm).imm16(imm).osz(),
-        R32Rm32Imm32(r, rm, imm) => Inst::opcode1(0x69).reg(r).rm32(rm).imm32(imm),
-        R64Rm64Imm32(r, rm, imm) => Inst::opcode1(0x69).reg(r).rm64(rm).imm32(imm).rex_w(),
+        R16Rm16Imm16(r, rm, imm) => Inst::opcode1(0x69).reg(r).rm(rm).imm16(imm).osz(),
+        R32Rm32Imm32(r, rm, imm) => Inst::opcode1(0x69).reg(r).rm(rm).imm32(imm),
+        R64Rm64Imm32(r, rm, imm) => Inst::opcode1(0x69).reg(r).rm(rm).imm32(imm).rex_w(),
     },
 
     In {
@@ -966,11 +935,11 @@ impl_encode! {
     },
 
     Inc {
-        Rm8l(rm) => Inst::opcode1(0xfe).reg(0).rm8l(rm),
-        Rm8(rm)  => Inst::opcode1(0xfe).reg(0).rm8(rm),
-        Rm16(rm) => Inst::opcode1(0xff).reg(0).rm16(rm).osz(),
-        Rm32(rm) => Inst::opcode1(0xff).reg(0).rm32(rm),
-        Rm64(rm) => Inst::opcode1(0xff).reg(0).rm64(rm).rex_w(),
+        Rm8l(rm) => Inst::opcode1(0xfe).reg(0).rm(rm),
+        Rm8(rm)  => Inst::opcode1(0xfe).reg(0).rm(rm),
+        Rm16(rm) => Inst::opcode1(0xff).reg(0).rm(rm).osz(),
+        Rm32(rm) => Inst::opcode1(0xff).reg(0).rm(rm),
+        Rm64(rm) => Inst::opcode1(0xff).reg(0).rm(rm).rex_w(),
     },
 
     Ins {
@@ -1009,7 +978,7 @@ impl_encode! {
     Jmp {
         Rel8(rel)  => Inst::opcode1(0xeb).disp(rel.0),
         Rel32(rel) => Inst::opcode1(0xe9).disp(rel.0),
-        Rm64(rm)   => Inst::opcode1(0xff).reg(4).rm64(rm),
+        Rm64(rm)   => Inst::opcode1(0xff).reg(4).rm(rm),
         M16x16(m)  => Inst::opcode1(0xff).reg(5).mem(m).osz(),
         M16x32(m)  => Inst::opcode1(0xff).reg(5).mem(m),
         M16x64(m)  => Inst::opcode1(0xff).reg(5).mem(m).rex_w(),
@@ -1051,11 +1020,11 @@ impl_encode! {
     },
 
     Lldt {
-        Rm16(rm) => Inst::opcode2(0x00).reg(2).rm16(rm),
+        Rm16(rm) => Inst::opcode2(0x00).reg(2).rm(rm),
     },
 
     Lmsw {
-        Rm16(rm) => Inst::opcode2(0x01).reg(6).rm16(rm),
+        Rm16(rm) => Inst::opcode2(0x01).reg(6).rm(rm),
     },
 
     Lods {
@@ -1072,13 +1041,13 @@ impl_encode! {
     },
 
     Ltr {
-        Rm16(rm) => Inst::opcode2(0x00).reg(3).rm16(rm),
+        Rm16(rm) => Inst::opcode2(0x00).reg(3).rm(rm),
     },
 
     Lzcnt {
-        R16Rm16(r, rm) => Inst::opcode2(0xbd).rep().reg(r).rm16(rm).osz(),
-        R32Rm32(r, rm) => Inst::opcode2(0xbd).rep().reg(r).rm32(rm),
-        R64Rm64(r, rm) => Inst::opcode2(0xbd).rep().reg(r).rm64(rm).rex_w(),
+        R16Rm16(r, rm) => Inst::opcode2(0xbd).rep().reg(r).rm(rm).osz(),
+        R32Rm32(r, rm) => Inst::opcode2(0xbd).rep().reg(r).rm(rm),
+        R64Rm64(r, rm) => Inst::opcode2(0xbd).rep().reg(r).rm(rm).rex_w(),
     },
 
     Mfence { Inst::opcode3(0xae, 0xf0) },
@@ -1086,23 +1055,23 @@ impl_encode! {
     Monitor { Inst::opcode3(0x01, 0xc8) },
 
     Mov {
-        Rm8lR8l(rm, r) => Inst::opcode1(0x88).rm8l(rm).reg(r),
-        Rm8R8(rm, r)   => Inst::opcode1(0x88).rm8(rm).reg(r),
-        Rm16R16(rm, r) => Inst::opcode1(0x89).rm16(rm).reg(r).osz(),
-        Rm32R32(rm, r) => Inst::opcode1(0x89).rm32(rm).reg(r),
-        Rm64R64(rm, r) => Inst::opcode1(0x89).rm64(rm).reg(r).rex_w(),
+        Rm8lR8l(rm, r) => Inst::opcode1(0x88).rm(rm).reg(r),
+        Rm8R8(rm, r)   => Inst::opcode1(0x88).rm(rm).reg(r),
+        Rm16R16(rm, r) => Inst::opcode1(0x89).rm(rm).reg(r).osz(),
+        Rm32R32(rm, r) => Inst::opcode1(0x89).rm(rm).reg(r),
+        Rm64R64(rm, r) => Inst::opcode1(0x89).rm(rm).reg(r).rex_w(),
 
-        R8lRm8l(r, rm) => Inst::opcode1(0x8a).reg(r).rm8l(rm),
-        R8Rm8(r, rm)   => Inst::opcode1(0x8a).reg(r).rm8(rm),
-        R16Rm16(r, rm) => Inst::opcode1(0x8b).reg(r).rm16(rm).osz(),
-        R32Rm32(r, rm) => Inst::opcode1(0x8b).reg(r).rm32(rm),
-        R64Rm64(r, rm) => Inst::opcode1(0x8b).reg(r).rm64(rm).rex_w(),
+        R8lRm8l(r, rm) => Inst::opcode1(0x8a).reg(r).rm(rm),
+        R8Rm8(r, rm)   => Inst::opcode1(0x8a).reg(r).rm(rm),
+        R16Rm16(r, rm) => Inst::opcode1(0x8b).reg(r).rm(rm).osz(),
+        R32Rm32(r, rm) => Inst::opcode1(0x8b).reg(r).rm(rm),
+        R64Rm64(r, rm) => Inst::opcode1(0x8b).reg(r).rm(rm).rex_w(),
 
-        Rm16Sreg(rm, sreg) => Inst::opcode1(0x8c).rm16(rm).reg(sreg),
-        Rm64Sreg(rm, sreg) => Inst::opcode1(0x8c).rm64(rm).reg(sreg).rex_w(),
+        Rm16Sreg(rm, sreg) => Inst::opcode1(0x8c).rm(rm).reg(sreg),
+        Rm64Sreg(rm, sreg) => Inst::opcode1(0x8c).rm(rm).reg(sreg).rex_w(),
 
-        SregRm16(sreg, rm) => Inst::opcode1(0x8e).rm16(rm).reg(sreg),
-        SregRm64(sreg, rm) => Inst::opcode1(0x8e).rm64(rm).reg(sreg).rex_w(),
+        SregRm16(sreg, rm) => Inst::opcode1(0x8e).rm(rm).reg(sreg),
+        SregRm64(sreg, rm) => Inst::opcode1(0x8e).rm(rm).reg(sreg).rex_w(),
 
         AlMoffs8(moffs)   => Inst::opcode1(0xa0).moffs(moffs),
         AxMoffs16(moffs)  => Inst::opcode1(0xa1).moffs(moffs).osz(),
@@ -1120,11 +1089,11 @@ impl_encode! {
         R32Imm32(r, imm) => Inst::opcode1(0xb8).plus(r).imm32(imm),
         R64Imm64(r, imm) => Inst::opcode1(0xb8).plus(r).imm64(imm).rex_w(),
 
-        Rm8lImm8(rm, imm)  => Inst::opcode1(0xc6).reg(0).rm8l(rm).imm8(imm),
-        Rm8Imm8(rm, imm)   => Inst::opcode1(0xc6).reg(0).rm8(rm).imm8(imm),
-        Rm16Imm16(rm, imm) => Inst::opcode1(0xc7).reg(0).rm16(rm).imm16(imm).osz(),
-        Rm32Imm32(rm, imm) => Inst::opcode1(0xc7).reg(0).rm32(rm).imm32(imm),
-        Rm64Imm32(rm, imm) => Inst::opcode1(0xc7).reg(0).rm64(rm).imm32(imm).rex_w(),
+        Rm8lImm8(rm, imm)  => Inst::opcode1(0xc6).reg(0).rm(rm).imm8(imm),
+        Rm8Imm8(rm, imm)   => Inst::opcode1(0xc6).reg(0).rm(rm).imm8(imm),
+        Rm16Imm16(rm, imm) => Inst::opcode1(0xc7).reg(0).rm(rm).imm16(imm).osz(),
+        Rm32Imm32(rm, imm) => Inst::opcode1(0xc7).reg(0).rm(rm).imm32(imm),
+        Rm64Imm32(rm, imm) => Inst::opcode1(0xc7).reg(0).rm(rm).imm32(imm).rex_w(),
 
         R64Cr(r, cr) => Inst::opcode2(0x20).rm_reg(r).reg(cr),
         CrR64(cr, r) => Inst::opcode2(0x22).reg(cr).rm_reg(r),
@@ -1151,27 +1120,27 @@ impl_encode! {
     },
 
     Movsx {
-        R16lRm8l(r, rm) => Inst::opcode2(0xbe).reg(r).rm8l(rm).osz(),
-        R16Rm8(r, rm)   => Inst::opcode2(0xbe).reg(r).rm8(rm).osz(),
-        R32lRm8l(r, rm) => Inst::opcode2(0xbe).reg(r).rm8l(rm),
-        R32Rm8(r, rm)   => Inst::opcode2(0xbe).reg(r).rm8(rm),
-        R64Rm8(r, rm)   => Inst::opcode2(0xbe).reg(r).rm8(rm).rex_w(),
+        R16lRm8l(r, rm) => Inst::opcode2(0xbe).reg(r).rm(rm).osz(),
+        R16Rm8(r, rm)   => Inst::opcode2(0xbe).reg(r).rm(rm).osz(),
+        R32lRm8l(r, rm) => Inst::opcode2(0xbe).reg(r).rm(rm),
+        R32Rm8(r, rm)   => Inst::opcode2(0xbe).reg(r).rm(rm),
+        R64Rm8(r, rm)   => Inst::opcode2(0xbe).reg(r).rm(rm).rex_w(),
 
-        R32Rm16(r, rm) => Inst::opcode2(0xbf).reg(r).rm16(rm),
-        R64Rm16(r, rm) => Inst::opcode2(0xbf).reg(r).rm16(rm).rex_w(),
+        R32Rm16(r, rm) => Inst::opcode2(0xbf).reg(r).rm(rm),
+        R64Rm16(r, rm) => Inst::opcode2(0xbf).reg(r).rm(rm).rex_w(),
 
-        R64Rm32(r, rm) => Inst::opcode1(0x63).reg(r).rm32(rm).rex_w(),
+        R64Rm32(r, rm) => Inst::opcode1(0x63).reg(r).rm(rm).rex_w(),
     },
 
     Movzx {
-        R16lRm8l(r, rm) => Inst::opcode2(0xb6).reg(r).rm8l(rm).osz(),
-        R16Rm8(r, rm)   => Inst::opcode2(0xb6).reg(r).rm8(rm).osz(),
-        R32lRm8l(r, rm) => Inst::opcode2(0xb6).reg(r).rm8l(rm),
-        R32Rm8(r, rm)   => Inst::opcode2(0xb6).reg(r).rm8(rm),
-        R64Rm8(r, rm)   => Inst::opcode2(0xb6).reg(r).rm8(rm).rex_w(),
+        R16lRm8l(r, rm) => Inst::opcode2(0xb6).reg(r).rm(rm).osz(),
+        R16Rm8(r, rm)   => Inst::opcode2(0xb6).reg(r).rm(rm).osz(),
+        R32lRm8l(r, rm) => Inst::opcode2(0xb6).reg(r).rm(rm),
+        R32Rm8(r, rm)   => Inst::opcode2(0xb6).reg(r).rm(rm),
+        R64Rm8(r, rm)   => Inst::opcode2(0xb6).reg(r).rm(rm).rex_w(),
 
-        R32Rm16(r, rm) => Inst::opcode2(0xb7).reg(r).rm16(rm),
-        R64Rm16(r, rm) => Inst::opcode2(0xb7).reg(r).rm16(rm).rex_w(),
+        R32Rm16(r, rm) => Inst::opcode2(0xb7).reg(r).rm(rm),
+        R64Rm16(r, rm) => Inst::opcode2(0xb7).reg(r).rm(rm).rex_w(),
     },
 
     Mul(4),
@@ -1184,8 +1153,8 @@ impl_encode! {
         Ax  => Inst::opcode1(0x90).osz(),
         Eax => Inst::opcode1(0x90),
 
-        Rm16(rm) => Inst::opcode2(0x1f).reg(0).rm16(rm).osz(),
-        Rm32(rm) => Inst::opcode2(0x1f).reg(0).rm32(rm),
+        Rm16(rm) => Inst::opcode2(0x1f).reg(0).rm(rm).osz(),
+        Rm32(rm) => Inst::opcode2(0x1f).reg(0).rm(rm),
     },
 
     Not(2),
@@ -1211,8 +1180,8 @@ impl_encode! {
     Pause { Inst::opcode1(0x90).rep() },
 
     Pop {
-        Rm16(rm) => Inst::opcode1(0x8f).reg(0).rm16(rm).osz(),
-        Rm64(rm) => Inst::opcode1(0x8f).reg(0).rm64(rm),
+        Rm16(rm) => Inst::opcode1(0x8f).reg(0).rm(rm).osz(),
+        Rm64(rm) => Inst::opcode1(0x8f).reg(0).rm(rm),
 
         R16(r) => Inst::opcode1(0x58).plus(r).osz(),
         R64(r) => Inst::opcode1(0x58).plus(r),
@@ -1224,9 +1193,9 @@ impl_encode! {
     },
 
     Popcnt {
-        R16Rm16(r, rm) => Inst::opcode2(0xb8).rep().reg(r).rm16(rm).osz(),
-        R32Rm32(r, rm) => Inst::opcode2(0xb8).rep().reg(r).rm32(rm),
-        R64Rm64(r, rm) => Inst::opcode2(0xb8).rep().reg(r).rm64(rm).rex_w(),
+        R16Rm16(r, rm) => Inst::opcode2(0xb8).rep().reg(r).rm(rm).osz(),
+        R32Rm32(r, rm) => Inst::opcode2(0xb8).rep().reg(r).rm(rm),
+        R64Rm64(r, rm) => Inst::opcode2(0xb8).rep().reg(r).rm(rm).rex_w(),
     },
 
     Popf {
@@ -1250,13 +1219,13 @@ impl_encode! {
     },
 
     Ptwrite {
-        Rm32(rm) => Inst::opcode2(0xae).rep().reg(4).rm32(rm),
-        Rm64(rm) => Inst::opcode2(0xae).rep().reg(4).rm64(rm).rex_w(),
+        Rm32(rm) => Inst::opcode2(0xae).rep().reg(4).rm(rm),
+        Rm64(rm) => Inst::opcode2(0xae).rep().reg(4).rm(rm).rex_w(),
     },
 
     Push {
-        Rm16(rm) => Inst::opcode1(0xff).reg(6).rm16(rm).osz(),
-        Rm64(rm) => Inst::opcode1(0xff).reg(6).rm64(rm),
+        Rm16(rm) => Inst::opcode1(0xff).reg(6).rm(rm).osz(),
+        Rm64(rm) => Inst::opcode1(0xff).reg(6).rm(rm),
 
         R16(r) => Inst::opcode1(0x50).plus(r).osz(),
         R64(r) => Inst::opcode1(0x50).plus(r),
@@ -1277,83 +1246,83 @@ impl_encode! {
     },
 
     Rcl {
-        Rm8l(rm)          => Inst::opcode1(0xd0).reg(2).rm8l(rm),
-        Rm8(rm)           => Inst::opcode1(0xd0).reg(2).rm8(rm),
-        Rm8lCl(rm)        => Inst::opcode1(0xd2).reg(2).rm8l(rm),
-        Rm8Cl(rm)         => Inst::opcode1(0xd2).reg(2).rm8(rm),
-        Rm8lImm8(rm, imm) => Inst::opcode1(0xc0).reg(2).rm8l(rm).imm8(imm),
-        Rm8Imm8(rm, imm)  => Inst::opcode1(0xc0).reg(2).rm8(rm).imm8(imm),
+        Rm8l(rm)          => Inst::opcode1(0xd0).reg(2).rm(rm),
+        Rm8(rm)           => Inst::opcode1(0xd0).reg(2).rm(rm),
+        Rm8lCl(rm)        => Inst::opcode1(0xd2).reg(2).rm(rm),
+        Rm8Cl(rm)         => Inst::opcode1(0xd2).reg(2).rm(rm),
+        Rm8lImm8(rm, imm) => Inst::opcode1(0xc0).reg(2).rm(rm).imm8(imm),
+        Rm8Imm8(rm, imm)  => Inst::opcode1(0xc0).reg(2).rm(rm).imm8(imm),
 
-        Rm16(rm)          => Inst::opcode1(0xd1).reg(2).rm16(rm).osz(),
-        Rm16Cl(rm)        => Inst::opcode1(0xd3).reg(2).rm16(rm).osz(),
-        Rm16Imm8(rm, imm) => Inst::opcode1(0xc1).reg(2).rm16(rm).imm8(imm).osz(),
+        Rm16(rm)          => Inst::opcode1(0xd1).reg(2).rm(rm).osz(),
+        Rm16Cl(rm)        => Inst::opcode1(0xd3).reg(2).rm(rm).osz(),
+        Rm16Imm8(rm, imm) => Inst::opcode1(0xc1).reg(2).rm(rm).imm8(imm).osz(),
 
-        Rm32(rm)          => Inst::opcode1(0xd1).reg(2).rm32(rm),
-        Rm64(rm)          => Inst::opcode1(0xd1).reg(2).rm64(rm).rex_w(),
-        Rm32Cl(rm)        => Inst::opcode1(0xd3).reg(2).rm32(rm),
-        Rm64Cl(rm)        => Inst::opcode1(0xd3).reg(2).rm64(rm).rex_w(),
-        Rm32Imm8(rm, imm) => Inst::opcode1(0xc1).reg(2).rm32(rm).imm8(imm),
-        Rm64Imm8(rm, imm) => Inst::opcode1(0xc1).reg(2).rm64(rm).imm8(imm).rex_w(),
+        Rm32(rm)          => Inst::opcode1(0xd1).reg(2).rm(rm),
+        Rm64(rm)          => Inst::opcode1(0xd1).reg(2).rm(rm).rex_w(),
+        Rm32Cl(rm)        => Inst::opcode1(0xd3).reg(2).rm(rm),
+        Rm64Cl(rm)        => Inst::opcode1(0xd3).reg(2).rm(rm).rex_w(),
+        Rm32Imm8(rm, imm) => Inst::opcode1(0xc1).reg(2).rm(rm).imm8(imm),
+        Rm64Imm8(rm, imm) => Inst::opcode1(0xc1).reg(2).rm(rm).imm8(imm).rex_w(),
     },
 
     Rcr {
-        Rm8l(rm)          => Inst::opcode1(0xd0).reg(3).rm8l(rm),
-        Rm8(rm)           => Inst::opcode1(0xd0).reg(3).rm8(rm),
-        Rm8lCl(rm)        => Inst::opcode1(0xd2).reg(3).rm8l(rm),
-        Rm8Cl(rm)         => Inst::opcode1(0xd2).reg(3).rm8(rm),
-        Rm8lImm8(rm, imm) => Inst::opcode1(0xc0).reg(3).rm8l(rm).imm8(imm),
-        Rm8Imm8(rm, imm)  => Inst::opcode1(0xc0).reg(3).rm8(rm).imm8(imm),
+        Rm8l(rm)          => Inst::opcode1(0xd0).reg(3).rm(rm),
+        Rm8(rm)           => Inst::opcode1(0xd0).reg(3).rm(rm),
+        Rm8lCl(rm)        => Inst::opcode1(0xd2).reg(3).rm(rm),
+        Rm8Cl(rm)         => Inst::opcode1(0xd2).reg(3).rm(rm),
+        Rm8lImm8(rm, imm) => Inst::opcode1(0xc0).reg(3).rm(rm).imm8(imm),
+        Rm8Imm8(rm, imm)  => Inst::opcode1(0xc0).reg(3).rm(rm).imm8(imm),
 
-        Rm16(rm)          => Inst::opcode1(0xd1).reg(3).rm16(rm).osz(),
-        Rm16Cl(rm)        => Inst::opcode1(0xd3).reg(3).rm16(rm).osz(),
-        Rm16Imm8(rm, imm) => Inst::opcode1(0xc1).reg(3).rm16(rm).imm8(imm).osz(),
+        Rm16(rm)          => Inst::opcode1(0xd1).reg(3).rm(rm).osz(),
+        Rm16Cl(rm)        => Inst::opcode1(0xd3).reg(3).rm(rm).osz(),
+        Rm16Imm8(rm, imm) => Inst::opcode1(0xc1).reg(3).rm(rm).imm8(imm).osz(),
 
-        Rm32(rm)          => Inst::opcode1(0xd1).reg(3).rm32(rm),
-        Rm64(rm)          => Inst::opcode1(0xd1).reg(3).rm64(rm).rex_w(),
-        Rm32Cl(rm)        => Inst::opcode1(0xd3).reg(3).rm32(rm),
-        Rm64Cl(rm)        => Inst::opcode1(0xd3).reg(3).rm64(rm).rex_w(),
-        Rm32Imm8(rm, imm) => Inst::opcode1(0xc1).reg(3).rm32(rm).imm8(imm),
-        Rm64Imm8(rm, imm) => Inst::opcode1(0xc1).reg(3).rm64(rm).imm8(imm).rex_w(),
+        Rm32(rm)          => Inst::opcode1(0xd1).reg(3).rm(rm),
+        Rm64(rm)          => Inst::opcode1(0xd1).reg(3).rm(rm).rex_w(),
+        Rm32Cl(rm)        => Inst::opcode1(0xd3).reg(3).rm(rm),
+        Rm64Cl(rm)        => Inst::opcode1(0xd3).reg(3).rm(rm).rex_w(),
+        Rm32Imm8(rm, imm) => Inst::opcode1(0xc1).reg(3).rm(rm).imm8(imm),
+        Rm64Imm8(rm, imm) => Inst::opcode1(0xc1).reg(3).rm(rm).imm8(imm).rex_w(),
     },
 
     Rol {
-        Rm8l(rm)          => Inst::opcode1(0xd0).reg(0).rm8l(rm),
-        Rm8(rm)           => Inst::opcode1(0xd0).reg(0).rm8(rm),
-        Rm8lCl(rm)        => Inst::opcode1(0xd2).reg(0).rm8l(rm),
-        Rm8Cl(rm)         => Inst::opcode1(0xd2).reg(0).rm8(rm),
-        Rm8lImm8(rm, imm) => Inst::opcode1(0xc0).reg(0).rm8l(rm).imm8(imm),
-        Rm8Imm8(rm, imm)  => Inst::opcode1(0xc0).reg(0).rm8(rm).imm8(imm),
+        Rm8l(rm)          => Inst::opcode1(0xd0).reg(0).rm(rm),
+        Rm8(rm)           => Inst::opcode1(0xd0).reg(0).rm(rm),
+        Rm8lCl(rm)        => Inst::opcode1(0xd2).reg(0).rm(rm),
+        Rm8Cl(rm)         => Inst::opcode1(0xd2).reg(0).rm(rm),
+        Rm8lImm8(rm, imm) => Inst::opcode1(0xc0).reg(0).rm(rm).imm8(imm),
+        Rm8Imm8(rm, imm)  => Inst::opcode1(0xc0).reg(0).rm(rm).imm8(imm),
 
-        Rm16(rm)          => Inst::opcode1(0xd1).reg(0).rm16(rm).osz(),
-        Rm16Cl(rm)        => Inst::opcode1(0xd3).reg(0).rm16(rm).osz(),
-        Rm16Imm8(rm, imm) => Inst::opcode1(0xc1).reg(0).rm16(rm).imm8(imm).osz(),
+        Rm16(rm)          => Inst::opcode1(0xd1).reg(0).rm(rm).osz(),
+        Rm16Cl(rm)        => Inst::opcode1(0xd3).reg(0).rm(rm).osz(),
+        Rm16Imm8(rm, imm) => Inst::opcode1(0xc1).reg(0).rm(rm).imm8(imm).osz(),
 
-        Rm32(rm)          => Inst::opcode1(0xd1).reg(0).rm32(rm),
-        Rm64(rm)          => Inst::opcode1(0xd1).reg(0).rm64(rm).rex_w(),
-        Rm32Cl(rm)        => Inst::opcode1(0xd3).reg(0).rm32(rm),
-        Rm64Cl(rm)        => Inst::opcode1(0xd3).reg(0).rm64(rm).rex_w(),
-        Rm32Imm8(rm, imm) => Inst::opcode1(0xc1).reg(0).rm32(rm).imm8(imm),
-        Rm64Imm8(rm, imm) => Inst::opcode1(0xc1).reg(0).rm64(rm).imm8(imm).rex_w(),
+        Rm32(rm)          => Inst::opcode1(0xd1).reg(0).rm(rm),
+        Rm64(rm)          => Inst::opcode1(0xd1).reg(0).rm(rm).rex_w(),
+        Rm32Cl(rm)        => Inst::opcode1(0xd3).reg(0).rm(rm),
+        Rm64Cl(rm)        => Inst::opcode1(0xd3).reg(0).rm(rm).rex_w(),
+        Rm32Imm8(rm, imm) => Inst::opcode1(0xc1).reg(0).rm(rm).imm8(imm),
+        Rm64Imm8(rm, imm) => Inst::opcode1(0xc1).reg(0).rm(rm).imm8(imm).rex_w(),
     },
 
     Ror {
-        Rm8l(rm)          => Inst::opcode1(0xd0).reg(1).rm8l(rm),
-        Rm8(rm)           => Inst::opcode1(0xd0).reg(1).rm8(rm),
-        Rm8lCl(rm)        => Inst::opcode1(0xd2).reg(1).rm8l(rm),
-        Rm8Cl(rm)         => Inst::opcode1(0xd2).reg(1).rm8(rm),
-        Rm8lImm8(rm, imm) => Inst::opcode1(0xc0).reg(1).rm8l(rm).imm8(imm),
-        Rm8Imm8(rm, imm)  => Inst::opcode1(0xc0).reg(1).rm8(rm).imm8(imm),
+        Rm8l(rm)          => Inst::opcode1(0xd0).reg(1).rm(rm),
+        Rm8(rm)           => Inst::opcode1(0xd0).reg(1).rm(rm),
+        Rm8lCl(rm)        => Inst::opcode1(0xd2).reg(1).rm(rm),
+        Rm8Cl(rm)         => Inst::opcode1(0xd2).reg(1).rm(rm),
+        Rm8lImm8(rm, imm) => Inst::opcode1(0xc0).reg(1).rm(rm).imm8(imm),
+        Rm8Imm8(rm, imm)  => Inst::opcode1(0xc0).reg(1).rm(rm).imm8(imm),
 
-        Rm16(rm)          => Inst::opcode1(0xd1).reg(1).rm16(rm).osz(),
-        Rm16Cl(rm)        => Inst::opcode1(0xd3).reg(1).rm16(rm).osz(),
-        Rm16Imm8(rm, imm) => Inst::opcode1(0xc1).reg(1).rm16(rm).imm8(imm).osz(),
+        Rm16(rm)          => Inst::opcode1(0xd1).reg(1).rm(rm).osz(),
+        Rm16Cl(rm)        => Inst::opcode1(0xd3).reg(1).rm(rm).osz(),
+        Rm16Imm8(rm, imm) => Inst::opcode1(0xc1).reg(1).rm(rm).imm8(imm).osz(),
 
-        Rm32(rm)          => Inst::opcode1(0xd1).reg(1).rm32(rm),
-        Rm64(rm)          => Inst::opcode1(0xd1).reg(1).rm64(rm).rex_w(),
-        Rm32Cl(rm)        => Inst::opcode1(0xd3).reg(1).rm32(rm),
-        Rm64Cl(rm)        => Inst::opcode1(0xd3).reg(1).rm64(rm).rex_w(),
-        Rm32Imm8(rm, imm) => Inst::opcode1(0xc1).reg(1).rm32(rm).imm8(imm),
-        Rm64Imm8(rm, imm) => Inst::opcode1(0xc1).reg(1).rm64(rm).imm8(imm).rex_w(),
+        Rm32(rm)          => Inst::opcode1(0xd1).reg(1).rm(rm),
+        Rm64(rm)          => Inst::opcode1(0xd1).reg(1).rm(rm).rex_w(),
+        Rm32Cl(rm)        => Inst::opcode1(0xd3).reg(1).rm(rm),
+        Rm64Cl(rm)        => Inst::opcode1(0xd3).reg(1).rm(rm).rex_w(),
+        Rm32Imm8(rm, imm) => Inst::opcode1(0xc1).reg(1).rm(rm).imm8(imm),
+        Rm64Imm8(rm, imm) => Inst::opcode1(0xc1).reg(1).rm(rm).imm8(imm).rex_w(),
     },
 
     Rdfsbase {
@@ -1405,83 +1374,83 @@ impl_encode! {
     Sahf { Inst::opcode1(0x9e) },
 
     Sal {
-        Rm8l(rm)          => Inst::opcode1(0xd0).reg(4).rm8l(rm),
-        Rm8(rm)           => Inst::opcode1(0xd0).reg(4).rm8(rm),
-        Rm8lCl(rm)        => Inst::opcode1(0xd2).reg(4).rm8l(rm),
-        Rm8Cl(rm)         => Inst::opcode1(0xd2).reg(4).rm8(rm),
-        Rm8lImm8(rm, imm) => Inst::opcode1(0xc0).reg(4).rm8l(rm).imm8(imm),
-        Rm8Imm8(rm, imm)  => Inst::opcode1(0xc0).reg(4).rm8(rm).imm8(imm),
+        Rm8l(rm)          => Inst::opcode1(0xd0).reg(4).rm(rm),
+        Rm8(rm)           => Inst::opcode1(0xd0).reg(4).rm(rm),
+        Rm8lCl(rm)        => Inst::opcode1(0xd2).reg(4).rm(rm),
+        Rm8Cl(rm)         => Inst::opcode1(0xd2).reg(4).rm(rm),
+        Rm8lImm8(rm, imm) => Inst::opcode1(0xc0).reg(4).rm(rm).imm8(imm),
+        Rm8Imm8(rm, imm)  => Inst::opcode1(0xc0).reg(4).rm(rm).imm8(imm),
 
-        Rm16(rm)          => Inst::opcode1(0xd1).reg(4).rm16(rm).osz(),
-        Rm16Cl(rm)        => Inst::opcode1(0xd3).reg(4).rm16(rm).osz(),
-        Rm16Imm8(rm, imm) => Inst::opcode1(0xc1).reg(4).rm16(rm).imm8(imm).osz(),
+        Rm16(rm)          => Inst::opcode1(0xd1).reg(4).rm(rm).osz(),
+        Rm16Cl(rm)        => Inst::opcode1(0xd3).reg(4).rm(rm).osz(),
+        Rm16Imm8(rm, imm) => Inst::opcode1(0xc1).reg(4).rm(rm).imm8(imm).osz(),
 
-        Rm32(rm)          => Inst::opcode1(0xd1).reg(4).rm32(rm),
-        Rm64(rm)          => Inst::opcode1(0xd1).reg(4).rm64(rm).rex_w(),
-        Rm32Cl(rm)        => Inst::opcode1(0xd3).reg(4).rm32(rm),
-        Rm64Cl(rm)        => Inst::opcode1(0xd3).reg(4).rm64(rm).rex_w(),
-        Rm32Imm8(rm, imm) => Inst::opcode1(0xc1).reg(4).rm32(rm).imm8(imm),
-        Rm64Imm8(rm, imm) => Inst::opcode1(0xc1).reg(4).rm64(rm).imm8(imm).rex_w(),
+        Rm32(rm)          => Inst::opcode1(0xd1).reg(4).rm(rm),
+        Rm64(rm)          => Inst::opcode1(0xd1).reg(4).rm(rm).rex_w(),
+        Rm32Cl(rm)        => Inst::opcode1(0xd3).reg(4).rm(rm),
+        Rm64Cl(rm)        => Inst::opcode1(0xd3).reg(4).rm(rm).rex_w(),
+        Rm32Imm8(rm, imm) => Inst::opcode1(0xc1).reg(4).rm(rm).imm8(imm),
+        Rm64Imm8(rm, imm) => Inst::opcode1(0xc1).reg(4).rm(rm).imm8(imm).rex_w(),
     },
 
     Sar {
-        Rm8l(rm)          => Inst::opcode1(0xd0).reg(7).rm8l(rm),
-        Rm8(rm)           => Inst::opcode1(0xd0).reg(7).rm8(rm),
-        Rm8lCl(rm)        => Inst::opcode1(0xd2).reg(7).rm8l(rm),
-        Rm8Cl(rm)         => Inst::opcode1(0xd2).reg(7).rm8(rm),
-        Rm8lImm8(rm, imm) => Inst::opcode1(0xc0).reg(7).rm8l(rm).imm8(imm),
-        Rm8Imm8(rm, imm)  => Inst::opcode1(0xc0).reg(7).rm8(rm).imm8(imm),
+        Rm8l(rm)          => Inst::opcode1(0xd0).reg(7).rm(rm),
+        Rm8(rm)           => Inst::opcode1(0xd0).reg(7).rm(rm),
+        Rm8lCl(rm)        => Inst::opcode1(0xd2).reg(7).rm(rm),
+        Rm8Cl(rm)         => Inst::opcode1(0xd2).reg(7).rm(rm),
+        Rm8lImm8(rm, imm) => Inst::opcode1(0xc0).reg(7).rm(rm).imm8(imm),
+        Rm8Imm8(rm, imm)  => Inst::opcode1(0xc0).reg(7).rm(rm).imm8(imm),
 
-        Rm16(rm)          => Inst::opcode1(0xd1).reg(7).rm16(rm).osz(),
-        Rm16Cl(rm)        => Inst::opcode1(0xd3).reg(7).rm16(rm).osz(),
-        Rm16Imm8(rm, imm) => Inst::opcode1(0xc1).reg(7).rm16(rm).imm8(imm).osz(),
+        Rm16(rm)          => Inst::opcode1(0xd1).reg(7).rm(rm).osz(),
+        Rm16Cl(rm)        => Inst::opcode1(0xd3).reg(7).rm(rm).osz(),
+        Rm16Imm8(rm, imm) => Inst::opcode1(0xc1).reg(7).rm(rm).imm8(imm).osz(),
 
-        Rm32(rm)          => Inst::opcode1(0xd1).reg(7).rm32(rm),
-        Rm64(rm)          => Inst::opcode1(0xd1).reg(7).rm64(rm).rex_w(),
-        Rm32Cl(rm)        => Inst::opcode1(0xd3).reg(7).rm32(rm),
-        Rm64Cl(rm)        => Inst::opcode1(0xd3).reg(7).rm64(rm).rex_w(),
-        Rm32Imm8(rm, imm) => Inst::opcode1(0xc1).reg(7).rm32(rm).imm8(imm),
-        Rm64Imm8(rm, imm) => Inst::opcode1(0xc1).reg(7).rm64(rm).imm8(imm).rex_w(),
+        Rm32(rm)          => Inst::opcode1(0xd1).reg(7).rm(rm),
+        Rm64(rm)          => Inst::opcode1(0xd1).reg(7).rm(rm).rex_w(),
+        Rm32Cl(rm)        => Inst::opcode1(0xd3).reg(7).rm(rm),
+        Rm64Cl(rm)        => Inst::opcode1(0xd3).reg(7).rm(rm).rex_w(),
+        Rm32Imm8(rm, imm) => Inst::opcode1(0xc1).reg(7).rm(rm).imm8(imm),
+        Rm64Imm8(rm, imm) => Inst::opcode1(0xc1).reg(7).rm(rm).imm8(imm).rex_w(),
     },
 
     Shl {
-        Rm8l(rm)          => Inst::opcode1(0xd0).reg(4).rm8l(rm),
-        Rm8(rm)           => Inst::opcode1(0xd0).reg(4).rm8(rm),
-        Rm8lCl(rm)        => Inst::opcode1(0xd2).reg(4).rm8l(rm),
-        Rm8Cl(rm)         => Inst::opcode1(0xd2).reg(4).rm8(rm),
-        Rm8lImm8(rm, imm) => Inst::opcode1(0xc0).reg(4).rm8l(rm).imm8(imm),
-        Rm8Imm8(rm, imm)  => Inst::opcode1(0xc0).reg(4).rm8(rm).imm8(imm),
+        Rm8l(rm)          => Inst::opcode1(0xd0).reg(4).rm(rm),
+        Rm8(rm)           => Inst::opcode1(0xd0).reg(4).rm(rm),
+        Rm8lCl(rm)        => Inst::opcode1(0xd2).reg(4).rm(rm),
+        Rm8Cl(rm)         => Inst::opcode1(0xd2).reg(4).rm(rm),
+        Rm8lImm8(rm, imm) => Inst::opcode1(0xc0).reg(4).rm(rm).imm8(imm),
+        Rm8Imm8(rm, imm)  => Inst::opcode1(0xc0).reg(4).rm(rm).imm8(imm),
 
-        Rm16(rm)          => Inst::opcode1(0xd1).reg(4).rm16(rm).osz(),
-        Rm16Cl(rm)        => Inst::opcode1(0xd3).reg(4).rm16(rm).osz(),
-        Rm16Imm8(rm, imm) => Inst::opcode1(0xc1).reg(4).rm16(rm).imm8(imm).osz(),
+        Rm16(rm)          => Inst::opcode1(0xd1).reg(4).rm(rm).osz(),
+        Rm16Cl(rm)        => Inst::opcode1(0xd3).reg(4).rm(rm).osz(),
+        Rm16Imm8(rm, imm) => Inst::opcode1(0xc1).reg(4).rm(rm).imm8(imm).osz(),
 
-        Rm32(rm)          => Inst::opcode1(0xd1).reg(4).rm32(rm),
-        Rm64(rm)          => Inst::opcode1(0xd1).reg(4).rm64(rm).rex_w(),
-        Rm32Cl(rm)        => Inst::opcode1(0xd3).reg(4).rm32(rm),
-        Rm64Cl(rm)        => Inst::opcode1(0xd3).reg(4).rm64(rm).rex_w(),
-        Rm32Imm8(rm, imm) => Inst::opcode1(0xc1).reg(4).rm32(rm).imm8(imm),
-        Rm64Imm8(rm, imm) => Inst::opcode1(0xc1).reg(4).rm64(rm).imm8(imm).rex_w(),
+        Rm32(rm)          => Inst::opcode1(0xd1).reg(4).rm(rm),
+        Rm64(rm)          => Inst::opcode1(0xd1).reg(4).rm(rm).rex_w(),
+        Rm32Cl(rm)        => Inst::opcode1(0xd3).reg(4).rm(rm),
+        Rm64Cl(rm)        => Inst::opcode1(0xd3).reg(4).rm(rm).rex_w(),
+        Rm32Imm8(rm, imm) => Inst::opcode1(0xc1).reg(4).rm(rm).imm8(imm),
+        Rm64Imm8(rm, imm) => Inst::opcode1(0xc1).reg(4).rm(rm).imm8(imm).rex_w(),
     },
 
     Shr {
-        Rm8l(rm)          => Inst::opcode1(0xd0).reg(5).rm8l(rm),
-        Rm8(rm)           => Inst::opcode1(0xd0).reg(5).rm8(rm),
-        Rm8lCl(rm)        => Inst::opcode1(0xd2).reg(5).rm8l(rm),
-        Rm8Cl(rm)         => Inst::opcode1(0xd2).reg(5).rm8(rm),
-        Rm8lImm8(rm, imm) => Inst::opcode1(0xc0).reg(5).rm8l(rm).imm8(imm),
-        Rm8Imm8(rm, imm)  => Inst::opcode1(0xc0).reg(5).rm8(rm).imm8(imm),
+        Rm8l(rm)          => Inst::opcode1(0xd0).reg(5).rm(rm),
+        Rm8(rm)           => Inst::opcode1(0xd0).reg(5).rm(rm),
+        Rm8lCl(rm)        => Inst::opcode1(0xd2).reg(5).rm(rm),
+        Rm8Cl(rm)         => Inst::opcode1(0xd2).reg(5).rm(rm),
+        Rm8lImm8(rm, imm) => Inst::opcode1(0xc0).reg(5).rm(rm).imm8(imm),
+        Rm8Imm8(rm, imm)  => Inst::opcode1(0xc0).reg(5).rm(rm).imm8(imm),
 
-        Rm16(rm)          => Inst::opcode1(0xd1).reg(5).rm16(rm).osz(),
-        Rm16Cl(rm)        => Inst::opcode1(0xd3).reg(5).rm16(rm).osz(),
-        Rm16Imm8(rm, imm) => Inst::opcode1(0xc1).reg(5).rm16(rm).imm8(imm).osz(),
+        Rm16(rm)          => Inst::opcode1(0xd1).reg(5).rm(rm).osz(),
+        Rm16Cl(rm)        => Inst::opcode1(0xd3).reg(5).rm(rm).osz(),
+        Rm16Imm8(rm, imm) => Inst::opcode1(0xc1).reg(5).rm(rm).imm8(imm).osz(),
 
-        Rm32(rm)          => Inst::opcode1(0xd1).reg(5).rm32(rm),
-        Rm64(rm)          => Inst::opcode1(0xd1).reg(5).rm64(rm).rex_w(),
-        Rm32Cl(rm)        => Inst::opcode1(0xd3).reg(5).rm32(rm),
-        Rm64Cl(rm)        => Inst::opcode1(0xd3).reg(5).rm64(rm).rex_w(),
-        Rm32Imm8(rm, imm) => Inst::opcode1(0xc1).reg(5).rm32(rm).imm8(imm),
-        Rm64Imm8(rm, imm) => Inst::opcode1(0xc1).reg(5).rm64(rm).imm8(imm).rex_w(),
+        Rm32(rm)          => Inst::opcode1(0xd1).reg(5).rm(rm),
+        Rm64(rm)          => Inst::opcode1(0xd1).reg(5).rm(rm).rex_w(),
+        Rm32Cl(rm)        => Inst::opcode1(0xd3).reg(5).rm(rm),
+        Rm64Cl(rm)        => Inst::opcode1(0xd3).reg(5).rm(rm).rex_w(),
+        Rm32Imm8(rm, imm) => Inst::opcode1(0xc1).reg(5).rm(rm).imm8(imm),
+        Rm64Imm8(rm, imm) => Inst::opcode1(0xc1).reg(5).rm(rm).imm8(imm).rex_w(),
     },
 
     Sbb(0x18, 3),
@@ -1494,8 +1463,8 @@ impl_encode! {
     },
 
     Set {
-        CcRm8l(cc, rm) => Inst::opcode2(0x90).cc(cc).rm8l(rm),
-        CcRm8(cc, rm)  => Inst::opcode2(0x90).cc(cc).rm8(rm),
+        CcRm8l(cc, rm) => Inst::opcode2(0x90).cc(cc).rm(rm),
+        CcRm8(cc, rm)  => Inst::opcode2(0x90).cc(cc).rm(rm),
     },
 
     Sfence { Inst::opcode3(0xae, 0xf8) },
@@ -1505,21 +1474,21 @@ impl_encode! {
     },
 
     Shld {
-        Rm16R16Imm8(rm, r, imm) => Inst::opcode2(0xa4).rm16(rm).reg(r).imm8(imm).osz(),
-        Rm16R16Cl(rm, r)        => Inst::opcode2(0xa5).rm16(rm).reg(r).osz(),
-        Rm32R32Imm8(rm, r, imm) => Inst::opcode2(0xa4).rm32(rm).reg(r).imm8(imm),
-        Rm64R64Imm8(rm, r, imm) => Inst::opcode2(0xa4).rm64(rm).reg(r).imm8(imm).rex_w(),
-        Rm32R32Cl(rm, r)        => Inst::opcode2(0xa5).rm32(rm).reg(r),
-        Rm64R64Cl(rm, r)        => Inst::opcode2(0xa5).rm64(rm).reg(r).rex_w(),
+        Rm16R16Imm8(rm, r, imm) => Inst::opcode2(0xa4).rm(rm).reg(r).imm8(imm).osz(),
+        Rm16R16Cl(rm, r)        => Inst::opcode2(0xa5).rm(rm).reg(r).osz(),
+        Rm32R32Imm8(rm, r, imm) => Inst::opcode2(0xa4).rm(rm).reg(r).imm8(imm),
+        Rm64R64Imm8(rm, r, imm) => Inst::opcode2(0xa4).rm(rm).reg(r).imm8(imm).rex_w(),
+        Rm32R32Cl(rm, r)        => Inst::opcode2(0xa5).rm(rm).reg(r),
+        Rm64R64Cl(rm, r)        => Inst::opcode2(0xa5).rm(rm).reg(r).rex_w(),
     },
 
     Shrd {
-        Rm16R16Imm8(rm, r, imm) => Inst::opcode2(0xac).rm16(rm).reg(r).imm8(imm).osz(),
-        Rm16R16Cl(rm, r)        => Inst::opcode2(0xad).rm16(rm).reg(r).osz(),
-        Rm32R32Imm8(rm, r, imm) => Inst::opcode2(0xac).rm32(rm).reg(r).imm8(imm),
-        Rm64R64Imm8(rm, r, imm) => Inst::opcode2(0xac).rm64(rm).reg(r).imm8(imm).rex_w(),
-        Rm32R32Cl(rm, r)        => Inst::opcode2(0xad).rm32(rm).reg(r),
-        Rm64R64Cl(rm, r)        => Inst::opcode2(0xad).rm64(rm).reg(r).rex_w(),
+        Rm16R16Imm8(rm, r, imm) => Inst::opcode2(0xac).rm(rm).reg(r).imm8(imm).osz(),
+        Rm16R16Cl(rm, r)        => Inst::opcode2(0xad).rm(rm).reg(r).osz(),
+        Rm32R32Imm8(rm, r, imm) => Inst::opcode2(0xac).rm(rm).reg(r).imm8(imm),
+        Rm64R64Imm8(rm, r, imm) => Inst::opcode2(0xac).rm(rm).reg(r).imm8(imm).rex_w(),
+        Rm32R32Cl(rm, r)        => Inst::opcode2(0xad).rm(rm).reg(r),
+        Rm64R64Cl(rm, r)        => Inst::opcode2(0xad).rm(rm).reg(r).rex_w(),
     },
 
     Sidt {
@@ -1527,14 +1496,14 @@ impl_encode! {
     },
 
     Sldt {
-        Rm16(rm) => Inst::opcode2(0x00).reg(0).rm16(rm),
-        Rm64(rm) => Inst::opcode2(0x00).reg(0).rm64(rm).rex_w(),
+        Rm16(rm) => Inst::opcode2(0x00).reg(0).rm(rm),
+        Rm64(rm) => Inst::opcode2(0x00).reg(0).rm(rm).rex_w(),
     },
 
     Smsw {
-        Rm16(rm) => Inst::opcode2(0x01).reg(4).rm16(rm).osz(),
-        Rm32(rm) => Inst::opcode2(0x01).reg(4).rm32(rm),
-        Rm64(rm) => Inst::opcode2(0x01).reg(4).rm64(rm).rex_w(),
+        Rm16(rm) => Inst::opcode2(0x01).reg(4).rm(rm).osz(),
+        Rm32(rm) => Inst::opcode2(0x01).reg(4).rm(rm),
+        Rm64(rm) => Inst::opcode2(0x01).reg(4).rm(rm).rex_w(),
     },
 
     Stac { Inst::opcode3(0x01, 0xCB) },
