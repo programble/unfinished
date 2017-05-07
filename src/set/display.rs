@@ -837,4 +837,6 @@ impl_display! {
 
     Tzcnt("tzcnt", 2, { R16Rm16, R32Rm32, R64Rm64 }),
     Ud2("ud2"),
+    Verr("verr", 1, { Rm16 }),
+    Verw("verw", 1, { Rm16 }),
 }

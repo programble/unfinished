@@ -1683,4 +1683,51 @@ declare! {
     // UCOMISS
 
     Ud2(),
+
+    // UNPCKHPD
+    // UNPCKHPS
+    // UNPCKLPD
+    // UNPCKLPS
+    // VALIGN
+    // VBLENDM
+    // VBROADCAST
+    // VPBROADCASTM
+    // VCOMPRESSPD
+    // VCOMPRESSPS
+    // VCVTPD2QQ
+    // VCVTPD2UDQ
+    // VCVTPD2UQQ
+    // VCVTPH2PS
+    // VCVTPS2PH
+    // VCVTPS2UDQ
+    // VCVTPS2QQ
+    // VCVTPS2UQQ
+    // VCVTQQ2PD
+    // VCVTQQ2PS
+    // VCVTSD2USI
+    // VCVTSS2USI
+    // VCVTTPD2QQ
+    // VCVTTPD2UDQ
+    // VCVTTPD2UQQ
+    // VCVTTPS2UDQ
+    // VCVTTPS2QQ
+    // VCVTTPS2UQQ
+    // VCVTTSD2USI
+    // VCVTTSS2USI
+    // VCVTUDQ2PD
+    // VCVTUDQ2PS
+    // VCVTUQQ2PD
+    // VCVTUQQ2PS
+    // VCVTUSI2SD
+    // VCVTUSI2SS
+    // VDBPSADBW
+    // VEXPANDPD
+    // VEXPANDPS
+
+    Verr {
+        Rm16(Rm16),
+    },
+    Verw {
+        Rm16(Rm16),
+    },
 }

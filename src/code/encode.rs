@@ -1567,4 +1567,11 @@ impl_encode! {
     },
 
     Ud2 { Inst::opcode2(0x0b) },
+
+    Verr {
+        Rm16(rm) => Inst::opcode2(0x00).reg(4).rm(rm),
+    },
+    Verw {
+        Rm16(rm) => Inst::opcode2(0x00).reg(5).rm(rm),
+    },
 }
