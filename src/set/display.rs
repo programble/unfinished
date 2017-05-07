@@ -801,4 +801,5 @@ impl_display! {
     },
 
     Str("str", 1, { Rm16 }),
+    Sub("sub", a),
 }

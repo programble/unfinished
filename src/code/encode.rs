@@ -1522,4 +1522,6 @@ impl_encode! {
     Str {
         Rm16(rm) => Inst::opcode2(0x00).reg(1).rm(rm),
     },
+
+    Sub(0x28, 5),
 }
