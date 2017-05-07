@@ -1530,4 +1530,14 @@ impl_encode! {
     Syscall { Inst::opcode2(0x05) },
 
     Sysenter { Inst::opcode2(0x34) },
+
+    Sysexit {
+        D => Inst::opcode2(0x35),
+        Q => Inst::opcode2(0x35).rex_w(),
+    },
+
+    Sysret {
+        D => Inst::opcode2(0x07),
+        Q => Inst::opcode2(0x07).rex_w(),
+    },
 }

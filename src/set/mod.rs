@@ -1643,4 +1643,14 @@ declare! {
     Syscall(),
 
     Sysenter(),
+
+    Sysexit {
+        D,
+        Q,
+    },
+
+    Sysret {
+        D,
+        Q,
+    },
 }

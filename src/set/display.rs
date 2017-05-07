@@ -805,4 +805,14 @@ impl_display! {
     Swapgs("swapgs"),
     Syscall("syscall"),
     Sysenter("sysenter"),
+
+    Sysexit {
+        D => format_args!("sysexitd"),
+        Q => format_args!("sysexitq"),
+    },
+
+    Sysret {
+        D => format_args!("sysretd"),
+        Q => format_args!("sysretq"),
+    },
 }
