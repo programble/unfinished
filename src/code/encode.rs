@@ -1565,4 +1565,6 @@ impl_encode! {
         R32Rm32(r, rm) => Inst::opcode2(0xbc).rep().reg(r).rm(rm),
         R64Rm64(r, rm) => Inst::opcode2(0xbc).rep().reg(r).rm(rm).rex_w(),
     },
+
+    Ud2 { Inst::opcode2(0x0b) },
 }

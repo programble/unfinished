@@ -1678,4 +1678,9 @@ declare! {
         R32Rm32(R32, Rm32),
         R64Rm64(R64, Rm64),
     },
+
+    // UCOMISD
+    // UCOMISS
+
+    Ud2(),
 }
