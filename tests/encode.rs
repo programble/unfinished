@@ -252,7 +252,7 @@ test_encode! {
             "80 05 04 03 02 01 05",
     },
 
-    add_rm8_imm8_m8_offset32 {
+    add_rm8_imm8_m8_offs32 {
         Add::Rm8Imm8(M(Offs32(None, RipDisp(0x01020304))), Imm8(0x05)) =>
             "67 80 05 04 03 02 01 05",
     },

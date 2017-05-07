@@ -208,10 +208,10 @@ impl<B32, I32, B64, I64> Display for Mem<B32, I32, B64, I64>
 where Offs<B32, I32>: Display, Offs<B64, I64>: Display {
     fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
         match *self {
-            Mem::Offs32(None, ref offset) => write!(f, "[{}]", offset),
-            Mem::Offs64(None, ref offset) => write!(f, "[{}]", offset),
-            Mem::Offs32(Some(sreg), ref offset) => write!(f, "[{}:{}]", sreg, offset),
-            Mem::Offs64(Some(sreg), ref offset) => write!(f, "[{}:{}]", sreg, offset),
+            Mem::Offs32(None, ref offs) => write!(f, "[{}]", offs),
+            Mem::Offs64(None, ref offs) => write!(f, "[{}]", offs),
+            Mem::Offs32(Some(sreg), ref offs) => write!(f, "[{}:{}]", sreg, offs),
+            Mem::Offs64(Some(sreg), ref offs) => write!(f, "[{}:{}]", sreg, offs),
         }
     }
 }
@@ -219,8 +219,8 @@ where Offs<B32, I32>: Display, Offs<B64, I64>: Display {
 impl Display for Moffs {
     fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
         match *self {
-            Moffs(None, offset) => write!(f, "[qword {:#018x}]", offset),
-            Moffs(Some(sreg), offset) => write!(f, "[{}:qword {:#018x}]", sreg, offset),
+            Moffs(None, offs) => write!(f, "[qword {:#018x}]", offs),
+            Moffs(Some(sreg), offs) => write!(f, "[{}:qword {:#018x}]", sreg, offs),
         }
     }
 }

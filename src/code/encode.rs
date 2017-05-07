@@ -57,14 +57,14 @@ pub trait InstExt {
 
     fn disp<D>(self, disp: D) -> Self where Disp: From<D>;
 
-    fn offset_index_disp<Index>(self, index: Index, scale: Scale, disp: i32) -> Self
+    fn offs_index_disp<Index>(self, index: Index, scale: Scale, disp: i32) -> Self
         where Index: Reg;
-    fn offset_disp(self, disp: mem::Disp) -> Self;
-    fn offset_base_index<Base, Index>(self, base: Base, index: Index, scale: Scale) -> Self
+    fn offs_disp(self, disp: mem::Disp) -> Self;
+    fn offs_base_index<Base, Index>(self, base: Base, index: Index, scale: Scale) -> Self
         where Base: Reg, Index: Reg;
-    fn offset_base<Base>(self, base: Base) -> Self where Base: Reg;
-    fn offset_rip_disp(self, disp: i32) -> Self;
-    fn offset<Base, Index>(self, offs: Offs<Base, Index>) -> Self
+    fn offs_base<Base>(self, base: Base) -> Self where Base: Reg;
+    fn offs_rip_disp(self, disp: i32) -> Self;
+    fn offs<Base, Index>(self, offs: Offs<Base, Index>) -> Self
         where Base: Reg, Index: Reg;
     fn mem<B32, I32, B64, I64>(self, mem: Mem<B32, I32, B64, I64>) -> Self
         where B32: Reg, I32: Reg, B64: Reg, I64: Reg;
@@ -262,7 +262,7 @@ impl InstExt for Inst {
         self
     }
 
-    fn offset_index_disp<Index>(self, index: Index, scale: Scale, disp: i32) -> Self
+    fn offs_index_disp<Index>(self, index: Index, scale: Scale, disp: i32) -> Self
     where Index: Reg {
         self.modrm_mod(0b00)
             .modrm_rm(0b100)
@@ -272,61 +272,61 @@ impl InstExt for Inst {
             .disp(disp)
     }
     #[inline]
-    fn offset_disp(self, disp: mem::Disp) -> Self {
+    fn offs_disp(self, disp: mem::Disp) -> Self {
         match disp {
             mem::Disp::Disp8(disp) => self.modrm_mod(0b01).disp(disp),
             mem::Disp::Disp32(disp) => self.modrm_mod(0b10).disp(disp),
         }
     }
-    fn offset_base_index<Base, Index>(mut self, base: Base, index: Index, scale: Scale) -> Self
+    fn offs_base_index<Base, Index>(mut self, base: Base, index: Index, scale: Scale) -> Self
     where Base: Reg, Index: Reg {
         if base.low_bits() == 0b101 {
-            self = self.offset_disp(mem::Disp::Disp8(0));
+            self = self.offs_disp(mem::Disp::Disp8(0));
         }
         self.modrm_rm(0b100)
             .scale(scale)
             .index(index)
             .base(base)
     }
-    fn offset_base<Base>(self, base: Base) -> Self where Base: Reg {
+    fn offs_base<Base>(self, base: Base) -> Self where Base: Reg {
         match base.low_bits() {
-            0b100 => self.offset_base_index(base, 0b100, Scale::X1),
-            0b101 => self.rm_base(base).offset_disp(mem::Disp::Disp8(0)),
+            0b100 => self.offs_base_index(base, 0b100, Scale::X1),
+            0b101 => self.rm_base(base).offs_disp(mem::Disp::Disp8(0)),
             _ => self.rm_base(base),
         }
     }
     #[inline]
-    fn offset_rip_disp(self, disp: i32) -> Self {
+    fn offs_rip_disp(self, disp: i32) -> Self {
         self.modrm_mod(0b00)
             .modrm_rm(0b101)
             .disp(disp)
     }
-    fn offset<Base, Index>(self, offs: Offs<Base, Index>) -> Self
+    fn offs<Base, Index>(self, offs: Offs<Base, Index>) -> Self
     where Base: Reg, Index: Reg {
         match offs {
-            Offs::Base(b)                   => self.offset_base(b),
-            Offs::BaseDisp(b, d)            => self.offset_base(b).offset_disp(d),
-            Offs::BaseIndex(b, i, s)        => self.offset_base_index(b, i, s),
-            Offs::BaseIndexDisp(b, i, s, d) => self.offset_base_index(b, i, s).offset_disp(d),
-            Offs::IndexDisp(i, s, d)        => self.offset_index_disp(i, s, d),
-            Offs::Disp(d)                   => self.offset_index_disp(0b100, Scale::X1, d),
-            Offs::RipDisp(d)                => self.offset_rip_disp(d),
+            Offs::Base(b)                   => self.offs_base(b),
+            Offs::BaseDisp(b, d)            => self.offs_base(b).offs_disp(d),
+            Offs::BaseIndex(b, i, s)        => self.offs_base_index(b, i, s),
+            Offs::BaseIndexDisp(b, i, s, d) => self.offs_base_index(b, i, s).offs_disp(d),
+            Offs::IndexDisp(i, s, d)        => self.offs_index_disp(i, s, d),
+            Offs::Disp(d)                   => self.offs_index_disp(0b100, Scale::X1, d),
+            Offs::RipDisp(d)                => self.offs_rip_disp(d),
         }
     }
     fn mem<B32, I32, B64, I64>(self, mem: Mem<B32, I32, B64, I64>) -> Self
     where B32: Reg, I32: Reg, B64: Reg, I64: Reg {
         match mem {
-            Mem::Offs32(None, offset)       => self.asz().offset(offset),
-            Mem::Offs32(Some(sreg), offset) => self.asz().sreg(sreg).offset(offset),
-            Mem::Offs64(None, offset)       => self.offset(offset),
-            Mem::Offs64(Some(sreg), offset) => self.sreg(sreg).offset(offset),
+            Mem::Offs32(None, offs)       => self.asz().offs(offs),
+            Mem::Offs32(Some(sreg), offs) => self.asz().sreg(sreg).offs(offs),
+            Mem::Offs64(None, offs)       => self.offs(offs),
+            Mem::Offs64(Some(sreg), offs) => self.sreg(sreg).offs(offs),
         }
     }
     #[inline]
     fn moffs(self, moffs: Moffs) -> Self {
         match moffs {
-            Moffs(None, offset)       => self.disp(offset as i64),
-            Moffs(Some(sreg), offset) => self.sreg(sreg).disp(offset as i64),
+            Moffs(None, offs)       => self.disp(offs as i64),
+            Moffs(Some(sreg), offs) => self.sreg(sreg).disp(offs as i64),
         }
     }
 
