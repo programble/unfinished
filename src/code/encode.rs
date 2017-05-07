@@ -1524,4 +1524,10 @@ impl_encode! {
     },
 
     Sub(0x28, 5),
+
+    Swapgs { Inst::opcode3(0x01, 0xf8) },
+
+    Syscall { Inst::opcode2(0x05) },
+
+    Sysenter { Inst::opcode2(0x34) },
 }

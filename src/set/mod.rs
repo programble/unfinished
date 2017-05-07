@@ -1632,4 +1632,15 @@ declare! {
         R32Rm32(R32, Rm32),
         R64Rm64(R64, Rm64),
     },
+
+    // SUBPD
+    // SUBPS
+    // SUBSD
+    // SUBSS
+
+    Swapgs(),
+
+    Syscall(),
+
+    Sysenter(),
 }
