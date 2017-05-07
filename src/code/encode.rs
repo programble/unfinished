@@ -1540,4 +1540,23 @@ impl_encode! {
         D => Inst::opcode2(0x07),
         Q => Inst::opcode2(0x07).rex_w(),
     },
+
+    Test {
+        AlImm8(imm)   => Inst::opcode1(0xa8).imm8(imm),
+        AxImm16(imm)  => Inst::opcode1(0xa9).imm16(imm).osz(),
+        EaxImm32(imm) => Inst::opcode1(0xa9).imm32(imm),
+        RaxImm32(imm) => Inst::opcode1(0xa9).imm32(imm).rex_w(),
+
+        Rm8lImm8(rm, imm)  => Inst::opcode1(0xf6).reg(0).rm(rm).imm8(imm),
+        Rm8Imm8(rm, imm)   => Inst::opcode1(0xf6).reg(0).rm(rm).imm8(imm),
+        Rm16Imm16(rm, imm) => Inst::opcode1(0xf7).reg(0).rm(rm).imm16(imm).osz(),
+        Rm32Imm32(rm, imm) => Inst::opcode1(0xf7).reg(0).rm(rm).imm32(imm),
+        Rm64Imm32(rm, imm) => Inst::opcode1(0xf7).reg(0).rm(rm).imm32(imm).rex_w(),
+
+        Rm8lR8l(rm, r) => Inst::opcode1(0x84).rm(rm).reg(r),
+        Rm8R8(rm, r)   => Inst::opcode1(0x84).rm(rm).reg(r),
+        Rm16R16(rm, r) => Inst::opcode1(0x85).rm(rm).reg(r).osz(),
+        Rm32R32(rm, r) => Inst::opcode1(0x85).rm(rm).reg(r),
+        Rm64R64(rm, r) => Inst::opcode1(0x85).rm(rm).reg(r).rex_w(),
+    },
 }

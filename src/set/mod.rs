@@ -1653,4 +1653,23 @@ declare! {
         D,
         Q,
     },
+
+    Test {
+        AlImm8(Imm8),
+        AxImm16(Imm16),
+        EaxImm32(Imm32),
+        RaxImm32(Imm32),
+
+        Rm8lImm8(Rm8l, Imm8),
+        Rm8Imm8(Rm8, Imm8),
+        Rm16Imm16(Rm16, Imm16),
+        Rm32Imm32(Rm32, Imm32),
+        Rm64Imm32(Rm64, Imm32),
+
+        Rm8lR8l(Rm8l, R8l),
+        Rm8R8(Rm8, R8),
+        Rm16R16(Rm16, R16),
+        Rm32R32(Rm32, R32),
+        Rm64R64(Rm64, R64),
+    },
 }

@@ -815,4 +815,23 @@ impl_display! {
         D => format_args!("sysretd"),
         Q => format_args!("sysretq"),
     },
+
+    Test {
+        AlImm8(imm)   => format_args!("test al, {}", imm),
+        AxImm16(imm)  => format_args!("test ax, {}", imm),
+        EaxImm32(imm) => format_args!("test eax, {}", imm),
+        RaxImm32(imm) => format_args!("test rax, {}", imm),
+
+        Rm8lImm8(rm, imm)  => format_args!("test {}, {}", rm, imm),
+        Rm8Imm8(rm, imm)   => format_args!("test {}, {}", rm, imm),
+        Rm16Imm16(rm, imm) => format_args!("test {}, {}", rm, imm),
+        Rm32Imm32(rm, imm) => format_args!("test {}, {}", rm, imm),
+        Rm64Imm32(rm, imm) => format_args!("test {}, {}", rm, imm),
+
+        Rm8lR8l(rm, r) => format_args!("test {}, {}", rm, r),
+        Rm8R8(rm, r)   => format_args!("test {}, {}", rm, r),
+        Rm16R16(rm, r) => format_args!("test {}, {}", rm, r),
+        Rm32R32(rm, r) => format_args!("test {}, {}", rm, r),
+        Rm64R64(rm, r) => format_args!("test {}, {}", rm, r),
+    },
 }
