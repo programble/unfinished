@@ -1574,4 +1574,6 @@ impl_encode! {
     Verw {
         Rm16(rm) => Inst::opcode2(0x00).reg(5).rm(rm),
     },
+
+    Wait { Inst::opcode1(0x9b) },
 }

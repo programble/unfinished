@@ -839,4 +839,5 @@ impl_display! {
     Ud2("ud2"),
     Verr("verr", 1, { Rm16 }),
     Verw("verw", 1, { Rm16 }),
+    Wait("wait"),
 }
