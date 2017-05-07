@@ -79,13 +79,7 @@ pub enum Mem<B32 = R32, I32 = Index32, B64 = R64, I64 = Index64> {
 
 /// Direct memory offset.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum Moffs {
-    /// 32-bit offset.
-    Moffset32(Option<Sreg>, u32),
-
-    /// 64-bit offset.
-    Moffset64(Option<Sreg>, u64),
-}
+pub struct Moffs(pub Option<Sreg>, pub u64);
 
 /// Register or memory operand.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -225,10 +219,8 @@ where Offset<B32, I32>: Display, Offset<B64, I64>: Display {
 impl Display for Moffs {
     fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
         match *self {
-            Moffs::Moffset32(None, offset) => write!(f, "[dword {:#010x}]", offset),
-            Moffs::Moffset64(None, offset) => write!(f, "[qword {:#018x}]", offset),
-            Moffs::Moffset32(Some(sreg), offset) => write!(f, "[{}:dword {:#010x}]", sreg, offset),
-            Moffs::Moffset64(Some(sreg), offset) => write!(f, "[{}:qword {:#018x}]", sreg, offset),
+            Moffs(None, offset) => write!(f, "[qword {:#018x}]", offset),
+            Moffs(Some(sreg), offset) => write!(f, "[{}:qword {:#018x}]", sreg, offset),
         }
     }
 }

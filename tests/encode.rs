@@ -343,23 +343,21 @@ test_encode! {
     },
 
     mov_al_moffs8 {
-        Mov::AlMoffs8(Moffset32(None, 0x01020304)) => "67 a0 04 03 02 01",
-        Mov::AlMoffs8(Moffset32(Some(Es), 0x01020304)) => "26 67 a0 04 03 02 01",
-        Mov::AlMoffs8(Moffset64(None, 0x0102030405060708)) => "a0 08 07 06 05 04 03 02 01",
-        Mov::AlMoffs8(Moffset64(Some(Es), 0x0102030405060708)) => "26 a0 08 07 06 05 04 03 02 01",
+        Mov::AlMoffs8(Moffs(None, 0x0102030405060708)) => "a0 08 07 06 05 04 03 02 01",
+        Mov::AlMoffs8(Moffs(Some(Es), 0x0102030405060708)) => "26 a0 08 07 06 05 04 03 02 01",
     },
 
     mov_eax_moffs {
-        Mov::AxMoffs16(Moffset64(None, 0x0102030405060708)) => "66 a1 08 07 06 05 04 03 02 01",
-        Mov::EaxMoffs32(Moffset64(None, 0x0102030405060708)) => "a1 08 07 06 05 04 03 02 01",
-        Mov::RaxMoffs64(Moffset64(None, 0x0102030405060708)) => "48 a1 08 07 06 05 04 03 02 01",
+        Mov::AxMoffs16(Moffs(None, 0x0102030405060708)) => "66 a1 08 07 06 05 04 03 02 01",
+        Mov::EaxMoffs32(Moffs(None, 0x0102030405060708)) => "a1 08 07 06 05 04 03 02 01",
+        Mov::RaxMoffs64(Moffs(None, 0x0102030405060708)) => "48 a1 08 07 06 05 04 03 02 01",
     },
 
     mov_moffs_eax {
-        Mov::Moffs8Al(Moffset64(None, 0x0102030405060708)) => "a2 08 07 06 05 04 03 02 01",
-        Mov::Moffs16Ax(Moffset64(None, 0x0102030405060708)) => "66 a3 08 07 06 05 04 03 02 01",
-        Mov::Moffs32Eax(Moffset64(None, 0x0102030405060708)) => "a3 08 07 06 05 04 03 02 01",
-        Mov::Moffs64Rax(Moffset64(None, 0x0102030405060708)) => "48 a3 08 07 06 05 04 03 02 01",
+        Mov::Moffs8Al(Moffs(None, 0x0102030405060708)) => "a2 08 07 06 05 04 03 02 01",
+        Mov::Moffs16Ax(Moffs(None, 0x0102030405060708)) => "66 a3 08 07 06 05 04 03 02 01",
+        Mov::Moffs32Eax(Moffs(None, 0x0102030405060708)) => "a3 08 07 06 05 04 03 02 01",
+        Mov::Moffs64Rax(Moffs(None, 0x0102030405060708)) => "48 a3 08 07 06 05 04 03 02 01",
     },
 
     mov_r_imm {

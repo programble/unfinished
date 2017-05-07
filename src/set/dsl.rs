@@ -18,5 +18,5 @@ pub use super::mem::Scale::*;
 pub use super::mem::Disp::*;
 pub use super::mem::Offset::*;
 pub use super::mem::Mem::*;
-pub use super::mem::Moffs::*;
+pub use super::mem::Moffs;
 pub use super::mem::Rm::*;

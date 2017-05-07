@@ -325,10 +325,8 @@ impl InstExt for Inst {
     #[inline]
     fn moffs(self, moffs: Moffs) -> Self {
         match moffs {
-            Moffs::Moffset32(None, offset)       => self.asz().disp(offset as i32),
-            Moffs::Moffset32(Some(sreg), offset) => self.asz().sreg(sreg).disp(offset as i32),
-            Moffs::Moffset64(None, offset)       => self.disp(offset as i64),
-            Moffs::Moffset64(Some(sreg), offset) => self.sreg(sreg).disp(offset as i64),
+            Moffs(None, offset)       => self.disp(offset as i64),
+            Moffs(Some(sreg), offset) => self.sreg(sreg).disp(offset as i64),
         }
     }
 
