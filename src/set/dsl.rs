@@ -16,7 +16,7 @@ pub use super::reg::Dr::*;
 pub use super::mem::{Index32l, Index32, Index64l, Index64};
 pub use super::mem::Scale::*;
 pub use super::mem::Disp::*;
-pub use super::mem::Offset::*;
+pub use super::mem::Offs::*;
 pub use super::mem::Mem::*;
 pub use super::mem::Moffs;
 pub use super::mem::Rm::*;

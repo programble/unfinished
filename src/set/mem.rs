@@ -44,7 +44,7 @@ pub enum Disp {
 
 /// Memory offset.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-pub enum Offset<Base, Index> {
+pub enum Offs<Base, Index> {
     /// Base.
     Base(Base),
 
@@ -71,10 +71,10 @@ pub enum Offset<Base, Index> {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Mem<B32 = R32, I32 = Index32, B64 = R64, I64 = Index64> {
     /// 32-bit offset.
-    Offset32(Option<Sreg>, Offset<B32, I32>),
+    Offs32(Option<Sreg>, Offs<B32, I32>),
 
     /// 64-bit offset.
-    Offset64(Option<Sreg>, Offset<B64, I64>),
+    Offs64(Option<Sreg>, Offs<B64, I64>),
 }
 
 /// Direct memory offset.
@@ -189,29 +189,29 @@ impl Display for Disp {
     }
 }
 
-impl<Base, Index> Display for Offset<Base, Index>
+impl<Base, Index> Display for Offs<Base, Index>
 where Base: Display, Index: Display {
     fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
         match *self {
-            Offset::Base(ref b) => write!(f, "{}", b),
-            Offset::BaseDisp(ref b, d) => write!(f, "{} + {}", b, d),
-            Offset::BaseIndex(ref b, ref i, s) => write!(f, "{} + {} * {}", b, i, s),
-            Offset::BaseIndexDisp(ref b, ref i, s, d) => write!(f, "{} + {} * {} + {}", b, i, s, d),
-            Offset::IndexDisp(ref i, s, d) => write!(f, "{} * {} + {}", i, s, d),
-            Offset::Disp(d) => write!(f, "{:#010x}", d),
-            Offset::RipDisp(d) => write!(f, "rip + {:#010x}", d),
+            Offs::Base(ref b) => write!(f, "{}", b),
+            Offs::BaseDisp(ref b, d) => write!(f, "{} + {}", b, d),
+            Offs::BaseIndex(ref b, ref i, s) => write!(f, "{} + {} * {}", b, i, s),
+            Offs::BaseIndexDisp(ref b, ref i, s, d) => write!(f, "{} + {} * {} + {}", b, i, s, d),
+            Offs::IndexDisp(ref i, s, d) => write!(f, "{} * {} + {}", i, s, d),
+            Offs::Disp(d) => write!(f, "{:#010x}", d),
+            Offs::RipDisp(d) => write!(f, "rip + {:#010x}", d),
         }
     }
 }
 
 impl<B32, I32, B64, I64> Display for Mem<B32, I32, B64, I64>
-where Offset<B32, I32>: Display, Offset<B64, I64>: Display {
+where Offs<B32, I32>: Display, Offs<B64, I64>: Display {
     fn fmt(&self, f: &mut Formatter) -> Result<(), Error> {
         match *self {
-            Mem::Offset32(None, ref offset) => write!(f, "[{}]", offset),
-            Mem::Offset64(None, ref offset) => write!(f, "[{}]", offset),
-            Mem::Offset32(Some(sreg), ref offset) => write!(f, "[{}:{}]", sreg, offset),
-            Mem::Offset64(Some(sreg), ref offset) => write!(f, "[{}:{}]", sreg, offset),
+            Mem::Offs32(None, ref offset) => write!(f, "[{}]", offset),
+            Mem::Offs64(None, ref offset) => write!(f, "[{}]", offset),
+            Mem::Offs32(Some(sreg), ref offset) => write!(f, "[{}:{}]", sreg, offset),
+            Mem::Offs64(Some(sreg), ref offset) => write!(f, "[{}:{}]", sreg, offset),
         }
     }
 }

@@ -54,206 +54,206 @@ test_encode! {
     },
 
     add_rm8_imm8_m8_sreg {
-        Add::Rm8Imm8(M(Offset64(Some(Cs), Base(Rax))), Imm8(0x01)) => "2e 80 00 01",
-        Add::Rm8Imm8(M(Offset64(Some(Ss), Base(Rax))), Imm8(0x01)) => "36 80 00 01",
-        Add::Rm8Imm8(M(Offset64(Some(Ds), Base(Rax))), Imm8(0x01)) => "3e 80 00 01",
-        Add::Rm8Imm8(M(Offset64(Some(Es), Base(Rax))), Imm8(0x01)) => "26 80 00 01",
-        Add::Rm8Imm8(M(Offset64(Some(Fs), Base(Rax))), Imm8(0x01)) => "64 80 00 01",
-        Add::Rm8Imm8(M(Offset64(Some(Gs), Base(Rax))), Imm8(0x01)) => "65 80 00 01",
+        Add::Rm8Imm8(M(Offs64(Some(Cs), Base(Rax))), Imm8(0x01)) => "2e 80 00 01",
+        Add::Rm8Imm8(M(Offs64(Some(Ss), Base(Rax))), Imm8(0x01)) => "36 80 00 01",
+        Add::Rm8Imm8(M(Offs64(Some(Ds), Base(Rax))), Imm8(0x01)) => "3e 80 00 01",
+        Add::Rm8Imm8(M(Offs64(Some(Es), Base(Rax))), Imm8(0x01)) => "26 80 00 01",
+        Add::Rm8Imm8(M(Offs64(Some(Fs), Base(Rax))), Imm8(0x01)) => "64 80 00 01",
+        Add::Rm8Imm8(M(Offs64(Some(Gs), Base(Rax))), Imm8(0x01)) => "65 80 00 01",
     },
 
     add_rm8_imm8_m8_base {
-        Add::Rm8Imm8(M(Offset64(None, Base(Rax))), Imm8(0x01)) => "80 00 01",
-        Add::Rm8Imm8(M(Offset64(None, Base(Rcx))), Imm8(0x01)) => "80 01 01",
-        Add::Rm8Imm8(M(Offset64(None, Base(Rdx))), Imm8(0x01)) => "80 02 01",
-        Add::Rm8Imm8(M(Offset64(None, Base(Rbx))), Imm8(0x01)) => "80 03 01",
-        Add::Rm8Imm8(M(Offset64(None, Base(Rsp))), Imm8(0x01)) => "80 04 24 01",
-        Add::Rm8Imm8(M(Offset64(None, Base(Rbp))), Imm8(0x01)) => "80 45 00 01",
-        Add::Rm8Imm8(M(Offset64(None, Base(Rsi))), Imm8(0x01)) => "80 06 01",
-        Add::Rm8Imm8(M(Offset64(None, Base(Rdi))), Imm8(0x01)) => "80 07 01",
-        Add::Rm8Imm8(M(Offset64(None, Base(R8))), Imm8(0x01)) => "41 80 00 01",
-        Add::Rm8Imm8(M(Offset64(None, Base(R9))), Imm8(0x01)) => "41 80 01 01",
-        Add::Rm8Imm8(M(Offset64(None, Base(R10))), Imm8(0x01)) => "41 80 02 01",
-        Add::Rm8Imm8(M(Offset64(None, Base(R11))), Imm8(0x01)) => "41 80 03 01",
-        Add::Rm8Imm8(M(Offset64(None, Base(R12))), Imm8(0x01)) => "41 80 04 24 01",
-        Add::Rm8Imm8(M(Offset64(None, Base(R13))), Imm8(0x01)) => "41 80 45 00 01",
-        Add::Rm8Imm8(M(Offset64(None, Base(R14))), Imm8(0x01)) => "41 80 06 01",
-        Add::Rm8Imm8(M(Offset64(None, Base(R15))), Imm8(0x01)) => "41 80 07 01",
+        Add::Rm8Imm8(M(Offs64(None, Base(Rax))), Imm8(0x01)) => "80 00 01",
+        Add::Rm8Imm8(M(Offs64(None, Base(Rcx))), Imm8(0x01)) => "80 01 01",
+        Add::Rm8Imm8(M(Offs64(None, Base(Rdx))), Imm8(0x01)) => "80 02 01",
+        Add::Rm8Imm8(M(Offs64(None, Base(Rbx))), Imm8(0x01)) => "80 03 01",
+        Add::Rm8Imm8(M(Offs64(None, Base(Rsp))), Imm8(0x01)) => "80 04 24 01",
+        Add::Rm8Imm8(M(Offs64(None, Base(Rbp))), Imm8(0x01)) => "80 45 00 01",
+        Add::Rm8Imm8(M(Offs64(None, Base(Rsi))), Imm8(0x01)) => "80 06 01",
+        Add::Rm8Imm8(M(Offs64(None, Base(Rdi))), Imm8(0x01)) => "80 07 01",
+        Add::Rm8Imm8(M(Offs64(None, Base(R8))), Imm8(0x01)) => "41 80 00 01",
+        Add::Rm8Imm8(M(Offs64(None, Base(R9))), Imm8(0x01)) => "41 80 01 01",
+        Add::Rm8Imm8(M(Offs64(None, Base(R10))), Imm8(0x01)) => "41 80 02 01",
+        Add::Rm8Imm8(M(Offs64(None, Base(R11))), Imm8(0x01)) => "41 80 03 01",
+        Add::Rm8Imm8(M(Offs64(None, Base(R12))), Imm8(0x01)) => "41 80 04 24 01",
+        Add::Rm8Imm8(M(Offs64(None, Base(R13))), Imm8(0x01)) => "41 80 45 00 01",
+        Add::Rm8Imm8(M(Offs64(None, Base(R14))), Imm8(0x01)) => "41 80 06 01",
+        Add::Rm8Imm8(M(Offs64(None, Base(R15))), Imm8(0x01)) => "41 80 07 01",
     },
 
     add_rm8_imm8_m8_base_disp8 {
-        Add::Rm8Imm8(M(Offset64(None, BaseDisp(Rax, Disp8(0x01)))), Imm8(0x02)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseDisp(Rax, Disp8(0x01)))), Imm8(0x02)) =>
             "80 40 01 02",
-        Add::Rm8Imm8(M(Offset64(None, BaseDisp(Rcx, Disp8(0x01)))), Imm8(0x02)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseDisp(Rcx, Disp8(0x01)))), Imm8(0x02)) =>
             "80 41 01 02",
-        Add::Rm8Imm8(M(Offset64(None, BaseDisp(Rdx, Disp8(0x01)))), Imm8(0x02)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseDisp(Rdx, Disp8(0x01)))), Imm8(0x02)) =>
             "80 42 01 02",
-        Add::Rm8Imm8(M(Offset64(None, BaseDisp(Rbx, Disp8(0x01)))), Imm8(0x02)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseDisp(Rbx, Disp8(0x01)))), Imm8(0x02)) =>
             "80 43 01 02",
-        Add::Rm8Imm8(M(Offset64(None, BaseDisp(Rsp, Disp8(0x01)))), Imm8(0x02)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseDisp(Rsp, Disp8(0x01)))), Imm8(0x02)) =>
             "80 44 24 01 02",
-        Add::Rm8Imm8(M(Offset64(None, BaseDisp(Rbp, Disp8(0x01)))), Imm8(0x02)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseDisp(Rbp, Disp8(0x01)))), Imm8(0x02)) =>
             "80 45 01 02",
-        Add::Rm8Imm8(M(Offset64(None, BaseDisp(Rsi, Disp8(0x01)))), Imm8(0x02)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseDisp(Rsi, Disp8(0x01)))), Imm8(0x02)) =>
             "80 46 01 02",
-        Add::Rm8Imm8(M(Offset64(None, BaseDisp(Rdi, Disp8(0x01)))), Imm8(0x02)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseDisp(Rdi, Disp8(0x01)))), Imm8(0x02)) =>
             "80 47 01 02",
-        Add::Rm8Imm8(M(Offset64(None, BaseDisp(R8, Disp8(0x01)))), Imm8(0x02)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseDisp(R8, Disp8(0x01)))), Imm8(0x02)) =>
             "41 80 40 01 02",
-        Add::Rm8Imm8(M(Offset64(None, BaseDisp(R9, Disp8(0x01)))), Imm8(0x02)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseDisp(R9, Disp8(0x01)))), Imm8(0x02)) =>
             "41 80 41 01 02",
-        Add::Rm8Imm8(M(Offset64(None, BaseDisp(R10, Disp8(0x01)))), Imm8(0x02)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseDisp(R10, Disp8(0x01)))), Imm8(0x02)) =>
             "41 80 42 01 02",
-        Add::Rm8Imm8(M(Offset64(None, BaseDisp(R11, Disp8(0x01)))), Imm8(0x02)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseDisp(R11, Disp8(0x01)))), Imm8(0x02)) =>
             "41 80 43 01 02",
-        Add::Rm8Imm8(M(Offset64(None, BaseDisp(R12, Disp8(0x01)))), Imm8(0x02)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseDisp(R12, Disp8(0x01)))), Imm8(0x02)) =>
             "41 80 44 24 01 02",
-        Add::Rm8Imm8(M(Offset64(None, BaseDisp(R13, Disp8(0x01)))), Imm8(0x02)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseDisp(R13, Disp8(0x01)))), Imm8(0x02)) =>
             "41 80 45 01 02",
-        Add::Rm8Imm8(M(Offset64(None, BaseDisp(R14, Disp8(0x01)))), Imm8(0x02)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseDisp(R14, Disp8(0x01)))), Imm8(0x02)) =>
             "41 80 46 01 02",
-        Add::Rm8Imm8(M(Offset64(None, BaseDisp(R15, Disp8(0x01)))), Imm8(0x02)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseDisp(R15, Disp8(0x01)))), Imm8(0x02)) =>
             "41 80 47 01 02",
     },
 
     add_rm8_imm8_m8_base_disp32 {
-        Add::Rm8Imm8(M(Offset64(None, BaseDisp(Rax, Disp32(0x01020304)))), Imm8(0x05)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseDisp(Rax, Disp32(0x01020304)))), Imm8(0x05)) =>
             "80 80 04 03 02 01 05",
-        Add::Rm8Imm8(M(Offset64(None, BaseDisp(Rcx, Disp32(0x01020304)))), Imm8(0x05)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseDisp(Rcx, Disp32(0x01020304)))), Imm8(0x05)) =>
             "80 81 04 03 02 01 05",
-        Add::Rm8Imm8(M(Offset64(None, BaseDisp(Rdx, Disp32(0x01020304)))), Imm8(0x05)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseDisp(Rdx, Disp32(0x01020304)))), Imm8(0x05)) =>
             "80 82 04 03 02 01 05",
-        Add::Rm8Imm8(M(Offset64(None, BaseDisp(Rbx, Disp32(0x01020304)))), Imm8(0x05)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseDisp(Rbx, Disp32(0x01020304)))), Imm8(0x05)) =>
             "80 83 04 03 02 01 05",
-        Add::Rm8Imm8(M(Offset64(None, BaseDisp(Rsp, Disp32(0x01020304)))), Imm8(0x05)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseDisp(Rsp, Disp32(0x01020304)))), Imm8(0x05)) =>
             "80 84 24 04 03 02 01 05",
-        Add::Rm8Imm8(M(Offset64(None, BaseDisp(Rbp, Disp32(0x01020304)))), Imm8(0x05)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseDisp(Rbp, Disp32(0x01020304)))), Imm8(0x05)) =>
             "80 85 04 03 02 01 05",
-        Add::Rm8Imm8(M(Offset64(None, BaseDisp(Rsi, Disp32(0x01020304)))), Imm8(0x05)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseDisp(Rsi, Disp32(0x01020304)))), Imm8(0x05)) =>
             "80 86 04 03 02 01 05",
-        Add::Rm8Imm8(M(Offset64(None, BaseDisp(Rdi, Disp32(0x01020304)))), Imm8(0x05)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseDisp(Rdi, Disp32(0x01020304)))), Imm8(0x05)) =>
             "80 87 04 03 02 01 05",
-        Add::Rm8Imm8(M(Offset64(None, BaseDisp(R8, Disp32(0x01020304)))), Imm8(0x05)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseDisp(R8, Disp32(0x01020304)))), Imm8(0x05)) =>
             "41 80 80 04 03 02 01 05",
-        Add::Rm8Imm8(M(Offset64(None, BaseDisp(R9, Disp32(0x01020304)))), Imm8(0x05)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseDisp(R9, Disp32(0x01020304)))), Imm8(0x05)) =>
             "41 80 81 04 03 02 01 05",
-        Add::Rm8Imm8(M(Offset64(None, BaseDisp(R10, Disp32(0x01020304)))), Imm8(0x05)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseDisp(R10, Disp32(0x01020304)))), Imm8(0x05)) =>
             "41 80 82 04 03 02 01 05",
-        Add::Rm8Imm8(M(Offset64(None, BaseDisp(R11, Disp32(0x01020304)))), Imm8(0x05)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseDisp(R11, Disp32(0x01020304)))), Imm8(0x05)) =>
             "41 80 83 04 03 02 01 05",
-        Add::Rm8Imm8(M(Offset64(None, BaseDisp(R12, Disp32(0x01020304)))), Imm8(0x05)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseDisp(R12, Disp32(0x01020304)))), Imm8(0x05)) =>
             "41 80 84 24 04 03 02 01 05",
-        Add::Rm8Imm8(M(Offset64(None, BaseDisp(R13, Disp32(0x01020304)))), Imm8(0x05)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseDisp(R13, Disp32(0x01020304)))), Imm8(0x05)) =>
             "41 80 85 04 03 02 01 05",
-        Add::Rm8Imm8(M(Offset64(None, BaseDisp(R14, Disp32(0x01020304)))), Imm8(0x05)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseDisp(R14, Disp32(0x01020304)))), Imm8(0x05)) =>
             "41 80 86 04 03 02 01 05",
-        Add::Rm8Imm8(M(Offset64(None, BaseDisp(R15, Disp32(0x01020304)))), Imm8(0x05)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseDisp(R15, Disp32(0x01020304)))), Imm8(0x05)) =>
             "41 80 87 04 03 02 01 05",
     },
 
     add_rm8_imm8_m8_base_index_base {
-        Add::Rm8Imm8(M(Offset64(None, BaseIndex(Rax, Index64::Rax, X1))), Imm8(0x01)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseIndex(Rax, Index64::Rax, X1))), Imm8(0x01)) =>
             "80 04 00 01",
-        Add::Rm8Imm8(M(Offset64(None, BaseIndex(Rcx, Index64::Rax, X1))), Imm8(0x01)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseIndex(Rcx, Index64::Rax, X1))), Imm8(0x01)) =>
             "80 04 01 01",
-        Add::Rm8Imm8(M(Offset64(None, BaseIndex(Rdx, Index64::Rax, X1))), Imm8(0x01)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseIndex(Rdx, Index64::Rax, X1))), Imm8(0x01)) =>
             "80 04 02 01",
-        Add::Rm8Imm8(M(Offset64(None, BaseIndex(Rbx, Index64::Rax, X1))), Imm8(0x01)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseIndex(Rbx, Index64::Rax, X1))), Imm8(0x01)) =>
             "80 04 03 01",
-        Add::Rm8Imm8(M(Offset64(None, BaseIndex(Rsp, Index64::Rax, X1))), Imm8(0x01)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseIndex(Rsp, Index64::Rax, X1))), Imm8(0x01)) =>
             "80 04 04 01",
-        Add::Rm8Imm8(M(Offset64(None, BaseIndex(Rbp, Index64::Rax, X1))), Imm8(0x01)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseIndex(Rbp, Index64::Rax, X1))), Imm8(0x01)) =>
             "80 44 05 00 01",
-        Add::Rm8Imm8(M(Offset64(None, BaseIndex(Rsi, Index64::Rax, X1))), Imm8(0x01)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseIndex(Rsi, Index64::Rax, X1))), Imm8(0x01)) =>
             "80 04 06 01",
-        Add::Rm8Imm8(M(Offset64(None, BaseIndex(Rdi, Index64::Rax, X1))), Imm8(0x01)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseIndex(Rdi, Index64::Rax, X1))), Imm8(0x01)) =>
             "80 04 07 01",
-        Add::Rm8Imm8(M(Offset64(None, BaseIndex(R8, Index64::Rax, X1))), Imm8(0x01)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseIndex(R8, Index64::Rax, X1))), Imm8(0x01)) =>
             "41 80 04 00 01",
-        Add::Rm8Imm8(M(Offset64(None, BaseIndex(R9, Index64::Rax, X1))), Imm8(0x01)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseIndex(R9, Index64::Rax, X1))), Imm8(0x01)) =>
             "41 80 04 01 01",
-        Add::Rm8Imm8(M(Offset64(None, BaseIndex(R10, Index64::Rax, X1))), Imm8(0x01)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseIndex(R10, Index64::Rax, X1))), Imm8(0x01)) =>
             "41 80 04 02 01",
-        Add::Rm8Imm8(M(Offset64(None, BaseIndex(R11, Index64::Rax, X1))), Imm8(0x01)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseIndex(R11, Index64::Rax, X1))), Imm8(0x01)) =>
             "41 80 04 03 01",
-        Add::Rm8Imm8(M(Offset64(None, BaseIndex(R12, Index64::Rax, X1))), Imm8(0x01)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseIndex(R12, Index64::Rax, X1))), Imm8(0x01)) =>
             "41 80 04 04 01",
-        Add::Rm8Imm8(M(Offset64(None, BaseIndex(R13, Index64::Rax, X1))), Imm8(0x01)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseIndex(R13, Index64::Rax, X1))), Imm8(0x01)) =>
             "41 80 44 05 00 01",
-        Add::Rm8Imm8(M(Offset64(None, BaseIndex(R14, Index64::Rax, X1))), Imm8(0x01)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseIndex(R14, Index64::Rax, X1))), Imm8(0x01)) =>
             "41 80 04 06 01",
-        Add::Rm8Imm8(M(Offset64(None, BaseIndex(R15, Index64::Rax, X1))), Imm8(0x01)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseIndex(R15, Index64::Rax, X1))), Imm8(0x01)) =>
             "41 80 04 07 01",
     },
 
     add_rm8_imm8_m8_base_index_index {
-        Add::Rm8Imm8(M(Offset64(None, BaseIndex(Rax, Index64::Rcx, X1))), Imm8(0x01)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseIndex(Rax, Index64::Rcx, X1))), Imm8(0x01)) =>
             "80 04 08 01",
-        Add::Rm8Imm8(M(Offset64(None, BaseIndex(Rax, Index64::Rdx, X1))), Imm8(0x01)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseIndex(Rax, Index64::Rdx, X1))), Imm8(0x01)) =>
             "80 04 10 01",
-        Add::Rm8Imm8(M(Offset64(None, BaseIndex(Rax, Index64::Rbx, X1))), Imm8(0x01)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseIndex(Rax, Index64::Rbx, X1))), Imm8(0x01)) =>
             "80 04 18 01",
-        Add::Rm8Imm8(M(Offset64(None, BaseIndex(Rax, Index64::Rbp, X1))), Imm8(0x01)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseIndex(Rax, Index64::Rbp, X1))), Imm8(0x01)) =>
             "80 04 28 01",
-        Add::Rm8Imm8(M(Offset64(None, BaseIndex(Rax, Index64::Rsi, X1))), Imm8(0x01)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseIndex(Rax, Index64::Rsi, X1))), Imm8(0x01)) =>
             "80 04 30 01",
-        Add::Rm8Imm8(M(Offset64(None, BaseIndex(Rax, Index64::Rdi, X1))), Imm8(0x01)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseIndex(Rax, Index64::Rdi, X1))), Imm8(0x01)) =>
             "80 04 38 01",
-        Add::Rm8Imm8(M(Offset64(None, BaseIndex(Rax, Index64::R8, X1))), Imm8(0x01)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseIndex(Rax, Index64::R8, X1))), Imm8(0x01)) =>
             "42 80 04 00 01",
-        Add::Rm8Imm8(M(Offset64(None, BaseIndex(Rax, Index64::R9, X1))), Imm8(0x01)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseIndex(Rax, Index64::R9, X1))), Imm8(0x01)) =>
             "42 80 04 08 01",
-        Add::Rm8Imm8(M(Offset64(None, BaseIndex(Rax, Index64::R10, X1))), Imm8(0x01)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseIndex(Rax, Index64::R10, X1))), Imm8(0x01)) =>
             "42 80 04 10 01",
-        Add::Rm8Imm8(M(Offset64(None, BaseIndex(Rax, Index64::R11, X1))), Imm8(0x01)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseIndex(Rax, Index64::R11, X1))), Imm8(0x01)) =>
             "42 80 04 18 01",
-        Add::Rm8Imm8(M(Offset64(None, BaseIndex(Rax, Index64::R12, X1))), Imm8(0x01)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseIndex(Rax, Index64::R12, X1))), Imm8(0x01)) =>
             "42 80 04 20 01",
-        Add::Rm8Imm8(M(Offset64(None, BaseIndex(Rax, Index64::R13, X1))), Imm8(0x01)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseIndex(Rax, Index64::R13, X1))), Imm8(0x01)) =>
             "42 80 04 28 01",
-        Add::Rm8Imm8(M(Offset64(None, BaseIndex(Rax, Index64::R14, X1))), Imm8(0x01)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseIndex(Rax, Index64::R14, X1))), Imm8(0x01)) =>
             "42 80 04 30 01",
-        Add::Rm8Imm8(M(Offset64(None, BaseIndex(Rax, Index64::R15, X1))), Imm8(0x01)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseIndex(Rax, Index64::R15, X1))), Imm8(0x01)) =>
             "42 80 04 38 01",
     },
 
     add_rm8_imm8_m8_base_index_scale {
-        Add::Rm8Imm8(M(Offset64(None, BaseIndex(Rax, Index64::Rax, X2))), Imm8(0x01)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseIndex(Rax, Index64::Rax, X2))), Imm8(0x01)) =>
             "80 04 40 01",
-        Add::Rm8Imm8(M(Offset64(None, BaseIndex(Rax, Index64::Rax, X4))), Imm8(0x01)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseIndex(Rax, Index64::Rax, X4))), Imm8(0x01)) =>
             "80 04 80 01",
-        Add::Rm8Imm8(M(Offset64(None, BaseIndex(Rax, Index64::Rax, X8))), Imm8(0x01)) =>
+        Add::Rm8Imm8(M(Offs64(None, BaseIndex(Rax, Index64::Rax, X8))), Imm8(0x01)) =>
             "80 04 c0 01",
     },
 
     add_rm8_imm8_m8_base_index_disp {
         Add::Rm8Imm8(
-            M(Offset64(None, BaseIndexDisp(Rax, Index64::Rax, X1, Disp8(0x01)))),
+            M(Offs64(None, BaseIndexDisp(Rax, Index64::Rax, X1, Disp8(0x01)))),
             Imm8(0x02),
         ) => "80 44 00 01 02",
         Add::Rm8Imm8(
-            M(Offset64(None, BaseIndexDisp(Rax, Index64::Rax, X1, Disp32(0x01020304)))),
+            M(Offs64(None, BaseIndexDisp(Rax, Index64::Rax, X1, Disp32(0x01020304)))),
             Imm8(0x05),
         ) => "80 84 00 04 03 02 01 05",
     },
 
     add_rm8_imm8_m8_index_disp {
-        Add::Rm8Imm8(M(Offset64(None, IndexDisp(Index64::Rax, X1, 0x01020304))), Imm8(0x05)) =>
+        Add::Rm8Imm8(M(Offs64(None, IndexDisp(Index64::Rax, X1, 0x01020304))), Imm8(0x05)) =>
             "80 04 05 04 03 02 01 05",
     },
 
     add_rm8_imm8_m8_disp {
-        Add::Rm8Imm8(M(Offset64(None, Disp(0x01020304))), Imm8(0x05)) =>
+        Add::Rm8Imm8(M(Offs64(None, Disp(0x01020304))), Imm8(0x05)) =>
             "80 04 25 04 03 02 01 05",
     },
 
     add_rm8_imm8_m8_rip_disp {
-        Add::Rm8Imm8(M(Offset64(None, RipDisp(0x01020304))), Imm8(0x05)) =>
+        Add::Rm8Imm8(M(Offs64(None, RipDisp(0x01020304))), Imm8(0x05)) =>
             "80 05 04 03 02 01 05",
     },
 
     add_rm8_imm8_m8_offset32 {
-        Add::Rm8Imm8(M(Offset32(None, RipDisp(0x01020304))), Imm8(0x05)) =>
+        Add::Rm8Imm8(M(Offs32(None, RipDisp(0x01020304))), Imm8(0x05)) =>
             "67 80 05 04 03 02 01 05",
     },
 
@@ -376,11 +376,11 @@ test_encode! {
     },
 
     mov_rm_imm {
-        Mov::Rm8lImm8(M(Offset64(None, Base(R64l::Rax))), Imm8(0x01)) => "c6 00 01",
-        Mov::Rm8Imm8(M(Offset64(None, Base(Rax))), Imm8(0x01)) => "c6 00 01",
-        Mov::Rm16Imm16(M(Offset64(None, Base(Rax))), Imm16(0x0102)) => "66 c7 00 02 01",
-        Mov::Rm32Imm32(M(Offset64(None, Base(Rax))), Imm32(0x01020304)) => "c7 00 04 03 02 01",
-        Mov::Rm64Imm32(M(Offset64(None, Base(Rax))), Imm32(0x01020304)) => "48 c7 00 04 03 02 01",
+        Mov::Rm8lImm8(M(Offs64(None, Base(R64l::Rax))), Imm8(0x01)) => "c6 00 01",
+        Mov::Rm8Imm8(M(Offs64(None, Base(Rax))), Imm8(0x01)) => "c6 00 01",
+        Mov::Rm16Imm16(M(Offs64(None, Base(Rax))), Imm16(0x0102)) => "66 c7 00 02 01",
+        Mov::Rm32Imm32(M(Offs64(None, Base(Rax))), Imm32(0x01020304)) => "c7 00 04 03 02 01",
+        Mov::Rm64Imm32(M(Offs64(None, Base(Rax))), Imm32(0x01020304)) => "48 c7 00 04 03 02 01",
     },
 
     mov_r64_cr {
