@@ -799,4 +799,6 @@ impl_display! {
         D => format_args!("stosd"),
         Q => format_args!("stosq"),
     },
+
+    Str("str", 1, { Rm16 }),
 }

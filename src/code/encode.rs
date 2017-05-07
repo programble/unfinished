@@ -1518,4 +1518,8 @@ impl_encode! {
         D => Inst::opcode1(0xab),
         Q => Inst::opcode1(0xab).rex_w(),
     },
+
+    Str {
+        Rm16(rm) => Inst::opcode2(0x00).reg(1).rm(rm),
+    },
 }
