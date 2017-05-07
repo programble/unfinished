@@ -1672,4 +1672,10 @@ declare! {
         Rm32R32(Rm32, R32),
         Rm64R64(Rm64, R64),
     },
+
+    Tzcnt {
+        R16Rm16(R16, Rm16),
+        R32Rm32(R32, Rm32),
+        R64Rm64(R64, Rm64),
+    },
 }

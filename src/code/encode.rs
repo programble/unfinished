@@ -1559,4 +1559,10 @@ impl_encode! {
         Rm32R32(rm, r) => Inst::opcode1(0x85).rm(rm).reg(r),
         Rm64R64(rm, r) => Inst::opcode1(0x85).rm(rm).reg(r).rex_w(),
     },
+
+    Tzcnt {
+        R16Rm16(r, rm) => Inst::opcode2(0xbc).rep().reg(r).rm(rm).osz(),
+        R32Rm32(r, rm) => Inst::opcode2(0xbc).rep().reg(r).rm(rm),
+        R64Rm64(r, rm) => Inst::opcode2(0xbc).rep().reg(r).rm(rm).rex_w(),
+    },
 }

@@ -834,4 +834,6 @@ impl_display! {
         Rm32R32(rm, r) => format_args!("test {}, {}", rm, r),
         Rm64R64(rm, r) => format_args!("test {}, {}", rm, r),
     },
+
+    Tzcnt("tzcnt", 2, { R16Rm16, R32Rm32, R64Rm64 }),
 }
